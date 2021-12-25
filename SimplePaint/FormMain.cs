@@ -15,6 +15,7 @@ namespace SimplePaint
     {
         //TODO save and load
         //TODO scroll and zoom
+        //TODO position indicator
         //TODO pen color and style
         //TODO freehand curve, rectangle, circle drawing tool
         //TODO pencil tool with shift makes straight lines

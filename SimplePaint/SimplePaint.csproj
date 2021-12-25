@@ -90,5 +90,32 @@
   <ItemGroup>
     <None Include="Resources\undo_40px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\circle_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clear_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\create_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ellipse_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\eraser_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\freehand_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\opened_folder_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rectangle_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save_40px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
