@@ -1,0 +1,10 @@
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Debug\SimplePaint.exe.config
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Debug\SimplePaint.exe
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Debug\SimplePaint.pdb
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.csproj.AssemblyReference.cache
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.FormMain.resources
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.Properties.Resources.resources
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.csproj.GenerateResource.cache
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.csproj.CoreCompileInputs.cache
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.exe
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.pdb
