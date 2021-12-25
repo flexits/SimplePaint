@@ -13,20 +13,27 @@ namespace SimplePaint
 {
     public partial class FormMain : Form
     {
-        //TODO save and load
-        //TODO scroll and zoom
-        //TODO position indicator
-        //TODO pen color and style
-        //TODO freehand curve, rectangle, circle drawing tool
+        //TODO save and load file
+        //TODO create new canvas with given size
+        //TODO load background image, crop and rotate
+        //TODO display grid and snap cursor position while drawing
+        //TODO scroll and zoom the canvas
+        //TODO cursor position indicator
+        //TODO pen color and style, canvas color and texture
+        //TODO fill shape tool
+        //TODO freehand curve, rectangle (Shift+square), ellipse (Shift+circle) drawing tool
         //TODO pencil tool with shift makes straight lines
-        //TODO eraser tool (right button) and shape deletion tool
-        //TODO move and resize drawn shapes
+        //TODO selector tool to move, resize and delete drawn shapes
+        //TODO shape intersections
 
         /*
-         * Buttons: new, open, save, clear, undo, redo
-         * Tools-drawing: pencil, freehand, rectangle, circle
-         * Tools-erasing: eraser, delete shapes
+         * Для лабы: 
+         * сохранять и загружать растр (скролл если не вмещается в экран);
+         * левой рисовать, правой стирать (менять цвет на белый)
+         * задавать цвет, толщину и стиль линии
+         * undo и redo в виде сохранения bitmap
          */
+
         public FormMain()
         {
             InitializeComponent();
@@ -48,6 +55,7 @@ namespace SimplePaint
         {
             None,
             Pencil,
+            Freehand
         }
 
         Stack<IDrawable> shapes = new Stack<IDrawable>();
@@ -73,6 +81,20 @@ namespace SimplePaint
             panelCanvas.Invalidate();
         }
 
+        private void toolStripButtonClear_Click(object sender, EventArgs e)
+        {
+            Stack<IDrawable> temp = new Stack<IDrawable>();
+            while (shapes.Count > 0)
+            {
+                temp.Push(shapes.Pop());
+            }
+            while (temp.Count > 0)
+            {
+                discarded.Push(temp.Pop());
+            }
+            panelCanvas.Invalidate();
+        }
+
         private void toolStripButtonPencil_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as ToolStripButton).Checked)
@@ -82,6 +104,38 @@ namespace SimplePaint
             else
             {
                 currentTool = DrawingTools.None;
+            }
+        }
+
+        private void toolStripButtonFreehand_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as ToolStripButton).Checked)
+            {
+                currentTool = DrawingTools.Freehand;
+            }
+            else
+            {
+                currentTool = DrawingTools.None;
+            }
+        }
+
+        private void toolStripButton_MouseDown(object sender, MouseEventArgs e)
+        {
+            ToolStripButton btncurrent = sender as ToolStripButton;
+            ToolStrip tstrip = btncurrent.Owner as ToolStrip;
+            if (btncurrent is null || tstrip is null)
+            {
+                return;
+            }
+            foreach (ToolStripItem tsitem in tstrip.Items)
+            {
+                if (tsitem is ToolStripButton)
+                {
+                    if (tsitem != btncurrent)
+                    {
+                        (tsitem as ToolStripButton).Checked = false;
+                    }
+                }
             }
         }
 
@@ -95,11 +149,25 @@ namespace SimplePaint
 
         private void panelCanvas_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
             startPt = e.Location;
+            switch (currentTool)
+            {
+                case DrawingTools.Pencil:
+                case DrawingTools.Freehand:
+                    Cursor.Current = Cursors.Cross;
+                    break;
+                default:
+                    return;
+            }
         }
 
         private void panelCanvas_MouseUp(object sender, MouseEventArgs e)
         {
+            Cursor.Current = Cursors.Arrow;
             //TODO check if e.Location is within borders of panelContainer
             if (e.Button != MouseButtons.Left)
             {

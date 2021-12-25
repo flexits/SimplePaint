@@ -32,13 +32,21 @@ namespace SimplePaint
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTools = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonFreehand = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
             this.panelContainer = new System.Windows.Forms.Panel();
             this.panelCanvas = new System.Windows.Forms.Panel();
             this.panelColors = new System.Windows.Forms.Panel();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelContainer.SuspendLayout();
@@ -64,14 +72,66 @@ namespace SimplePaint
             // 
             this.toolStripTools.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStripTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonNew,
+            this.toolStripButtonOpen,
+            this.toolStripButtonSave,
+            this.toolStripSeparator3,
             this.toolStripButtonPencil,
+            this.toolStripButtonFreehand,
+            this.toolStripSeparator1,
             this.toolStripButtonUndo,
-            this.toolStripButtonRedo});
+            this.toolStripButtonRedo,
+            this.toolStripButtonClear,
+            this.toolStripSeparator2});
             this.toolStripTools.Location = new System.Drawing.Point(0, 24);
             this.toolStripTools.Name = "toolStripTools";
             this.toolStripTools.Size = new System.Drawing.Size(800, 39);
             this.toolStripTools.TabIndex = 1;
             this.toolStripTools.Text = "toolStrip1";
+            // 
+            // toolStripButtonPencil
+            // 
+            this.toolStripButtonPencil.CheckOnClick = true;
+            this.toolStripButtonPencil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPencil.Image = global::SimplePaint.Properties.Resources.pencil_40px;
+            this.toolStripButtonPencil.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPencil.Name = "toolStripButtonPencil";
+            this.toolStripButtonPencil.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonPencil.Text = "Рисовать прямые линии";
+            this.toolStripButtonPencil.CheckedChanged += new System.EventHandler(this.toolStripButtonPencil_CheckedChanged);
+            this.toolStripButtonPencil.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolStripButton_MouseDown);
+            // 
+            // toolStripButtonFreehand
+            // 
+            this.toolStripButtonFreehand.CheckOnClick = true;
+            this.toolStripButtonFreehand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFreehand.Image = global::SimplePaint.Properties.Resources.freehand_40px;
+            this.toolStripButtonFreehand.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFreehand.Name = "toolStripButtonFreehand";
+            this.toolStripButtonFreehand.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonFreehand.Text = "Рисовать произвольный контур";
+            this.toolStripButtonFreehand.CheckedChanged += new System.EventHandler(this.toolStripButtonFreehand_CheckedChanged);
+            this.toolStripButtonFreehand.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolStripButton_MouseDown);
+            // 
+            // toolStripButtonUndo
+            // 
+            this.toolStripButtonUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonUndo.Image = global::SimplePaint.Properties.Resources.undo_40px;
+            this.toolStripButtonUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonUndo.Name = "toolStripButtonUndo";
+            this.toolStripButtonUndo.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonUndo.Text = "Отменить";
+            this.toolStripButtonUndo.Click += new System.EventHandler(this.toolStripButtonUndo_Click);
+            // 
+            // toolStripButtonRedo
+            // 
+            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRedo.Image = global::SimplePaint.Properties.Resources.redo_40px;
+            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
+            this.toolStripButtonRedo.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonRedo.Text = "Вернуть";
+            this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
             // 
             // panelContainer
             // 
@@ -87,7 +147,7 @@ namespace SimplePaint
             // 
             // panelCanvas
             // 
-            this.panelCanvas.BackColor = System.Drawing.SystemColors.Control;
+            this.panelCanvas.BackColor = System.Drawing.Color.White;
             this.panelCanvas.Location = new System.Drawing.Point(65, 45);
             this.panelCanvas.Name = "panelCanvas";
             this.panelCanvas.Size = new System.Drawing.Size(520, 281);
@@ -105,36 +165,57 @@ namespace SimplePaint
             this.panelColors.Size = new System.Drawing.Size(145, 387);
             this.panelColors.TabIndex = 3;
             // 
-            // toolStripButtonPencil
+            // toolStripSeparator1
             // 
-            this.toolStripButtonPencil.CheckOnClick = true;
-            this.toolStripButtonPencil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonPencil.Image = global::SimplePaint.Properties.Resources.pencil_40px;
-            this.toolStripButtonPencil.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonPencil.Name = "toolStripButtonPencil";
-            this.toolStripButtonPencil.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonPencil.Text = "toolStripButton1";
-            this.toolStripButtonPencil.CheckedChanged += new System.EventHandler(this.toolStripButtonPencil_CheckedChanged);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
             // 
-            // toolStripButtonUndo
+            // toolStripSeparator2
             // 
-            this.toolStripButtonUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonUndo.Image = global::SimplePaint.Properties.Resources.undo_40px;
-            this.toolStripButtonUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonUndo.Name = "toolStripButtonUndo";
-            this.toolStripButtonUndo.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonUndo.Text = "toolStripButton1";
-            this.toolStripButtonUndo.Click += new System.EventHandler(this.toolStripButtonUndo_Click);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
-            // toolStripButtonRedo
+            // toolStripButtonClear
             // 
-            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRedo.Image = global::SimplePaint.Properties.Resources.redo_40px;
-            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
-            this.toolStripButtonRedo.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonRedo.Text = "toolStripButton1";
-            this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
+            this.toolStripButtonClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonClear.Image = global::SimplePaint.Properties.Resources.clear_40px;
+            this.toolStripButtonClear.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonClear.Name = "toolStripButtonClear";
+            this.toolStripButtonClear.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonClear.Text = "Отменить всё";
+            this.toolStripButtonClear.Click += new System.EventHandler(this.toolStripButtonClear_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
+            // 
+            // toolStripButtonNew
+            // 
+            this.toolStripButtonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonNew.Image = global::SimplePaint.Properties.Resources.create_40px;
+            this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonNew.Name = "toolStripButtonNew";
+            this.toolStripButtonNew.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonNew.Text = "toolStripButton1";
+            // 
+            // toolStripButtonOpen
+            // 
+            this.toolStripButtonOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonOpen.Image = global::SimplePaint.Properties.Resources.opened_folder_40px;
+            this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonOpen.Name = "toolStripButtonOpen";
+            this.toolStripButtonOpen.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonOpen.Text = "toolStripButton1";
+            // 
+            // toolStripButtonSave
+            // 
+            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSave.Image = global::SimplePaint.Properties.Resources.save_40px;
+            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSave.Name = "toolStripButtonSave";
+            this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonSave.Text = "toolStripButton1";
             // 
             // FormMain
             // 
@@ -170,6 +251,14 @@ namespace SimplePaint
         private System.Windows.Forms.Panel panelCanvas;
         private System.Windows.Forms.ToolStripButton toolStripButtonUndo;
         private System.Windows.Forms.ToolStripButton toolStripButtonRedo;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFreehand;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton toolStripButtonClear;
+        private System.Windows.Forms.ToolStripButton toolStripButtonNew;
+        private System.Windows.Forms.ToolStripButton toolStripButtonOpen;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSave;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
 
