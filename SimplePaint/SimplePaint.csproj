@@ -120,5 +120,14 @@
   <ItemGroup>
     <None Include="Resources\hand_40px.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\find_and_replace_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoom_in_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoom_out_40px.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

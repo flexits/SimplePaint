@@ -13,6 +13,9 @@ namespace SimplePaint
 {
     public partial class FormMain : Form
     {
+        private const float ZOOM_STEP = 0.1F;
+        private const float ZOOM_DEFT = 1.0F;
+
         //TODO save and load file
         //TODO create new canvas with given size
         //TODO load background image, crop and rotate
@@ -38,28 +41,55 @@ namespace SimplePaint
         {
             InitializeComponent();
             _ = typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, panelCanvas, new object[] { true });
+
             currentTool = DrawingTools.None;
             currentBrush = new SolidBrush(Color.Black);
             currentPen = new Pen(currentBrush);
             startPt = new Point(0, 0);
+            canvasZoomFactor = ZOOM_DEFT;
+            canvasSizeOriginal = panelCanvas.Size;
             //TODO set custom panelCanvas size and center it in panelContainer
-            panelCanvas.Dock = DockStyle.Fill;
+
+            panelCanvas.Width = 200;
+            panelCanvas.Height = 200;
+
+            CenterCanvas();
+            toolStripButtonSelect.PerformClick();
         }
 
         DrawingTools currentTool;
         Brush currentBrush;
         Pen currentPen;
         Point startPt;
+        float canvasZoomFactor;
+        Size canvasSizeOriginal;
 
         enum DrawingTools
         {
             None,
+            Selector,
             Pencil,
             Freehand
         }
 
         Stack<IDrawable> shapes = new Stack<IDrawable>();
         Stack<IDrawable> discarded = new Stack<IDrawable>();
+
+        private void CenterCanvas()
+        {
+            Point canvasLocationNew = new Point(0, 0);
+            int diffY = panelContainer.Height - panelCanvas.Height;
+            if (diffY > 0)
+            {
+                canvasLocationNew.Y = diffY / 2;
+            }
+            int diffX = panelContainer.Width - panelCanvas.Width;
+            if (diffX > 0)
+            {
+                canvasLocationNew.X = diffX / 2;
+            }
+            panelCanvas.Location = canvasLocationNew;
+        }
 
         private void toolStripButtonUndo_Click(object sender, EventArgs e)
         {
@@ -93,6 +123,18 @@ namespace SimplePaint
                 discarded.Push(temp.Pop());
             }
             panelCanvas.Invalidate();
+        }
+
+        private void toolStripButtonSelect_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as ToolStripButton).Checked)
+            {
+                currentTool = DrawingTools.Selector;
+            }
+            else
+            {
+                currentTool = DrawingTools.None;
+            }
         }
 
         private void toolStripButtonPencil_CheckedChanged(object sender, EventArgs e)
@@ -141,10 +183,13 @@ namespace SimplePaint
 
         private void panelCanvas_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.ScaleTransform(canvasZoomFactor, canvasZoomFactor);
             foreach (IDrawable shape in shapes)
             {
                 shape.Draw(e.Graphics);
             }
+            Size zoomedSize = new Size((int)(canvasSizeOriginal.Width * canvasZoomFactor), (int)(canvasSizeOriginal.Height * canvasZoomFactor));
+            panelCanvas.Size = zoomedSize;
         }
 
         private void panelCanvas_MouseDown(object sender, MouseEventArgs e)
@@ -156,6 +201,9 @@ namespace SimplePaint
             startPt = e.Location;
             switch (currentTool)
             {
+                case DrawingTools.Selector:
+                    Cursor.Current = Cursors.SizeAll;
+                    break;
                 case DrawingTools.Pencil:
                 case DrawingTools.Freehand:
                     Cursor.Current = Cursors.Cross;
@@ -168,7 +216,7 @@ namespace SimplePaint
         private void panelCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             Cursor.Current = Cursors.Arrow;
-            //TODO check if e.Location is within borders of panelContainer
+            //TODO check if e.Location is within the borders of panelCanvas
             if (e.Button != MouseButtons.Left)
             {
                 return;
@@ -201,16 +249,58 @@ namespace SimplePaint
             {
                 return;
             }
+            //TODO check if e.Location is within the borders of panelContainer
             Graphics canvas = (sender as Control).CreateGraphics();
             (sender as Control).Refresh();
             switch (currentTool)
             {
+                case DrawingTools.Selector:
+                    int diffX = startPt.X - e.Location.X;
+                    int diffY = startPt.Y - e.Location.Y;
+                    Point canvasLocationNew = panelCanvas.Location;
+                    canvasLocationNew.X -= diffX;
+                    canvasLocationNew.Y -= diffY;
+                    panelCanvas.Location = canvasLocationNew;
+                    break;
                 case DrawingTools.Pencil:
                     new Line(currentPen, startPt, e.Location).Draw(canvas);
                     break;
                 default:
                     return;
             }
+        }
+
+        private void panelContainer_Resize(object sender, EventArgs e)
+        {
+            CenterCanvas();
+        }
+
+        private void panelCanvas_Resize(object sender, EventArgs e)
+        {
+            //TODO only if not moved by selector tool
+            CenterCanvas();
+        }
+
+        private void buttonZoomIn_Click(object sender, EventArgs e)
+        {
+            canvasZoomFactor += ZOOM_STEP;
+            panelCanvas.Invalidate();
+        }
+
+        private void buttonZoomOut_Click(object sender, EventArgs e)
+        {
+            if (canvasZoomFactor <= ZOOM_STEP)
+            {
+                return;
+            }
+            canvasZoomFactor -= ZOOM_STEP;
+            panelCanvas.Invalidate();
+        }
+
+        private void buttonZoomReset_Click(object sender, EventArgs e)
+        {
+            canvasZoomFactor = ZOOM_DEFT;
+            panelCanvas.Invalidate();
         }
     }
 }

@@ -113,6 +113,16 @@ namespace SimplePaint.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap find_and_replace_40px {
+            get {
+                object obj = ResourceManager.GetObject("find_and_replace_40px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap freehand_40px {
             get {
                 object obj = ResourceManager.GetObject("freehand_40px", resourceCulture);
@@ -186,6 +196,26 @@ namespace SimplePaint.Properties {
         internal static System.Drawing.Bitmap undo_40px {
             get {
                 object obj = ResourceManager.GetObject("undo_40px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap zoom_in_40px {
+            get {
+                object obj = ResourceManager.GetObject("zoom_in_40px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap zoom_out_40px {
+            get {
+                object obj = ResourceManager.GetObject("zoom_out_40px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
