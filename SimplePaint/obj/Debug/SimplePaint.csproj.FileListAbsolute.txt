@@ -8,3 +8,4 @@ C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePain
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.csproj.CoreCompileInputs.cache
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.exe
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.pdb
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.DialogNew.resources
