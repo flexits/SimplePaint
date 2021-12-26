@@ -30,11 +30,32 @@ namespace SimplePaint
 
         /*
          * Для лабы: 
-         * сохранять и загружать растр (скролл если не вмещается в экран);
+         * сохранять и загружать растр +(скролл если не вмещается в экран);
          * левой рисовать, правой стирать (менять цвет на белый)
          + задавать цвет, толщину и стиль линии
          + undo и redo 
          */
+
+        private DrawingTools currentTool;
+        private Pen currentPen;
+        private Point startPt;
+        private SmoothingMode currentSmoothingMode;
+        private float canvasZoomFactor;
+        private Size canvasSizeOriginal;
+
+        IDrawable currentShape;
+
+        private enum DrawingTools
+        {
+            None,
+            Selector,
+            Pencil,
+            Freehand,
+            Eraser
+        }
+
+        private Stack<IDrawable> shapes = new Stack<IDrawable>();
+        private Stack<IDrawable> discarded = new Stack<IDrawable>();
 
         public FormMain()
         {
@@ -46,16 +67,7 @@ namespace SimplePaint
             {
                 _ = comboBoxStyle.Items.Add(style);
             }
-            comboBoxStyle.SelectedIndex = 0;
-
-            currentTool = DrawingTools.None;
-            currentPen = new Pen(Color.Black, 1);
-            currentPen.DashStyle = DashStyle.Solid;
-            startPt = new Point(0, 0);
-            currentSmoothingMode = SmoothingMode.None;
-            canvasZoomFactor = ZOOM_DEFT;
-            //TODO set custom panelCanvas size and center it in panelContainer
-
+            ResetDrawing();
             ControlsActivation(false);
         }
 
@@ -63,26 +75,51 @@ namespace SimplePaint
         {
             toolStripButtonNew.PerformClick();
             CenterCanvas();
-            toolStripButtonSelect.PerformClick();
+            toolStripButtonSelect.Checked = true;
         }
 
-        private DrawingTools currentTool;
-        private Pen currentPen;
-        private Point startPt;
-        private SmoothingMode currentSmoothingMode;
-        private float canvasZoomFactor;
-        private Size canvasSizeOriginal;
-
-        private enum DrawingTools
+        private void ControlsActivation(bool setEnabled)
         {
-            None,
-            Selector,
-            Pencil,
-            Freehand
+            panelCanvas.Visible = setEnabled;
+            panelColors.Enabled = setEnabled;
+            foreach (ToolStripItem tsitem in toolStripTools.Items)
+            {
+                if (tsitem is ToolStripButton)
+                {
+                    (tsitem as ToolStripButton).Enabled = setEnabled;
+                }
+            }
+            foreach (ToolStripItem tsitem in statusStrip1.Items)
+            {
+                if (tsitem is ToolStripStatusLabel)
+                {
+                    (tsitem as ToolStripStatusLabel).Text = string.Empty;
+                }
+            }
+            toolStripButtonNew.Enabled = true;
+            toolStripButtonOpen.Enabled = true;
         }
 
-        private Stack<IDrawable> shapes = new Stack<IDrawable>();
-        private Stack<IDrawable> discarded = new Stack<IDrawable>();
+        private void ResetDrawing()
+        {
+            currentTool = DrawingTools.None;
+            currentPen = new Pen(Color.Black, 1);
+            currentPen.DashStyle = DashStyle.Solid;
+            startPt = new Point(0, 0);
+            currentSmoothingMode = SmoothingMode.None;
+            canvasZoomFactor = ZOOM_DEFT;
+
+            pictureBoxToolColor.BackColor = Color.Black;
+            pictureBoxBackColor.BackColor = Color.White;
+            trackBarWidth.Value = 1;
+            comboBoxStyle.SelectedIndex = 0;
+            checkBoxSmoothing.Checked = false;
+
+            shapes.Clear();
+            discarded.Clear();
+
+            currentShape = null;
+        }
 
         private void CenterCanvas()
         {
@@ -143,74 +180,62 @@ namespace SimplePaint
             panelCanvas.Invalidate();
         }
 
-        private void toolStripButtonSelect_CheckedChanged(object sender, EventArgs e)
+        private void toolStripButtonToolSelect_CheckedChanged(object sender, EventArgs e)
         {
-            if ((sender as ToolStripButton).Checked)
-            {
-                currentTool = DrawingTools.Selector;
-            }
-            else
-            {
-                currentTool = DrawingTools.None;
-            }
-        }
-
-        private void toolStripButtonPencil_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as ToolStripButton).Checked)
-            {
-                currentTool = DrawingTools.Pencil;
-            }
-            else
-            {
-                currentTool = DrawingTools.None;
-            }
-        }
-
-        private void toolStripButtonFreehand_CheckedChanged(object sender, EventArgs e)
-        {
-            if ((sender as ToolStripButton).Checked)
-            {
-                currentTool = DrawingTools.Freehand;
-            }
-            else
-            {
-                currentTool = DrawingTools.None;
-            }
-        }
-
-        private void toolStripButtonToolSelect_MouseDown(object sender, MouseEventArgs e)
-        {
-            ToolStripButton btncurrent = sender as ToolStripButton;
-            ToolStrip tstrip = btncurrent.Owner as ToolStrip;
-            if (btncurrent is null || tstrip is null)
+            ToolStripButton btnSender = sender as ToolStripButton;
+            ToolStrip tstrip = btnSender.Owner as ToolStrip;
+            if (btnSender is null || tstrip is null)
             {
                 return;
             }
-            foreach (ToolStripItem tsitem in tstrip.Items)
+            if (btnSender.Checked)
             {
-                if (tsitem is ToolStripButton)
+                foreach (ToolStripItem tsitem in tstrip.Items)
                 {
-                    if (tsitem != btncurrent)
+                    if (tsitem is ToolStripButton)
                     {
-                        (tsitem as ToolStripButton).Checked = false;
+                        if ((tsitem as ToolStripButton).CheckOnClick && tsitem != btnSender)
+                        {
+                            (tsitem as ToolStripButton).Checked = false;
+                        }
                     }
                 }
-            }
-        }
-
-        private void toolStripButtonToolSelect_Click(object sender, EventArgs e)
-        {
-            ToolStripButton btncurrent = sender as ToolStripButton;
-            if (btncurrent.CheckState==CheckState.Checked)
-            {
-                statusLabelTool.Text = "Инструмент: " + btncurrent.Tag.ToString();
+                statusLabelTool.Text = "Инструмент: " + btnSender.Tag.ToString();
+                if (btnSender == toolStripButtonPencil)
+                {
+                    currentTool = DrawingTools.Pencil;
+                    return;
+                }
+                else if (btnSender == toolStripButtonFreehand)
+                {
+                    currentTool = DrawingTools.Freehand;
+                    return;
+                }
+                else if (btnSender == toolStripButtonSelect)
+                {
+                    currentTool = DrawingTools.Selector;
+                    return;
+                }
+                else if (btnSender == toolStripButtonEraser)
+                {
+                    currentTool = DrawingTools.Eraser;
+                    return;
+                }
+                else
+                {
+                    currentTool = DrawingTools.None;
+                    statusLabelTool.Text = string.Empty;
+                    return;
+                }
             }
             else
             {
+                currentTool = DrawingTools.None;
                 statusLabelTool.Text = string.Empty;
             }
         }
+
+        float prevZoomF = 1F;
 
         private void panelCanvas_Paint(object sender, PaintEventArgs e)
         {
@@ -220,10 +245,32 @@ namespace SimplePaint
             {
                 shapes.ElementAt(i).Draw(e.Graphics);
             }
+            /*
             Size zoomedSize = new Size((int)(canvasSizeOriginal.Width * canvasZoomFactor), (int)(canvasSizeOriginal.Height * canvasZoomFactor));
             panelCanvas.Size = zoomedSize;
-            //TODO lines drawn on a zoomed canvas are out of bound. Need to change the zooming method
+            // lines drawn on a zoomed canvas are out of bound. Need to change the zooming method
+            */
+            panelCanvas.Scale(new SizeF(canvasZoomFactor/prevZoomF, canvasZoomFactor/prevZoomF));
+            prevZoomF = canvasZoomFactor;
+            //TODO lines drawn on a zoomed canvas are still out of bound the same way!
+
             statusLabelScale.Text = "Масштаб " + Math.Round(canvasZoomFactor * 100) + "%";
+        }
+
+        private Point UnscalePoint (Point scaledPoint, float zoomFactor)
+        {
+            Point unscaledPoint = Point.Empty;
+            unscaledPoint.X = (int)Math.Round(scaledPoint.X / zoomFactor);
+            unscaledPoint.Y = (int)Math.Round(scaledPoint.Y / zoomFactor);
+            return unscaledPoint;
+        }
+
+        private Point ScalePoint(Point unscaledPoint, float zoomFactor)
+        {
+            Point scaledPoint = Point.Empty;
+            scaledPoint.X = (int)Math.Round(unscaledPoint.X * zoomFactor);
+            scaledPoint.Y = (int)Math.Round(unscaledPoint.Y * zoomFactor);
+            return scaledPoint;
         }
 
         private void panelCanvas_MouseDown(object sender, MouseEventArgs e)
@@ -239,8 +286,17 @@ namespace SimplePaint
                     Cursor.Current = Cursors.SizeAll;
                     break;
                 case DrawingTools.Pencil:
+                    Cursor.Current = Cursors.Cross;
+                    break;
                 case DrawingTools.Freehand:
                     Cursor.Current = Cursors.Cross;
+                    currentShape = new Freepath((Pen)currentPen.Clone(), startPt);
+                    break;
+                case DrawingTools.Eraser:
+                    Cursor.Current = Cursors.Cross;
+                    Pen eraserPen = (Pen)currentPen.Clone();
+                    eraserPen.Color = pictureBoxBackColor.BackColor;
+                    currentShape = new Freepath(eraserPen, startPt);
                     break;
                 default:
                     return;
@@ -259,11 +315,15 @@ namespace SimplePaint
             {
                 return;
             }
-            IDrawable currentShape;
+            
             switch (currentTool)
             {
                 case DrawingTools.Pencil:
-                    currentShape = new Line((Pen)currentPen.Clone(), startPt, e.Location);
+                    currentShape = new Line((Pen)currentPen.Clone(), UnscalePoint(startPt, canvasZoomFactor), UnscalePoint(e.Location, canvasZoomFactor));
+                    break;
+                case DrawingTools.Freehand:
+                case DrawingTools.Eraser:
+                    (currentShape as Freepath).AddPoint(e.Location);
                     break;
                 default:
                     return;
@@ -299,8 +359,13 @@ namespace SimplePaint
                     panelCanvas.Location = canvasLocationNew;
                     break;
                 case DrawingTools.Pencil:
-                    new Line(currentPen, startPt, e.Location).Draw(canvas);
+                    canvas.DrawLine(currentPen, startPt, e.Location);
                     break;
+                case DrawingTools.Freehand:
+                case DrawingTools.Eraser:
+                    (currentShape as Freepath).AddPoint(e.Location);
+                    currentShape.Draw(canvas);
+                    return;
                 default:
                     return;
             }
@@ -398,39 +463,58 @@ namespace SimplePaint
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
+            bool canvasChanged = shapes.Count > 0;
+            if (canvasChanged)
+            {
+                SaveDrawing(true);
+            }
             DialogNew dialogNew = new DialogNew();
             dialogNew.StartPosition = FormStartPosition.CenterParent;
             bool resultOK = dialogNew.ShowDialog(this) == DialogResult.OK;
             if (resultOK)
             {
+                ResetDrawing();
                 canvasSizeOriginal = dialogNew.SelectedDimensions;
                 panelCanvas.Width = canvasSizeOriginal.Width;
                 panelCanvas.Height = canvasSizeOriginal.Height;
-                panelCanvas.Visible = true;
+                CenterCanvas();
+                toolStripButtonSelect.Checked = true;
             }
-            ControlsActivation(resultOK);
+            ControlsActivation(resultOK || canvasChanged);
         }
 
-        private void ControlsActivation(bool setEnabled)
+        private void toolStripButtonOpen_Click(object sender, EventArgs e)
         {
-            panelCanvas.Visible = setEnabled;
-            panelColors.Enabled = setEnabled;
-            foreach (ToolStripItem tsitem in toolStripTools.Items)
+            bool canvasChanged = shapes.Count > 0;
+            if (canvasChanged)
             {
-                if (tsitem is ToolStripButton)
+                SaveDrawing(true);
+            }
+            bool resultOK = openFileDialog1.ShowDialog(this) == DialogResult.OK;
+            if (resultOK)
+            {
+                ResetDrawing();
+                //load file 
+                CenterCanvas();
+                toolStripButtonSelect.Checked = true;
+            }
+            ControlsActivation(resultOK || canvasChanged);
+        }
+
+        private void SaveDrawing(bool issuePrompt)
+        {
+            if (issuePrompt)
+            {
+                DialogResult result = MessageBox.Show(this, "Имеются несохранённые изменения! Сохранить?", "Возможна потеря данных", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (result != DialogResult.OK)
                 {
-                    (tsitem as ToolStripButton).Enabled = setEnabled;
+                    return;
                 }
             }
-            foreach (ToolStripItem tsitem in statusStrip1.Items)
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                if (tsitem is ToolStripStatusLabel)
-                {
-                    (tsitem as ToolStripStatusLabel).Text = string.Empty;
-                }
+                throw new NotImplementedException();
             }
-            toolStripButtonNew.Enabled = true;
-            toolStripButtonOpen.Enabled = true;
         }
     }
 }

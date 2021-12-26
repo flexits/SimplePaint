@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Threading.Tasks;
 
 namespace SimplePaint
@@ -53,6 +54,39 @@ namespace SimplePaint
             int width = Math.Abs(endPt.X - startPt.X);
             int height = Math.Abs(endPt.Y - startPt.Y);
             return new Rectangle(coordX, coordY, width, height);
+        }
+    }
+
+    class Freepath : Shape
+    {
+        private List<Point> pathPoints;
+        
+        public Freepath(Pen pen, Point startPoint) : base(pen)
+        {
+            pathPoints = new List<Point>();
+            AddPoint(startPoint);
+        }
+
+        public void AddPoint(Point pathPoint)
+        {
+            pathPoints.Add(pathPoint);
+        }
+
+        public Point[] GetPoints()
+        {
+            return pathPoints.ToArray();
+        }
+
+        public override void Draw(Graphics drawSurface)
+        {
+            drawSurface.DrawLines(DrawingPen, pathPoints.ToArray());
+        }
+
+        public override Rectangle GetBoundingRectangle()
+        {
+            //amongst all points find the biggest and smallest X and Y
+            //then calculate rectangle
+            return Rectangle.Empty;
         }
     }
 }
