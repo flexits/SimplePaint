@@ -118,6 +118,8 @@ namespace SimplePaint
             discarded.Clear();
 
             currentShape = null;
+
+            panelCanvas.Invalidate();
         }
 
         private void CenterCanvas()
@@ -498,7 +500,7 @@ namespace SimplePaint
             ControlsActivation(resultOK || canvasChanged);
         }
 
-        private void SaveDrawing(bool issuePrompt)
+        private void SaveDrawing(bool issuePrompt = false)
         {
             if (issuePrompt)
             {
@@ -512,6 +514,11 @@ namespace SimplePaint
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private void toolStripButtonSave_Click(object sender, EventArgs e)
+        {
+            SaveDrawing();
         }
     }
 }

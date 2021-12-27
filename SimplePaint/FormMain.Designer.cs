@@ -41,6 +41,7 @@ namespace SimplePaint
             this.toolStripButtonSelect = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonFreehand = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
@@ -67,7 +68,6 @@ namespace SimplePaint
             this.statusLabelTool = new System.Windows.Forms.ToolStripStatusLabel();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelContainer.SuspendLayout();
@@ -137,7 +137,7 @@ namespace SimplePaint
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonNew.Text = "toolStripButton1";
+            this.toolStripButtonNew.Text = "Новый рисунок";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
             // 
             // toolStripButtonOpen
@@ -147,7 +147,7 @@ namespace SimplePaint
             this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonOpen.Name = "toolStripButtonOpen";
             this.toolStripButtonOpen.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonOpen.Text = "toolStripButton1";
+            this.toolStripButtonOpen.Text = "Открыть файл";
             this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
             // 
             // toolStripButtonSave
@@ -157,7 +157,8 @@ namespace SimplePaint
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonSave.Text = "toolStripButton1";
+            this.toolStripButtonSave.Text = "Сохранить как";
+            this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
             // toolStripSeparator3
             // 
@@ -199,6 +200,18 @@ namespace SimplePaint
             this.toolStripButtonFreehand.Tag = "произвольные контуры";
             this.toolStripButtonFreehand.Text = "Рисовать произвольный контур";
             this.toolStripButtonFreehand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            // 
+            // toolStripButtonEraser
+            // 
+            this.toolStripButtonEraser.CheckOnClick = true;
+            this.toolStripButtonEraser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEraser.Image = global::SimplePaint.Properties.Resources.eraser_40px;
+            this.toolStripButtonEraser.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEraser.Name = "toolStripButtonEraser";
+            this.toolStripButtonEraser.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonEraser.Tag = "ластик";
+            this.toolStripButtonEraser.Text = "Стирать контуры";
+            this.toolStripButtonEraser.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
             // toolStripSeparator1
             // 
@@ -435,18 +448,6 @@ namespace SimplePaint
             // 
             this.openFileDialog1.Filter = "JPEG|*.jpg|Bitmap|*.bmp|PNG|*.png|Все файлы|*.*";
             this.openFileDialog1.Title = "Открыть графический файл";
-            // 
-            // toolStripButtonEraser
-            // 
-            this.toolStripButtonEraser.CheckOnClick = true;
-            this.toolStripButtonEraser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonEraser.Image = global::SimplePaint.Properties.Resources.eraser_40px;
-            this.toolStripButtonEraser.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonEraser.Name = "toolStripButtonEraser";
-            this.toolStripButtonEraser.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonEraser.Tag = "ластик";
-            this.toolStripButtonEraser.Text = "Стирать контуры";
-            this.toolStripButtonEraser.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
             // FormMain
             // 
