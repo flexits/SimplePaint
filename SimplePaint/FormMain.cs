@@ -20,7 +20,6 @@ namespace SimplePaint
         //TODO save and load file
         //TODO load background image, crop and rotate
         //TODO display grid and snap cursor position while drawing
-        //TODO zoom the canvas 
         //TODO fill shape tool
         //TODO freehand curve, rectangle (Shift+square), ellipse (Shift+circle) drawing tool
         //TODO pencil tool with shift makes straight lines
@@ -245,14 +244,9 @@ namespace SimplePaint
             {
                 shapes.ElementAt(i).Draw(e.Graphics);
             }
-            /*
+            
             Size zoomedSize = new Size((int)(canvasSizeOriginal.Width * canvasZoomFactor), (int)(canvasSizeOriginal.Height * canvasZoomFactor));
             panelCanvas.Size = zoomedSize;
-            // lines drawn on a zoomed canvas are out of bound. Need to change the zooming method
-            */
-            panelCanvas.Scale(new SizeF(canvasZoomFactor/prevZoomF, canvasZoomFactor/prevZoomF));
-            prevZoomF = canvasZoomFactor;
-            //TODO lines drawn on a zoomed canvas are still out of bound the same way!
 
             statusLabelScale.Text = "Масштаб " + Math.Round(canvasZoomFactor * 100) + "%";
         }
@@ -279,7 +273,7 @@ namespace SimplePaint
             {
                 return;
             }
-            startPt = e.Location;
+            startPt = UnscalePoint(e.Location, canvasZoomFactor);
             switch (currentTool)
             {
                 case DrawingTools.Selector:
@@ -307,6 +301,7 @@ namespace SimplePaint
         {
             Cursor.Current = Cursors.Arrow;
             //TODO check if e.Location is within the borders of panelCanvas
+            Point currPt = UnscalePoint(e.Location, canvasZoomFactor);
             if (e.Button != MouseButtons.Left)
             {
                 return;
@@ -319,11 +314,11 @@ namespace SimplePaint
             switch (currentTool)
             {
                 case DrawingTools.Pencil:
-                    currentShape = new Line((Pen)currentPen.Clone(), UnscalePoint(startPt, canvasZoomFactor), UnscalePoint(e.Location, canvasZoomFactor));
+                    currentShape = new Line((Pen)currentPen.Clone(), startPt, currPt);
                     break;
                 case DrawingTools.Freehand:
                 case DrawingTools.Eraser:
-                    (currentShape as Freepath).AddPoint(e.Location);
+                    (currentShape as Freepath).AddPoint(currPt);
                     break;
                 default:
                     return;
@@ -336,7 +331,8 @@ namespace SimplePaint
         private void panelCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             //TODO if cursor is out of bounds set label to 0;0
-            statusLabelPosition.Text = e.X.ToString() + "; " + e.Y.ToString();
+            Point currPt = UnscalePoint(e.Location, canvasZoomFactor);
+            statusLabelPosition.Text = currPt.X.ToString() + "; " + currPt.Y.ToString();
             if (e.Button != MouseButtons.Left)
             {
                 return;
@@ -351,20 +347,21 @@ namespace SimplePaint
             switch (currentTool)
             {
                 case DrawingTools.Selector:
-                    int diffX = startPt.X - e.Location.X;
-                    int diffY = startPt.Y - e.Location.Y;
+                    //move canvas
+                    int diffX = startPt.X - currPt.X;
+                    int diffY = startPt.Y - currPt.Y;
                     Point canvasLocationNew = panelCanvas.Location;
                     canvasLocationNew.X -= diffX;
                     canvasLocationNew.Y -= diffY;
                     panelCanvas.Location = canvasLocationNew;
                     break;
                 case DrawingTools.Pencil:
-                    canvas.DrawLine(currentPen, startPt, e.Location);
+                    canvas.DrawLine(currentPen, ScalePoint(startPt, canvasZoomFactor), e.Location);
                     break;
                 case DrawingTools.Freehand:
                 case DrawingTools.Eraser:
-                    (currentShape as Freepath).AddPoint(e.Location);
-                    currentShape.Draw(canvas);
+                    (currentShape as Freepath).AddPoint(currPt);
+                    canvas.DrawLines(currentPen, (currentShape as Freepath).GetPoints(canvasZoomFactor));
                     return;
                 default:
                     return;

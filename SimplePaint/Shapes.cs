@@ -72,9 +72,10 @@ namespace SimplePaint
             pathPoints.Add(pathPoint);
         }
 
-        public Point[] GetPoints()
+        public Point[] GetPoints(float zoomFactor = 1.0F)
         {
-            return pathPoints.ToArray();
+            var result = pathPoints.Select(point => new Point((int)Math.Round(point.X * zoomFactor), (int)Math.Round(point.Y * zoomFactor)));
+            return result.ToArray();
         }
 
         public override void Draw(Graphics drawSurface)
