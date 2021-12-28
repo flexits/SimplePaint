@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -11,25 +6,22 @@ namespace SimplePaint
 {
     public static class ShapesFactory
     {
-        private static IDrawable currentShape;
-        private static Pen currentPen;
-
-        static ShapesFactory()
-        {
-            currentShape = null;
-            currentPen = new Pen(Color.Black, 1)
-            {
-                DashStyle = DashStyle.Solid
-            };
-        }
+        private static IDrawable currentShape = null;
 
         public static void Init<T>(Pen pen, Point startPt) where T : IDrawable
         {
-            if (pen != null)
+            object[] args = { null, startPt };
+            if (pen is null)
             {
-                currentPen = pen;
+                args[0] = new Pen(Color.Black, 1)
+                {
+                    DashStyle = DashStyle.Solid
+                };
             }
-            object[] args = { (Pen)currentPen.Clone(), startPt };
+            else
+            {
+                args[0] = (Pen)pen.Clone();
+            }
             currentShape = (T)Activator.CreateInstance(typeof(T), args);
         }
 
@@ -39,17 +31,7 @@ namespace SimplePaint
             {
                 throw new NullReferenceException();
             }
-            switch (currentShape.ShapeType)
-            {
-                case Shapes.LineStraight:
-                    (currentShape as Line).ChangeEndPoint(nextPt);
-                    break;
-                case Shapes.LineFreehand:
-                    (currentShape as Freepath).AddPoint(nextPt);
-                    break;
-                default:
-                    return;
-            }
+            currentShape.AddPoint(nextPt);
         }
 
         public static IDrawable Finish(Point endPt)
@@ -58,15 +40,7 @@ namespace SimplePaint
             {
                 throw new NullReferenceException();
             }
-            switch (currentShape.ShapeType)
-            {
-                case Shapes.LineStraight:
-                    (currentShape as Line).ChangeEndPoint(endPt);
-                    break;
-                case Shapes.LineFreehand:
-                    (currentShape as Freepath).AddPoint(endPt);
-                    break;
-            }
+            currentShape.AddPoint(endPt);
             return currentShape;
         }
     }

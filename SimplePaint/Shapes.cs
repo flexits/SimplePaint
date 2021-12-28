@@ -7,15 +7,9 @@ using System.Threading.Tasks;
 
 namespace SimplePaint
 {
-    public enum Shapes
-    {
-        LineStraight,
-        LineFreehand,
-    }
-
     public interface IDrawable : ICloneable
     {
-        Shapes ShapeType { get; }
+        void AddPoint(Point pathPoint);
         void Draw(Graphics drawSurface);
         Rectangle GetBoundingRectangle();
     }
@@ -29,20 +23,18 @@ namespace SimplePaint
             DrawingPen = pen;
         }
 
+        public abstract void AddPoint(Point pathPoint);
+        public abstract void Draw(Graphics drawSurface);
+        public abstract Rectangle GetBoundingRectangle();
+
         public object Clone()
         {
             return this.MemberwiseClone();
         }
-        
-        public abstract void Draw(Graphics drawSurface);
-        public abstract Rectangle GetBoundingRectangle();
-
-        public abstract Shapes ShapeType { get; }
     }
 
     internal class Line : Shape
     {
-        public override Shapes ShapeType => Shapes.LineStraight;
         private protected Point startPt { get; set; }
         private protected Point endPt { get; set; }
 
@@ -52,15 +44,9 @@ namespace SimplePaint
             endPt = startPoint;
         }
 
-        /*public Line(Pen pen, Point startPoint, Point endPoint) : base(pen)
+        public override void AddPoint(Point pathPoint)
         {
-            startPt = startPoint;
-            endPt = endPoint;
-        }*/
-
-        public void ChangeEndPoint(Point endPoint)
-        {
-            endPt = endPoint;
+            endPt = pathPoint;
         }
 
         public override void Draw(Graphics drawSurface)
@@ -79,9 +65,7 @@ namespace SimplePaint
     }
 
     internal class Freepath : Shape
-    {
-        public override Shapes ShapeType => Shapes.LineFreehand;
-
+    { 
         private protected List<Point> pathPoints;
         
         public Freepath(Pen pen, Point startPoint) : base(pen)
@@ -90,16 +74,16 @@ namespace SimplePaint
             AddPoint(startPoint);
         }
 
-        public void AddPoint(Point pathPoint)
+        public override void AddPoint(Point pathPoint)
         {
             pathPoints.Add(pathPoint);
         }
 
-        public Point[] GetPoints(float zoomFactor = 1.0F)
+        /*public Point[] GetPoints(float zoomFactor = 1.0F)
         {
             var result = pathPoints.Select(point => new Point((int)Math.Round(point.X * zoomFactor), (int)Math.Round(point.Y * zoomFactor)));
             return result.ToArray();
-        }
+        }*/
 
         public override void Draw(Graphics drawSurface)
         {

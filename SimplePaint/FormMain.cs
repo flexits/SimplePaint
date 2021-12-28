@@ -44,8 +44,6 @@ namespace SimplePaint
         private float canvasZoomFactor;
         private Size canvasSizeOriginal;
 
-        //IDrawable currentShape;
-
         private enum DrawingTools
         {
             None,
@@ -116,8 +114,6 @@ namespace SimplePaint
             trackBarWidth.Value = 1;
             comboBoxStyle.SelectedIndex = 0;
             checkBoxSmoothing.Checked = false;
-
-            //currentShape = null;
 
             panelCanvas.Invalidate();
         }
@@ -222,8 +218,6 @@ namespace SimplePaint
             }
         }
 
-        float prevZoomF = 1F;
-
         private void panelCanvas_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = currentSmoothingMode;
@@ -267,13 +261,10 @@ namespace SimplePaint
                     break;
                 case DrawingTools.Pencil:
                     Cursor.Current = Cursors.Cross;
-                    //ShapesFactory.Init(currentPen, Shapes.LineStraight, startPt);
                     ShapesFactory.Init<Line>(currentPen, startPt);
                     break;
                 case DrawingTools.Freehand:
                     Cursor.Current = Cursors.Cross;
-                    //currentShape = new Freepath((Pen)currentPen.Clone(), startPt);
-                    //ShapesFactory.Init(currentPen, Shapes.LineFreehand, startPt);
                     ShapesFactory.Init<Freepath>(currentPen, startPt);
                     break;
                 case DrawingTools.Eraser:
@@ -281,8 +272,6 @@ namespace SimplePaint
                     Pen eraserPen = (Pen)currentPen.Clone();
                     eraserPen.Color = pictureBoxBackColor.BackColor;
                     ShapesFactory.Init<Freepath>(eraserPen, startPt);
-                    //ShapesFactory.Init(eraserPen, Shapes.LineFreehand, startPt);
-                    //currentShape = new Freepath(eraserPen, startPt);
                     break;
                 default:
                     return;
@@ -332,20 +321,6 @@ namespace SimplePaint
                     canvasLocationNew.X -= diffX;
                     canvasLocationNew.Y -= diffY;
                     panelCanvas.Location = canvasLocationNew;
-                    break;
-                case DrawingTools.Pencil:
-                    //canvas.DrawLine(currentPen, ScalePoint(startPt, canvasZoomFactor), e.Location);
-
-                    break;
-                case DrawingTools.Freehand:
-                    (currentShape as Freepath).AddPoint(currPt);
-                    canvas.DrawLines(currentPen, (currentShape as Freepath).GetPoints(canvasZoomFactor));
-                    break;
-                case DrawingTools.Eraser:
-                    Pen eraserPen = (Pen)currentPen.Clone();
-                    eraserPen.Color = pictureBoxBackColor.BackColor;
-                    (currentShape as Freepath).AddPoint(currPt);
-                    canvas.DrawLines(eraserPen, (currentShape as Freepath).GetPoints(canvasZoomFactor));
                     break;
                 default:
                     return;
