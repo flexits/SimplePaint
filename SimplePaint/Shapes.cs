@@ -7,17 +7,24 @@ using System.Threading.Tasks;
 
 namespace SimplePaint
 {
-    interface IDrawable : ICloneable
+    public enum Shapes
     {
+        LineStraight,
+        LineFreehand,
+    }
+
+    public interface IDrawable : ICloneable
+    {
+        Shapes ShapeType { get; }
         void Draw(Graphics drawSurface);
         Rectangle GetBoundingRectangle();
     }
 
-    abstract class Shape : IDrawable
+    internal abstract class Shape : IDrawable
     {
         public Pen DrawingPen { get; set; }
 
-        protected Shape(Pen pen)
+        private protected Shape(Pen pen)
         {
             DrawingPen = pen;
         }
@@ -29,16 +36,30 @@ namespace SimplePaint
         
         public abstract void Draw(Graphics drawSurface);
         public abstract Rectangle GetBoundingRectangle();
+
+        public abstract Shapes ShapeType { get; }
     }
 
-    class Line : Shape
+    internal class Line : Shape
     {
-        protected Point startPt { get; set; }
-        protected Point endPt { get; set; }
+        public override Shapes ShapeType => Shapes.LineStraight;
+        private protected Point startPt { get; set; }
+        private protected Point endPt { get; set; }
+
+        public Line(Pen pen, Point startPoint) : base(pen)
+        {
+            startPt = startPoint;
+            endPt = startPoint;
+        }
 
         public Line(Pen pen, Point startPoint, Point endPoint) : base(pen)
         {
             startPt = startPoint;
+            endPt = endPoint;
+        }
+
+        public void ChangeEndPoint(Point endPoint)
+        {
             endPt = endPoint;
         }
 
@@ -57,9 +78,11 @@ namespace SimplePaint
         }
     }
 
-    class Freepath : Shape
+    internal class Freepath : Shape
     {
-        private List<Point> pathPoints;
+        public override Shapes ShapeType => Shapes.LineFreehand;
+
+        private protected List<Point> pathPoints;
         
         public Freepath(Pen pen, Point startPoint) : base(pen)
         {

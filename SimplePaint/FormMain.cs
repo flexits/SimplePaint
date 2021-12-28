@@ -44,7 +44,7 @@ namespace SimplePaint
         private float canvasZoomFactor;
         private Size canvasSizeOriginal;
 
-        IDrawable currentShape;
+        //IDrawable currentShape;
 
         private enum DrawingTools
         {
@@ -55,8 +55,6 @@ namespace SimplePaint
             Eraser
         }
 
-        //private Stack<IDrawable> shapes = new Stack<IDrawable>();
-        //private Stack<IDrawable> discarded = new Stack<IDrawable>();
 
         public FormMain()
         {
@@ -119,10 +117,7 @@ namespace SimplePaint
             comboBoxStyle.SelectedIndex = 0;
             checkBoxSmoothing.Checked = false;
 
-            //shapes.Clear();
-            //discarded.Clear();
-
-            currentShape = null;
+            //currentShape = null;
 
             panelCanvas.Invalidate();
         }
@@ -272,16 +267,19 @@ namespace SimplePaint
                     break;
                 case DrawingTools.Pencil:
                     Cursor.Current = Cursors.Cross;
+                    ShapesFactory.Init(currentPen, Shapes.LineStraight, startPt);
                     break;
                 case DrawingTools.Freehand:
                     Cursor.Current = Cursors.Cross;
-                    currentShape = new Freepath((Pen)currentPen.Clone(), startPt);
+                    //currentShape = new Freepath((Pen)currentPen.Clone(), startPt);
+                    ShapesFactory.Init(currentPen, Shapes.LineFreehand, startPt);
                     break;
                 case DrawingTools.Eraser:
                     Cursor.Current = Cursors.Cross;
                     Pen eraserPen = (Pen)currentPen.Clone();
                     eraserPen.Color = pictureBoxBackColor.BackColor;
-                    currentShape = new Freepath(eraserPen, startPt);
+                    ShapesFactory.Init(eraserPen, Shapes.LineFreehand, startPt);
+                    //currentShape = new Freepath(eraserPen, startPt);
                     break;
                 default:
                     return;
@@ -297,12 +295,12 @@ namespace SimplePaint
             {
                 return;
             }
-            if (currentTool == DrawingTools.None)
+            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Selector)
             {
                 return;
             }
-            
-            switch (currentTool)
+
+            /*switch (currentTool)
             {
                 case DrawingTools.Pencil:
                     currentShape = new Line((Pen)currentPen.Clone(), startPt, currPt);
@@ -313,9 +311,11 @@ namespace SimplePaint
                     break;
                 default:
                     return;
-            }
+            }*/
 
-            currentDrawing.AddShape(currentShape);
+            //currentDrawing.AddShape(currentShape);
+
+            currentDrawing.AddShape(ShapesFactory.Finish(currPt));
         }
 
         private void panelCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -327,14 +327,14 @@ namespace SimplePaint
             {
                 return;
             }
-            if (currentTool == DrawingTools.None)
+            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Selector)
             {
                 return;
             }
             //TODO check if e.Location is within the borders of panelContainer
-            Graphics canvas = (sender as Control).CreateGraphics();
             (sender as Control).Refresh();
-            switch (currentTool)
+            ShapesFactory.Finish(currPt).Draw((sender as Control).CreateGraphics());
+            /*switch (currentTool)
             {
                 case DrawingTools.Selector:
                     //move canvas
@@ -346,7 +346,8 @@ namespace SimplePaint
                     panelCanvas.Location = canvasLocationNew;
                     break;
                 case DrawingTools.Pencil:
-                    canvas.DrawLine(currentPen, ScalePoint(startPt, canvasZoomFactor), e.Location);
+                    //canvas.DrawLine(currentPen, ScalePoint(startPt, canvasZoomFactor), e.Location);
+
                     break;
                 case DrawingTools.Freehand:
                     (currentShape as Freepath).AddPoint(currPt);
@@ -360,7 +361,7 @@ namespace SimplePaint
                     break;
                 default:
                     return;
-            }
+            }*/
         }
 
         private void panelContainer_Resize(object sender, EventArgs e)
@@ -376,24 +377,24 @@ namespace SimplePaint
 
         private void buttonZoomIn_Click(object sender, EventArgs e)
         {
-            /*canvasZoomFactor += ZOOM_STEP;
-            panelCanvas.Invalidate();*/
+            canvasZoomFactor += ZOOM_STEP;
+            panelCanvas.Invalidate();
         }
 
         private void buttonZoomOut_Click(object sender, EventArgs e)
         {
-            /*if (canvasZoomFactor <= ZOOM_STEP)
+            if (canvasZoomFactor <= ZOOM_STEP)
             {
                 return;
             }
             canvasZoomFactor -= ZOOM_STEP;
-            panelCanvas.Invalidate();*/
+            panelCanvas.Invalidate();
         }
 
         private void buttonZoomReset_Click(object sender, EventArgs e)
         {
-            /*canvasZoomFactor = ZOOM_DEFT;
-            panelCanvas.Invalidate();*/
+            canvasZoomFactor = ZOOM_DEFT;
+            panelCanvas.Invalidate();
         }
 
         private void pictureBoxToolColor_Click(object sender, EventArgs e)

@@ -20,6 +20,7 @@ namespace SimplePaint
         void UndoAll();
         void Clear();
     }
+
     class Drawing : IDrawing
     {
         public event UpdateHandler Updated; //TODO send bounding rectangle
@@ -30,6 +31,10 @@ namespace SimplePaint
 
         public void AddShape(IDrawable shape)
         {
+            if (shape == null)
+            {
+                return;
+            }
             shapes.Push(shape);
             discarded.Clear();
             Updated?.Invoke();
