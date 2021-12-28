@@ -52,11 +52,11 @@ namespace SimplePaint
             endPt = startPoint;
         }
 
-        public Line(Pen pen, Point startPoint, Point endPoint) : base(pen)
+        /*public Line(Pen pen, Point startPoint, Point endPoint) : base(pen)
         {
             startPt = startPoint;
             endPt = endPoint;
-        }
+        }*/
 
         public void ChangeEndPoint(Point endPoint)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -22,24 +23,14 @@ namespace SimplePaint
             };
         }
 
-        public static void Init(Pen pen, Shapes shapeType, Point startPt)
+        public static void Init<T>(Pen pen, Point startPt) where T : IDrawable
         {
             if (pen != null)
             {
                 currentPen = pen;
             }
-            switch (shapeType)
-            {
-                case Shapes.LineStraight:
-                    currentShape = new Line((Pen)currentPen.Clone(), startPt);
-                    break;
-                case Shapes.LineFreehand:
-                    currentShape = new Freepath((Pen)currentPen.Clone(), startPt);
-                    break;
-                default:
-                    currentShape = null;
-                    return;
-            }
+            object[] args = { (Pen)currentPen.Clone(), startPt };
+            currentShape = (T)Activator.CreateInstance(typeof(T), args);
         }
 
         public static void Continue(Point nextPt)

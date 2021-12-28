@@ -267,18 +267,21 @@ namespace SimplePaint
                     break;
                 case DrawingTools.Pencil:
                     Cursor.Current = Cursors.Cross;
-                    ShapesFactory.Init(currentPen, Shapes.LineStraight, startPt);
+                    //ShapesFactory.Init(currentPen, Shapes.LineStraight, startPt);
+                    ShapesFactory.Init<Line>(currentPen, startPt);
                     break;
                 case DrawingTools.Freehand:
                     Cursor.Current = Cursors.Cross;
                     //currentShape = new Freepath((Pen)currentPen.Clone(), startPt);
-                    ShapesFactory.Init(currentPen, Shapes.LineFreehand, startPt);
+                    //ShapesFactory.Init(currentPen, Shapes.LineFreehand, startPt);
+                    ShapesFactory.Init<Freepath>(currentPen, startPt);
                     break;
                 case DrawingTools.Eraser:
                     Cursor.Current = Cursors.Cross;
                     Pen eraserPen = (Pen)currentPen.Clone();
                     eraserPen.Color = pictureBoxBackColor.BackColor;
-                    ShapesFactory.Init(eraserPen, Shapes.LineFreehand, startPt);
+                    ShapesFactory.Init<Freepath>(eraserPen, startPt);
+                    //ShapesFactory.Init(eraserPen, Shapes.LineFreehand, startPt);
                     //currentShape = new Freepath(eraserPen, startPt);
                     break;
                 default:
@@ -299,21 +302,6 @@ namespace SimplePaint
             {
                 return;
             }
-
-            /*switch (currentTool)
-            {
-                case DrawingTools.Pencil:
-                    currentShape = new Line((Pen)currentPen.Clone(), startPt, currPt);
-                    break;
-                case DrawingTools.Freehand:
-                case DrawingTools.Eraser:
-                    (currentShape as Freepath).AddPoint(currPt);
-                    break;
-                default:
-                    return;
-            }*/
-
-            //currentDrawing.AddShape(currentShape);
 
             currentDrawing.AddShape(ShapesFactory.Finish(currPt));
         }
