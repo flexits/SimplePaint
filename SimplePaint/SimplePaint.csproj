@@ -56,6 +56,7 @@
     <Compile Include="DialogNew.Designer.cs">
       <DependentUpon>DialogNew.cs</DependentUpon>
     </Compile>
+    <Compile Include="Drawing.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

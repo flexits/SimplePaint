@@ -35,6 +35,8 @@ namespace SimplePaint
          + undo и redo 
          */
 
+        private IDrawing currentDrawing;
+
         private DrawingTools currentTool;
         private Pen currentPen;
         private Point startPt;
@@ -53,8 +55,8 @@ namespace SimplePaint
             Eraser
         }
 
-        private Stack<IDrawable> shapes = new Stack<IDrawable>();
-        private Stack<IDrawable> discarded = new Stack<IDrawable>();
+        //private Stack<IDrawable> shapes = new Stack<IDrawable>();
+        //private Stack<IDrawable> discarded = new Stack<IDrawable>();
 
         public FormMain()
         {
@@ -101,6 +103,9 @@ namespace SimplePaint
 
         private void ResetDrawing()
         {
+            currentDrawing = new Drawing();
+            currentDrawing.Updated += CurrentDrawing_Updated;
+
             currentTool = DrawingTools.None;
             currentPen = new Pen(Color.Black, 1);
             currentPen.DashStyle = DashStyle.Solid;
@@ -114,11 +119,16 @@ namespace SimplePaint
             comboBoxStyle.SelectedIndex = 0;
             checkBoxSmoothing.Checked = false;
 
-            shapes.Clear();
-            discarded.Clear();
+            //shapes.Clear();
+            //discarded.Clear();
 
             currentShape = null;
 
+            panelCanvas.Invalidate();
+        }
+
+        private void CurrentDrawing_Updated()
+        {
             panelCanvas.Invalidate();
         }
 
@@ -149,36 +159,17 @@ namespace SimplePaint
 
         private void toolStripButtonUndo_Click(object sender, EventArgs e)
         {
-            if (shapes.Count == 0)
-            {
-                return;
-            }
-            discarded.Push(shapes.Pop());
-            panelCanvas.Invalidate();
+            currentDrawing.Undo();
         }
 
         private void toolStripButtonRedo_Click(object sender, EventArgs e)
         {
-            if (discarded.Count == 0)
-            {
-                return;
-            }
-            shapes.Push(discarded.Pop());
-            panelCanvas.Invalidate();
+            currentDrawing.Redo();
         }
 
         private void toolStripButtonClear_Click(object sender, EventArgs e)
         {
-            Stack<IDrawable> temp = new Stack<IDrawable>();
-            while (shapes.Count > 0)
-            {
-                temp.Push(shapes.Pop());
-            }
-            while (temp.Count > 0)
-            {
-                discarded.Push(temp.Pop());
-            }
-            panelCanvas.Invalidate();
+            currentDrawing.UndoAll();
         }
 
         private void toolStripButtonToolSelect_CheckedChanged(object sender, EventArgs e)
@@ -242,10 +233,8 @@ namespace SimplePaint
         {
             e.Graphics.SmoothingMode = currentSmoothingMode;
             e.Graphics.ScaleTransform(canvasZoomFactor, canvasZoomFactor);
-            for (int i = shapes.Count - 1; i >= 0; i--)
-            {
-                shapes.ElementAt(i).Draw(e.Graphics);
-            }
+            
+            currentDrawing.DrawAll(e.Graphics);
             
             Size zoomedSize = new Size((int)(canvasSizeOriginal.Width * canvasZoomFactor), (int)(canvasSizeOriginal.Height * canvasZoomFactor));
             panelCanvas.Size = zoomedSize;
@@ -325,9 +314,8 @@ namespace SimplePaint
                 default:
                     return;
             }
-            shapes.Push(currentShape);
-            panelCanvas.Invalidate(currentShape.GetBoundingRectangle());
-            discarded.Clear();
+
+            currentDrawing.AddShape(currentShape);
         }
 
         private void panelCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -361,10 +349,15 @@ namespace SimplePaint
                     canvas.DrawLine(currentPen, ScalePoint(startPt, canvasZoomFactor), e.Location);
                     break;
                 case DrawingTools.Freehand:
-                case DrawingTools.Eraser:
                     (currentShape as Freepath).AddPoint(currPt);
                     canvas.DrawLines(currentPen, (currentShape as Freepath).GetPoints(canvasZoomFactor));
-                    return;
+                    break;
+                case DrawingTools.Eraser:
+                    Pen eraserPen = (Pen)currentPen.Clone();
+                    eraserPen.Color = pictureBoxBackColor.BackColor;
+                    (currentShape as Freepath).AddPoint(currPt);
+                    canvas.DrawLines(eraserPen, (currentShape as Freepath).GetPoints(canvasZoomFactor));
+                    break;
                 default:
                     return;
             }
@@ -383,24 +376,24 @@ namespace SimplePaint
 
         private void buttonZoomIn_Click(object sender, EventArgs e)
         {
-            canvasZoomFactor += ZOOM_STEP;
-            panelCanvas.Invalidate();
+            /*canvasZoomFactor += ZOOM_STEP;
+            panelCanvas.Invalidate();*/
         }
 
         private void buttonZoomOut_Click(object sender, EventArgs e)
         {
-            if (canvasZoomFactor <= ZOOM_STEP)
+            /*if (canvasZoomFactor <= ZOOM_STEP)
             {
                 return;
             }
             canvasZoomFactor -= ZOOM_STEP;
-            panelCanvas.Invalidate();
+            panelCanvas.Invalidate();*/
         }
 
         private void buttonZoomReset_Click(object sender, EventArgs e)
         {
-            canvasZoomFactor = ZOOM_DEFT;
-            panelCanvas.Invalidate();
+            /*canvasZoomFactor = ZOOM_DEFT;
+            panelCanvas.Invalidate();*/
         }
 
         private void pictureBoxToolColor_Click(object sender, EventArgs e)
@@ -462,8 +455,7 @@ namespace SimplePaint
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            bool canvasChanged = shapes.Count > 0;
-            if (canvasChanged)
+            if (currentDrawing.DrawingChanged)
             {
                 SaveDrawing(true);
             }
@@ -479,13 +471,12 @@ namespace SimplePaint
                 CenterCanvas();
                 toolStripButtonSelect.Checked = true;
             }
-            ControlsActivation(resultOK || canvasChanged);
+            ControlsActivation(resultOK || currentDrawing.DrawingChanged);
         }
 
         private void toolStripButtonOpen_Click(object sender, EventArgs e)
         {
-            bool canvasChanged = shapes.Count > 0;
-            if (canvasChanged)
+            if (currentDrawing.DrawingChanged)
             {
                 SaveDrawing(true);
             }
@@ -493,11 +484,16 @@ namespace SimplePaint
             if (resultOK)
             {
                 ResetDrawing();
-                //load file 
+                LoadFile();
                 CenterCanvas();
                 toolStripButtonSelect.Checked = true;
             }
-            ControlsActivation(resultOK || canvasChanged);
+            ControlsActivation(resultOK || currentDrawing.DrawingChanged);
+        }
+
+        private void toolStripButtonSave_Click(object sender, EventArgs e)
+        {
+            SaveDrawing();
         }
 
         private void SaveDrawing(bool issuePrompt = false)
@@ -516,9 +512,9 @@ namespace SimplePaint
             }
         }
 
-        private void toolStripButtonSave_Click(object sender, EventArgs e)
+        private void LoadFile()
         {
-            SaveDrawing();
+            throw new NotImplementedException();
         }
     }
 }
