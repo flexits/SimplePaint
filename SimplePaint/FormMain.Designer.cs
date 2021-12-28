@@ -33,6 +33,7 @@ namespace SimplePaint
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTools = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
@@ -44,14 +45,12 @@ namespace SimplePaint
             this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomReset = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
-            this.panelContainer = new System.Windows.Forms.Panel();
-            this.panelCanvas = new System.Windows.Forms.Panel();
             this.panelColors = new System.Windows.Forms.Panel();
             this.checkBoxSmoothing = new System.Windows.Forms.CheckBox();
             this.comboBoxStyle = new System.Windows.Forms.ComboBox();
@@ -68,20 +67,23 @@ namespace SimplePaint
             this.statusLabelTool = new System.Windows.Forms.ToolStripStatusLabel();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.drawCanvas1 = new SimplePaint.DrawCanvas();
+            this.panelContainer = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
-            this.panelContainer.SuspendLayout();
             this.panelColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.panelContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.файлToolStripMenuItem});
+            this.файлToolStripMenuItem,
+            this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -103,6 +105,13 @@ namespace SimplePaint
             this.toolStripMenuItemExit.Size = new System.Drawing.Size(146, 22);
             this.toolStripMenuItemExit.Text = "Выход";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.toolStripMenuItemExit_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(24, 20);
+            this.toolStripMenuItem1.Text = "?";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // toolStripTools
             // 
@@ -228,16 +237,6 @@ namespace SimplePaint
             this.toolStripButtonUndo.Text = "Отменить";
             this.toolStripButtonUndo.Click += new System.EventHandler(this.toolStripButtonUndo_Click);
             // 
-            // toolStripButtonRedo
-            // 
-            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRedo.Image = global::SimplePaint.Properties.Resources.redo_40px;
-            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
-            this.toolStripButtonRedo.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonRedo.Text = "Вернуть";
-            this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
-            // 
             // toolStripButtonClear
             // 
             this.toolStripButtonClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -247,6 +246,16 @@ namespace SimplePaint
             this.toolStripButtonClear.Size = new System.Drawing.Size(36, 36);
             this.toolStripButtonClear.Text = "Отменить всё";
             this.toolStripButtonClear.Click += new System.EventHandler(this.toolStripButtonClear_Click);
+            // 
+            // toolStripButtonRedo
+            // 
+            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRedo.Image = global::SimplePaint.Properties.Resources.redo_40px;
+            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
+            this.toolStripButtonRedo.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonRedo.Text = "Вернуть";
+            this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
             // 
             // toolStripSeparator2
             // 
@@ -282,33 +291,6 @@ namespace SimplePaint
             this.toolStripButtonZoomOut.Size = new System.Drawing.Size(36, 36);
             this.toolStripButtonZoomOut.Text = "Уменьшить масштаб";
             this.toolStripButtonZoomOut.Click += new System.EventHandler(this.buttonZoomOut_Click);
-            // 
-            // panelContainer
-            // 
-            this.panelContainer.AutoScroll = true;
-            this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelContainer.Controls.Add(this.panelCanvas);
-            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(0, 63);
-            this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(648, 365);
-            this.panelContainer.TabIndex = 2;
-            this.panelContainer.Resize += new System.EventHandler(this.panelContainer_Resize);
-            // 
-            // panelCanvas
-            // 
-            this.panelCanvas.AutoSize = true;
-            this.panelCanvas.BackColor = System.Drawing.Color.White;
-            this.panelCanvas.Location = new System.Drawing.Point(65, 45);
-            this.panelCanvas.Name = "panelCanvas";
-            this.panelCanvas.Size = new System.Drawing.Size(520, 281);
-            this.panelCanvas.TabIndex = 0;
-            this.panelCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.panelCanvas_Paint);
-            this.panelCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelCanvas_MouseDown);
-            this.panelCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelCanvas_MouseMove);
-            this.panelCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelCanvas_MouseUp);
-            this.panelCanvas.Resize += new System.EventHandler(this.panelCanvas_Resize);
             // 
             // panelColors
             // 
@@ -449,6 +431,33 @@ namespace SimplePaint
             this.openFileDialog1.Filter = "JPEG|*.jpg|Bitmap|*.bmp|PNG|*.png|Все файлы|*.*";
             this.openFileDialog1.Title = "Открыть графический файл";
             // 
+            // drawCanvas1
+            // 
+            this.drawCanvas1.BackColor = System.Drawing.Color.White;
+            this.drawCanvas1.CanvasSmoothing = System.Drawing.Drawing2D.SmoothingMode.None;
+            this.drawCanvas1.Location = new System.Drawing.Point(32, 25);
+            this.drawCanvas1.Name = "drawCanvas1";
+            this.drawCanvas1.Size = new System.Drawing.Size(150, 150);
+            this.drawCanvas1.TabIndex = 0;
+            this.drawCanvas1.ZoomStep = 0.1F;
+            this.drawCanvas1.ShapesDrawRequest += new System.Windows.Forms.PaintEventHandler(this.drawCanvas1_ShapesDrawRequest);
+            this.drawCanvas1.OnMouseDownScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseDownScaled);
+            this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
+            this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
+            // 
+            // panelContainer
+            // 
+            this.panelContainer.AutoScroll = true;
+            this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelContainer.Controls.Add(this.drawCanvas1);
+            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContainer.Location = new System.Drawing.Point(0, 63);
+            this.panelContainer.Name = "panelContainer";
+            this.panelContainer.Size = new System.Drawing.Size(648, 365);
+            this.panelContainer.TabIndex = 2;
+            this.panelContainer.Resize += new System.EventHandler(this.panelContainer_Resize);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -468,8 +477,6 @@ namespace SimplePaint
             this.menuStrip1.PerformLayout();
             this.toolStripTools.ResumeLayout(false);
             this.toolStripTools.PerformLayout();
-            this.panelContainer.ResumeLayout(false);
-            this.panelContainer.PerformLayout();
             this.panelColors.ResumeLayout(false);
             this.panelColors.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).EndInit();
@@ -477,6 +484,7 @@ namespace SimplePaint
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.panelContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -488,10 +496,8 @@ namespace SimplePaint
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStripTools;
         private System.Windows.Forms.ToolStripButton toolStripButtonPencil;
-        private System.Windows.Forms.Panel panelContainer;
         private System.Windows.Forms.Panel panelColors;
         private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.Panel panelCanvas;
         private System.Windows.Forms.ToolStripButton toolStripButtonUndo;
         private System.Windows.Forms.ToolStripButton toolStripButtonRedo;
         private System.Windows.Forms.ToolStripButton toolStripButtonFreehand;
@@ -522,6 +528,9 @@ namespace SimplePaint
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripButton toolStripButtonEraser;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private DrawCanvas drawCanvas1;
+        private System.Windows.Forms.Panel panelContainer;
     }
 }
 

@@ -40,9 +40,6 @@ namespace SimplePaint
         private DrawingTools currentTool;
         private Pen currentPen;
         private Point startPt;
-        private SmoothingMode currentSmoothingMode;
-        private float canvasZoomFactor;
-        private Size canvasSizeOriginal;
 
         private enum DrawingTools
         {
@@ -57,8 +54,6 @@ namespace SimplePaint
         public FormMain()
         {
             InitializeComponent();
-            _ = typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, panelCanvas, new object[] { true });
-
             var dstyles = DashStyles.GetReadableNames();
             foreach (string style in dstyles)
             {
@@ -71,13 +66,13 @@ namespace SimplePaint
         private void FormMain_Shown(object sender, EventArgs e)
         {
             toolStripButtonNew.PerformClick();
-            CenterCanvas();
+            drawCanvas1.CenterParent();
             toolStripButtonSelect.Checked = true;
         }
 
         private void ControlsActivation(bool setEnabled)
         {
-            panelCanvas.Visible = setEnabled;
+            drawCanvas1.Visible = setEnabled;
             panelColors.Enabled = setEnabled;
             foreach (ToolStripItem tsitem in toolStripTools.Items)
             {
@@ -106,41 +101,19 @@ namespace SimplePaint
             currentPen = new Pen(Color.Black, 1);
             currentPen.DashStyle = DashStyle.Solid;
             startPt = new Point(0, 0);
-            currentSmoothingMode = SmoothingMode.None;
-            canvasZoomFactor = ZOOM_DEFT;
+            drawCanvas1.CanvasSmoothing = SmoothingMode.None;
 
             pictureBoxToolColor.BackColor = Color.Black;
             pictureBoxBackColor.BackColor = Color.White;
             trackBarWidth.Value = 1;
             comboBoxStyle.SelectedIndex = 0;
             checkBoxSmoothing.Checked = false;
-
-            panelCanvas.Invalidate();
+            drawCanvas1.Invalidate();
         }
 
         private void CurrentDrawing_Updated()
         {
-            panelCanvas.Invalidate();
-        }
-
-        private void CenterCanvas()
-        {
-            if (!panelCanvas.Visible)
-            {
-                return;
-            }
-            Point canvasLocationNew = new Point(0, 0);
-            int diffY = panelContainer.Height - panelCanvas.Height;
-            if (diffY > 0)
-            {
-                canvasLocationNew.Y = diffY / 2;
-            }
-            int diffX = panelContainer.Width - panelCanvas.Width;
-            if (diffX > 0)
-            {
-                canvasLocationNew.X = diffX / 2;
-            }
-            panelCanvas.Location = canvasLocationNew;
+            drawCanvas1.Invalidate();
         }
 
         private void toolStripMenuItemExit_Click(object sender, EventArgs e)
@@ -218,146 +191,24 @@ namespace SimplePaint
             }
         }
 
-        private void panelCanvas_Paint(object sender, PaintEventArgs e)
-        {
-            e.Graphics.SmoothingMode = currentSmoothingMode;
-            e.Graphics.ScaleTransform(canvasZoomFactor, canvasZoomFactor);
-            
-            currentDrawing.DrawAll(e.Graphics);
-            
-            Size zoomedSize = new Size((int)(canvasSizeOriginal.Width * canvasZoomFactor), (int)(canvasSizeOriginal.Height * canvasZoomFactor));
-            panelCanvas.Size = zoomedSize;
-
-            statusLabelScale.Text = "Масштаб " + Math.Round(canvasZoomFactor * 100) + "%";
-        }
-
-        private Point UnscalePoint (Point scaledPoint, float zoomFactor)
-        {
-            Point unscaledPoint = Point.Empty;
-            unscaledPoint.X = (int)Math.Round(scaledPoint.X / zoomFactor);
-            unscaledPoint.Y = (int)Math.Round(scaledPoint.Y / zoomFactor);
-            return unscaledPoint;
-        }
-
-        private Point ScalePoint(Point unscaledPoint, float zoomFactor)
-        {
-            Point scaledPoint = Point.Empty;
-            scaledPoint.X = (int)Math.Round(unscaledPoint.X * zoomFactor);
-            scaledPoint.Y = (int)Math.Round(unscaledPoint.Y * zoomFactor);
-            return scaledPoint;
-        }
-
-        private void panelCanvas_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-            startPt = UnscalePoint(e.Location, canvasZoomFactor);
-            switch (currentTool)
-            {
-                case DrawingTools.Selector:
-                    Cursor.Current = Cursors.SizeAll;
-                    break;
-                case DrawingTools.Pencil:
-                    Cursor.Current = Cursors.Cross;
-                    ShapesFactory.Init<Line>(currentPen, startPt);
-                    break;
-                case DrawingTools.Freehand:
-                    Cursor.Current = Cursors.Cross;
-                    ShapesFactory.Init<Freepath>(currentPen, startPt);
-                    break;
-                case DrawingTools.Eraser:
-                    Cursor.Current = Cursors.Cross;
-                    Pen eraserPen = (Pen)currentPen.Clone();
-                    eraserPen.Color = pictureBoxBackColor.BackColor;
-                    ShapesFactory.Init<Freepath>(eraserPen, startPt);
-                    break;
-                default:
-                    return;
-            }
-        }
-
-        private void panelCanvas_MouseUp(object sender, MouseEventArgs e)
-        {
-            Cursor.Current = Cursors.Arrow;
-            //TODO check if e.Location is within the borders of panelCanvas
-            Point currPt = UnscalePoint(e.Location, canvasZoomFactor);
-            if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Selector)
-            {
-                return;
-            }
-
-            currentDrawing.AddShape(ShapesFactory.Finish(currPt));
-        }
-
-        private void panelCanvas_MouseMove(object sender, MouseEventArgs e)
-        {
-            //TODO if cursor is out of bounds set label to 0;0
-            Point currPt = UnscalePoint(e.Location, canvasZoomFactor);
-            statusLabelPosition.Text = currPt.X.ToString() + "; " + currPt.Y.ToString();
-            if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Selector)
-            {
-                return;
-            }
-            //TODO check if e.Location is within the borders of panelContainer
-            (sender as Control).Refresh();
-            ShapesFactory.Finish(currPt).Draw((sender as Control).CreateGraphics());
-            /*switch (currentTool)
-            {
-                case DrawingTools.Selector:
-                    //move canvas
-                    int diffX = startPt.X - currPt.X;
-                    int diffY = startPt.Y - currPt.Y;
-                    Point canvasLocationNew = panelCanvas.Location;
-                    canvasLocationNew.X -= diffX;
-                    canvasLocationNew.Y -= diffY;
-                    panelCanvas.Location = canvasLocationNew;
-                    break;
-                default:
-                    return;
-            }*/
-        }
-
         private void panelContainer_Resize(object sender, EventArgs e)
         {
-            CenterCanvas();
-        }
-
-        private void panelCanvas_Resize(object sender, EventArgs e)
-        {
-            //TODO only if not moved by selector tool
-            CenterCanvas();
+            drawCanvas1.CenterParent();
         }
 
         private void buttonZoomIn_Click(object sender, EventArgs e)
         {
-            canvasZoomFactor += ZOOM_STEP;
-            panelCanvas.Invalidate();
+            drawCanvas1.ZoomIn();
         }
 
         private void buttonZoomOut_Click(object sender, EventArgs e)
         {
-            if (canvasZoomFactor <= ZOOM_STEP)
-            {
-                return;
-            }
-            canvasZoomFactor -= ZOOM_STEP;
-            panelCanvas.Invalidate();
+            drawCanvas1.ZoomOut();
         }
 
         private void buttonZoomReset_Click(object sender, EventArgs e)
         {
-            canvasZoomFactor = ZOOM_DEFT;
-            panelCanvas.Invalidate();
+            drawCanvas1.ZoomReset();
         }
 
         private void pictureBoxToolColor_Click(object sender, EventArgs e)
@@ -377,7 +228,7 @@ namespace SimplePaint
             if (colorDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 Color selectedColor = colorDialog1.Color;
-                panelCanvas.BackColor = selectedColor;
+                drawCanvas1.BackColor = selectedColor;
                 pictureBoxBackColor.BackColor = selectedColor;
             }
         }
@@ -402,18 +253,18 @@ namespace SimplePaint
 
         private void checkBoxSmoothing_CheckedChanged(object sender, EventArgs e)
         {
-            SmoothingMode prevMode = currentSmoothingMode;
+            SmoothingMode prevMode = drawCanvas1.CanvasSmoothing;
             if (checkBoxSmoothing.Checked)
             {
-                currentSmoothingMode = SmoothingMode.AntiAlias;
+                drawCanvas1.CanvasSmoothing = SmoothingMode.AntiAlias;
             }
             else
             {
-                currentSmoothingMode = SmoothingMode.None;
+                drawCanvas1.CanvasSmoothing = SmoothingMode.None;
             }
-            if (currentSmoothingMode != prevMode)
+            if (drawCanvas1.CanvasSmoothing != prevMode)
             {
-                panelCanvas.Invalidate();
+                drawCanvas1.Invalidate();
             }
         }
 
@@ -429,10 +280,9 @@ namespace SimplePaint
             if (resultOK)
             {
                 ResetDrawing();
-                canvasSizeOriginal = dialogNew.SelectedDimensions;
-                panelCanvas.Width = canvasSizeOriginal.Width;
-                panelCanvas.Height = canvasSizeOriginal.Height;
-                CenterCanvas();
+                drawCanvas1.Size = dialogNew.SelectedDimensions;
+                drawCanvas1.canvasSizeOriginal = dialogNew.SelectedDimensions;
+                drawCanvas1.CenterParent();
                 toolStripButtonSelect.Checked = true;
             }
             ControlsActivation(resultOK || currentDrawing.DrawingChanged);
@@ -449,7 +299,7 @@ namespace SimplePaint
             {
                 ResetDrawing();
                 LoadFile();
-                CenterCanvas();
+                drawCanvas1.CenterParent();
                 toolStripButtonSelect.Checked = true;
             }
             ControlsActivation(resultOK || currentDrawing.DrawingChanged);
@@ -479,6 +329,93 @@ namespace SimplePaint
         private void LoadFile()
         {
             throw new NotImplementedException();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void drawCanvas1_OnMouseDownScaled(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            switch (currentTool)
+            {
+                case DrawingTools.Selector:
+                    Cursor.Current = Cursors.SizeAll;
+                    break;
+                case DrawingTools.Pencil:
+                    Cursor.Current = Cursors.Cross;
+                    ShapesFactory.Init<Line>(currentPen, e.Location);
+                    break;
+                case DrawingTools.Freehand:
+                    Cursor.Current = Cursors.Cross;
+                    ShapesFactory.Init<Freepath>(currentPen, e.Location);
+                    break;
+                case DrawingTools.Eraser:
+                    Cursor.Current = Cursors.Cross;
+                    Pen eraserPen = (Pen)currentPen.Clone();
+                    eraserPen.Color = pictureBoxBackColor.BackColor;
+                    ShapesFactory.Init<Freepath>(eraserPen, e.Location);
+                    break;
+                default:
+                    return;
+            }
+            startPt = drawCanvas1.Location;
+        }
+
+        private void drawCanvas1_OnMouseMoveScaled(object sender, MouseEventArgs e)
+        {
+            //TODO if cursor is out of bounds set label to 0;0
+            statusLabelPosition.Text = e.X.ToString() + "; " + e.Y.ToString();
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            if (currentTool == DrawingTools.None)
+            {
+                return;
+            }
+            if (currentTool == DrawingTools.Selector)
+            {
+                //move canvas
+                //не работает!
+                int diffX = startPt.X - e.X;
+                int diffY = startPt.Y - e.Y;
+                Point canvasLocationNew = drawCanvas1.Location;
+                canvasLocationNew.X -= diffX;
+                canvasLocationNew.Y -= diffY;
+                drawCanvas1.Location = canvasLocationNew;
+                return;
+            }
+            //TODO check if e.Location is within the borders of panelContainer
+            (sender as Control).Refresh();
+            //неправильно! Draw должно быть UNSCALED (передать уже масшитабированный Graphics?)
+            ShapesFactory.Finish(e.Location).Draw((sender as Control).CreateGraphics());
+        }
+
+        private void drawCanvas1_OnMouseUpScaled(object sender, MouseEventArgs e)
+        {
+            Cursor.Current = Cursors.Arrow;
+            //TODO check if e.Location is within the borders of panelCanvas
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Selector)
+            {
+                return;
+            }
+            currentDrawing.AddShape(ShapesFactory.Finish(e.Location));
+        }
+
+        private void drawCanvas1_ShapesDrawRequest(object sender, PaintEventArgs e)
+        {
+            currentDrawing.DrawAll(e.Graphics);
+            statusLabelScale.Text = "Масштаб " + Math.Round(drawCanvas1.CanvasZoomFactor * 100) + "%";
         }
     }
 }
