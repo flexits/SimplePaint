@@ -312,22 +312,19 @@ namespace SimplePaint
             {
                 return;
             }
-            saveFileDialog1.Filter = "Векторное изображение|*.drw|Растр BMP|*.bmp|PNG|*.png|JPG|*.jpg";
+            saveFileDialog1.Filter = "Растр BMP|*.bmp|PNG|*.png|JPG|*.jpg";
             saveFileDialog1.FilterIndex = 1;
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 switch (saveFileDialog1.FilterIndex)
                 {
                     case 1:
-                        
-                        break;
-                    case 2:
                         drawCanvas1.GetBitmap().Save(saveFileDialog1.FileName, ImageFormat.Bmp);
                         break;
-                    case 3:
+                    case 2:
                         drawCanvas1.GetBitmap().Save(saveFileDialog1.FileName, ImageFormat.Png);
                         break;
-                    case 4:
+                    case 3:
                         drawCanvas1.GetBitmap().Save(saveFileDialog1.FileName, ImageFormat.Jpeg);
                         break;
                 }

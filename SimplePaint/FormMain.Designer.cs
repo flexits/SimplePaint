@@ -431,10 +431,6 @@ namespace SimplePaint
             this.openFileDialog1.Filter = "JPEG|*.jpg|Bitmap|*.bmp|PNG|*.png|Все файлы|*.*";
             this.openFileDialog1.Title = "Открыть графический файл";
             // 
-            // saveFileDialog1
-            // 
-            this.saveFileDialog1.Filter = "Векторное изображение|*.drw|Растр BMP|*.bmp|PNG|*.png|JPG|*.jpg";
-            // 
             // panelContainer
             // 
             this.panelContainer.AutoScroll = true;
