@@ -59,6 +59,16 @@ namespace SimplePaint
             CenterParent();
         }
 
+        public Bitmap GetBitmap()
+        {
+            ZoomReset();
+            Bitmap btmp = new Bitmap(this.Width, this.Height, CreateGraphics());
+            Rectangle cr = this.ClientRectangle;
+            cr = new Rectangle(0, 0, this.Width, this.Height);
+            this.DrawToBitmap(btmp, cr);
+            return btmp;
+        }
+
         public event PaintEventHandler ShapesDrawRequest;
 
         protected override void OnPaint(PaintEventArgs e)

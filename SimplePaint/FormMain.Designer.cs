@@ -67,8 +67,8 @@ namespace SimplePaint
             this.statusLabelTool = new System.Windows.Forms.ToolStripStatusLabel();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.drawCanvas1 = new SimplePaint.DrawCanvas();
             this.panelContainer = new System.Windows.Forms.Panel();
+            this.drawCanvas1 = new SimplePaint.DrawCanvas();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelColors.SuspendLayout();
@@ -431,6 +431,21 @@ namespace SimplePaint
             this.openFileDialog1.Filter = "JPEG|*.jpg|Bitmap|*.bmp|PNG|*.png|Все файлы|*.*";
             this.openFileDialog1.Title = "Открыть графический файл";
             // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "Векторное изображение|*.drw|Растр BMP|*.bmp|PNG|*.png|JPG|*.jpg";
+            // 
+            // panelContainer
+            // 
+            this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelContainer.Controls.Add(this.drawCanvas1);
+            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContainer.Location = new System.Drawing.Point(0, 63);
+            this.panelContainer.Name = "panelContainer";
+            this.panelContainer.Size = new System.Drawing.Size(648, 365);
+            this.panelContainer.TabIndex = 2;
+            // 
             // drawCanvas1
             // 
             this.drawCanvas1.BackColor = System.Drawing.Color.White;
@@ -445,18 +460,6 @@ namespace SimplePaint
             this.drawCanvas1.OnMouseDownScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseDownScaled);
             this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
             this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
-            // 
-            // panelContainer
-            // 
-            this.panelContainer.AutoScroll = true;
-            this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelContainer.Controls.Add(this.drawCanvas1);
-            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(0, 63);
-            this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(648, 365);
-            this.panelContainer.TabIndex = 2;
             // 
             // FormMain
             // 

@@ -24,13 +24,21 @@ namespace SimplePaint
 
     class Drawing : IDrawing
     {
-        public event UpdateHandler Updated; //TODO send bounding rectangle
-        private Stack<IDrawable> shapes = new Stack<IDrawable>();
-        private Stack<IDrawable> discarded = new Stack<IDrawable>();
+        public event UpdateHandler Updated; //TODO send bounding rectangle as an argument to make Inalidate(Rectangle) possible
+
+        private Stack<IDrawable> shapes;
+
+        private Stack<IDrawable> discarded;
 
         public bool DrawingChanged => shapes.Count > 0;
 
         public Size Size { get; set; }
+
+        public Drawing()
+        {
+            shapes = new Stack<IDrawable>();
+            discarded = new Stack<IDrawable>();
+        }
 
         public void AddShape(IDrawable shape)
         {

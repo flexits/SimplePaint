@@ -61,6 +61,7 @@ namespace SimplePaint
             // 
             // buttonCancel
             // 
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Location = new System.Drawing.Point(12, 78);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -74,7 +75,7 @@ namespace SimplePaint
             this.buttonOK.Location = new System.Drawing.Point(124, 78);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonOK.TabIndex = 5;
+            this.buttonOK.TabIndex = 3;
             this.buttonOK.Text = "ОК";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -94,7 +95,7 @@ namespace SimplePaint
             0});
             this.numericUpDownW.Name = "numericUpDownW";
             this.numericUpDownW.Size = new System.Drawing.Size(75, 20);
-            this.numericUpDownW.TabIndex = 6;
+            this.numericUpDownW.TabIndex = 1;
             this.numericUpDownW.Value = new decimal(new int[] {
             640,
             0,
@@ -116,7 +117,7 @@ namespace SimplePaint
             0});
             this.numericUpDownH.Name = "numericUpDownH";
             this.numericUpDownH.Size = new System.Drawing.Size(75, 20);
-            this.numericUpDownH.TabIndex = 7;
+            this.numericUpDownH.TabIndex = 2;
             this.numericUpDownH.Value = new decimal(new int[] {
             480,
             0,
@@ -125,8 +126,10 @@ namespace SimplePaint
             // 
             // DialogNew
             // 
+            this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(213, 114);
             this.ControlBox = false;
             this.Controls.Add(this.numericUpDownH);

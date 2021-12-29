@@ -4,11 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Reflection;
+using System.IO;
 
 namespace SimplePaint
 {
@@ -257,11 +258,7 @@ namespace SimplePaint
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            bool changesDetected = (currentDrawing?.DrawingChanged).GetValueOrDefault();
-            if (changesDetected)
-            {
-                SaveDrawing(true);
-            }
+            bool changesDetected = DetectChangesAndSave();
             DialogNew dialogNew = new DialogNew();
             dialogNew.StartPosition = FormStartPosition.CenterParent;
             bool resultOK = dialogNew.ShowDialog(this) == DialogResult.OK;
@@ -271,48 +268,69 @@ namespace SimplePaint
                 currentDrawing = new Drawing();
                 currentDrawing.Updated += CurrentDrawing_Updated;
                 currentDrawing.Size = dialogNew.SelectedDimensions;
-                drawCanvas1.Size = dialogNew.SelectedDimensions;
                 drawCanvas1.canvasSizeOriginal = dialogNew.SelectedDimensions;
-                drawCanvas1.CenterParent();
+                //drawCanvas1.CenterParent();
             }
             ControlsActivation(resultOK || changesDetected);
         }
 
         private void toolStripButtonOpen_Click(object sender, EventArgs e)
         {
-            bool changesDetected = (currentDrawing?.DrawingChanged).GetValueOrDefault();
-            if (changesDetected)
-            {
-                SaveDrawing(true);
-            }
+            bool changesDetected = DetectChangesAndSave();
             bool resultOK = openFileDialog1.ShowDialog(this) == DialogResult.OK;
             if (resultOK)
             {
                 ResetDrawing();
                 LoadFile();
-                drawCanvas1.CenterParent();
+                //drawCanvas1.CenterParent();
             }
             ControlsActivation(resultOK || changesDetected);
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            SaveDrawing();
+            SaveCurrentDrawing();
         }
 
-        private void SaveDrawing(bool issuePrompt = false)
+        private bool DetectChangesAndSave()
         {
-            if (issuePrompt)
+            bool changesDetected = (currentDrawing?.DrawingChanged).GetValueOrDefault();
+            if (changesDetected)
             {
                 DialogResult result = MessageBox.Show(this, "Имеются несохранённые изменения! Сохранить?", "Возможна потеря данных", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                if (result != DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
-                    return;
+                    SaveCurrentDrawing();
                 }
             }
+            return changesDetected;
+        }
+
+        private void SaveCurrentDrawing()
+        {
+            if (currentDrawing is null)
+            {
+                return;
+            }
+            saveFileDialog1.Filter = "Векторное изображение|*.drw|Растр BMP|*.bmp|PNG|*.png|JPG|*.jpg";
+            saveFileDialog1.FilterIndex = 1;
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                throw new NotImplementedException();
+                switch (saveFileDialog1.FilterIndex)
+                {
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        drawCanvas1.GetBitmap().Save(saveFileDialog1.FileName, ImageFormat.Bmp);
+                        break;
+                    case 3:
+                        drawCanvas1.GetBitmap().Save(saveFileDialog1.FileName, ImageFormat.Png);
+                        break;
+                    case 4:
+                        drawCanvas1.GetBitmap().Save(saveFileDialog1.FileName, ImageFormat.Jpeg);
+                        break;
+                }
             }
         }
 
