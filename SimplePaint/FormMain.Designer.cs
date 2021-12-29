@@ -437,6 +437,7 @@ namespace SimplePaint
             // 
             // panelContainer
             // 
+            this.panelContainer.AutoScroll = true;
             this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelContainer.Controls.Add(this.drawCanvas1);
