@@ -39,7 +39,7 @@ namespace SimplePaint
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonSelect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonHand = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonFreehand = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
@@ -121,7 +121,7 @@ namespace SimplePaint
             this.toolStripButtonOpen,
             this.toolStripButtonSave,
             this.toolStripSeparator3,
-            this.toolStripButtonSelect,
+            this.toolStripButtonHand,
             this.toolStripButtonPencil,
             this.toolStripButtonFreehand,
             this.toolStripButtonEraser,
@@ -174,17 +174,17 @@ namespace SimplePaint
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
             // 
-            // toolStripButtonSelect
+            // toolStripButtonHand
             // 
-            this.toolStripButtonSelect.CheckOnClick = true;
-            this.toolStripButtonSelect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonSelect.Image = global::SimplePaint.Properties.Resources.hand_40px;
-            this.toolStripButtonSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSelect.Name = "toolStripButtonSelect";
-            this.toolStripButtonSelect.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonSelect.Tag = "селектор";
-            this.toolStripButtonSelect.Text = "Перемещать";
-            this.toolStripButtonSelect.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            this.toolStripButtonHand.CheckOnClick = true;
+            this.toolStripButtonHand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonHand.Image = global::SimplePaint.Properties.Resources.hand_40px;
+            this.toolStripButtonHand.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonHand.Name = "toolStripButtonHand";
+            this.toolStripButtonHand.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonHand.Tag = "селектор";
+            this.toolStripButtonHand.Text = "Перемещать";
+            this.toolStripButtonHand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
             // toolStripButtonPencil
             // 
@@ -434,10 +434,11 @@ namespace SimplePaint
             // drawCanvas1
             // 
             this.drawCanvas1.BackColor = System.Drawing.Color.White;
+            this.drawCanvas1.canvasSizeOriginal = new System.Drawing.Size(100, 100);
             this.drawCanvas1.CanvasSmoothing = System.Drawing.Drawing2D.SmoothingMode.None;
-            this.drawCanvas1.Location = new System.Drawing.Point(32, 25);
+            this.drawCanvas1.Location = new System.Drawing.Point(0, 0);
             this.drawCanvas1.Name = "drawCanvas1";
-            this.drawCanvas1.Size = new System.Drawing.Size(150, 150);
+            this.drawCanvas1.Size = new System.Drawing.Size(100, 100);
             this.drawCanvas1.TabIndex = 0;
             this.drawCanvas1.ZoomStep = 0.1F;
             this.drawCanvas1.ShapesDrawRequest += new System.Windows.Forms.PaintEventHandler(this.drawCanvas1_ShapesDrawRequest);
@@ -456,7 +457,6 @@ namespace SimplePaint
             this.panelContainer.Name = "panelContainer";
             this.panelContainer.Size = new System.Drawing.Size(648, 365);
             this.panelContainer.TabIndex = 2;
-            this.panelContainer.Resize += new System.EventHandler(this.panelContainer_Resize);
             // 
             // FormMain
             // 
@@ -508,7 +508,7 @@ namespace SimplePaint
         private System.Windows.Forms.ToolStripButton toolStripButtonOpen;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton toolStripButtonSelect;
+        private System.Windows.Forms.ToolStripButton toolStripButtonHand;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomReset;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;

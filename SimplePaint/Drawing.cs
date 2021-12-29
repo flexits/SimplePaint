@@ -11,6 +11,7 @@ namespace SimplePaint
     interface IDrawing
     {
         bool DrawingChanged { get; }
+        Size Size { get; set; }
 
         event UpdateHandler Updated;
         void AddShape(IDrawable shape);
@@ -28,6 +29,8 @@ namespace SimplePaint
         private Stack<IDrawable> discarded = new Stack<IDrawable>();
 
         public bool DrawingChanged => shapes.Count > 0;
+
+        public Size Size { get; set; }
 
         public void AddShape(IDrawable shape)
         {

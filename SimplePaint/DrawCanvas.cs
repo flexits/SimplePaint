@@ -31,10 +31,6 @@ namespace SimplePaint
 
         public void CenterParent()
         {
-            if (!Visible)
-            {
-                return;
-            }
             int locY = (Parent.ClientSize.Height - Height) / 2;
             int locX = (Parent.ClientSize.Width - Width) / 2;
             Location = new Point(locX, locY);
@@ -58,7 +54,9 @@ namespace SimplePaint
 
         public void ZoomReset()
         {
+            CanvasZoomFactor = 1.0F;
             Invalidate();
+            CenterParent();
         }
 
         public event PaintEventHandler ShapesDrawRequest;
@@ -66,14 +64,11 @@ namespace SimplePaint
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-
             e.Graphics.SmoothingMode = CanvasSmoothing;
             e.Graphics.ScaleTransform(CanvasZoomFactor, CanvasZoomFactor);
             ShapesDrawRequest?.Invoke(this, e);
-            Size zoomedSize = new Size((int)(canvasSizeOriginal.Width * CanvasZoomFactor), (int)(canvasSizeOriginal.Height * CanvasZoomFactor));
-            this.Size = zoomedSize;
-
-            CenterParent();
+            this.Size = new Size((int)(canvasSizeOriginal.Width * CanvasZoomFactor), (int)(canvasSizeOriginal.Height * CanvasZoomFactor));
+            //CenterParent();
         }
 
         public event MouseEventHandler OnMouseDownScaled;
@@ -105,6 +100,10 @@ namespace SimplePaint
 
         private Point UnscalePoint(Point scaledPoint, float zoomFactor)
         {
+            //здесь проблема
+            //при малых zoomFactor (<= 0.5 примерно)
+            //координаты очень быстро становятся неадекватными,
+            //из-за этого при перемещении дрожит изображение и даже уезжает далеко за пределы экрана
             Point unscaledPoint = Point.Empty;
             unscaledPoint.X = (int)Math.Round(scaledPoint.X / zoomFactor);
             unscaledPoint.Y = (int)Math.Round(scaledPoint.Y / zoomFactor);

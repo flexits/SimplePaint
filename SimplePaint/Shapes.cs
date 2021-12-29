@@ -29,6 +29,7 @@ namespace SimplePaint
 
         public object Clone()
         {
+            //clone Pen too!
             return this.MemberwiseClone();
         }
     }
