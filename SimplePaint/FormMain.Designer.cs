@@ -76,6 +76,8 @@ namespace SimplePaint
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelColors.SuspendLayout();
@@ -203,7 +205,7 @@ namespace SimplePaint
             this.toolStripButtonPencil.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonPencil.Name = "toolStripButtonPencil";
             this.toolStripButtonPencil.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonPencil.Tag = "прямые линии";
+            this.toolStripButtonPencil.Tag = "прямые линии (Shift+угол)";
             this.toolStripButtonPencil.Text = "Рисовать прямые линии";
             this.toolStripButtonPencil.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
@@ -304,6 +306,8 @@ namespace SimplePaint
             // panelColors
             // 
             this.panelColors.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelColors.Controls.Add(this.label9);
+            this.panelColors.Controls.Add(this.label8);
             this.panelColors.Controls.Add(this.label7);
             this.panelColors.Controls.Add(this.label6);
             this.panelColors.Controls.Add(this.label5);
@@ -498,7 +502,7 @@ namespace SimplePaint
             this.toolStripButtonRectangle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRectangle.Name = "toolStripButtonRectangle";
             this.toolStripButtonRectangle.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonRectangle.Tag = "прямоугольник";
+            this.toolStripButtonRectangle.Tag = "прямоугольник (Shift+квадрат)";
             this.toolStripButtonRectangle.Text = "Рисовать прямоугольник";
             this.toolStripButtonRectangle.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
@@ -510,7 +514,7 @@ namespace SimplePaint
             this.toolStripButtonEllipse.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonEllipse.Name = "toolStripButtonEllipse";
             this.toolStripButtonEllipse.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonEllipse.Tag = "окружность";
+            this.toolStripButtonEllipse.Tag = "эллипс (Shift+круг)";
             this.toolStripButtonEllipse.Text = "Рисовать окружность";
             this.toolStripButtonEllipse.Click += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
@@ -549,6 +553,24 @@ namespace SimplePaint
             this.label7.Size = new System.Drawing.Size(35, 13);
             this.label7.TabIndex = 12;
             this.label7.Text = "label7";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(23, 343);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(35, 13);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "label8";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(68, 343);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 13);
+            this.label9.TabIndex = 14;
+            this.label9.Text = "label9";
             // 
             // FormMain
             // 
@@ -629,6 +651,8 @@ namespace SimplePaint
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
     }
 }
 

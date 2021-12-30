@@ -9,8 +9,8 @@ namespace SimplePaint
 {
     public interface IDrawable : ICloneable
     {
-        void AddPoint(Point pathPoint);
-        void Draw(Graphics drawSurface, bool snapOn);
+        void AddPoint(Point pathPoint, bool snapToStraight);
+        void Draw(Graphics drawSurface);
         Rectangle GetBoundingRectangle();
     }
 
@@ -23,8 +23,8 @@ namespace SimplePaint
             DrawingPen = pen;
         }
 
-        public abstract void AddPoint(Point pathPoint);
-        public abstract void Draw(Graphics drawSurface, bool snapOn);
+        public abstract void AddPoint(Point pathPoint, bool snapToStraight);
+        public abstract void Draw(Graphics drawSurface);
         public abstract Rectangle GetBoundingRectangle();
 
         public object Clone()
@@ -51,42 +51,44 @@ namespace SimplePaint
             endPt = startPoint;
         }
 
-        public override void AddPoint(Point pathPoint)
+        public override void AddPoint(Point pathPoint, bool snapToStraight)
         {
+            if (startPt == pathPoint)
+            {
+                return;
+            }
             endPt = pathPoint;
+            if (!snapToStraight || endPt.X == startPt.X || endPt.Y == startPt.Y)
+            {
+                return;
+            }
+            int width = endPt.X - startPt.X;
+            int height = endPt.Y - startPt.Y;
+            float tga = Math.Abs((float)width / height);
+            if (tga < Tg15)
+            {
+                //vertical
+                endPt.X = startPt.X;
+            }
+            else if (tga > Tg75)
+            {
+                //horizontal
+                endPt.Y = startPt.Y;
+            }
+            else if (tga > Tg30 || tga < Tg60)
+            {
+                //45%
+                int hyp = (int)Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2));
+                endPt.X = startPt.X + hyp * Math.Sign(width);
+                endPt.Y = startPt.Y + hyp * Math.Sign(height);
+            }
         }
 
-        public override void Draw(Graphics drawSurface, bool snapOn)
+        public override void Draw(Graphics drawSurface)
         {
             if (startPt == endPt)
             {
                 return;
-            }
-            if (snapOn)
-            {
-                if (endPt.X != startPt.X && endPt.Y != startPt.Y)
-                {
-                    int width = endPt.X - startPt.X;
-                    int height = endPt.Y - startPt.Y;
-                    float tga = Math.Abs((float)width / height);
-                    if (tga < Tg15)
-                    {
-                        //vertical
-                        endPt.X = startPt.X;
-                    }
-                    else if (tga > Tg75)
-                    {
-                        //horizontal
-                        endPt.Y = startPt.Y; 
-                    }
-                    else if (tga > Tg30 || tga < Tg60)
-                    {
-                        //45%
-                        int hyp = (int)Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2));
-                        endPt.X = startPt.X + hyp * Math.Sign(width);
-                        endPt.Y = startPt.Y + hyp * Math.Sign(height);
-                    }
-                }
             }
             drawSurface.DrawLine(DrawingPen, startPt, endPt);
         }
@@ -108,15 +110,15 @@ namespace SimplePaint
         public Freepath(Pen pen, Point startPoint) : base(pen)
         {
             pathPoints = new List<Point>();
-            AddPoint(startPoint);
+            pathPoints.Add(startPoint);
         }
 
-        public override void AddPoint(Point pathPoint)
+        public override void AddPoint(Point pathPoint, bool snapToStraight)
         {
             pathPoints.Add(pathPoint);
         }
 
-        public override void Draw(Graphics drawSurface, bool snapOn)
+        public override void Draw(Graphics drawSurface)
         {
             if (pathPoints.Count <= 1)
             {
@@ -137,54 +139,62 @@ namespace SimplePaint
 
     internal class Rectngl : Shape
     {
+        private protected Point givenStartPt;
+
         private protected Point startPt;
         private protected Point endPt;
-        private protected Rectangle rect = Rectangle.Empty;
 
         public Rectngl(Pen pen, Point startPoint) : base(pen)
         {
-            startPt = startPoint;
-            endPt = startPoint;
+            givenStartPt = startPoint;
         }
 
-        public override void AddPoint(Point pathPoint)
+        public override void AddPoint(Point addPt, bool snapToStraight)
         {
-            endPt = pathPoint;
+            int width = addPt.X - givenStartPt.X;
+            int height = addPt.Y - givenStartPt.Y;
+            int signX = Math.Sign(width);
+            int signY = Math.Sign(height);            
+            width = Math.Abs(width);
+            height = Math.Abs(height);
+            if (snapToStraight && width != height)
+            {
+                width = height = Math.Max(width, height);
+            }
+            startPt.X = givenStartPt.X;
+            if (signX < 0)
+            {
+                startPt.X -= width;
+            }
+            startPt.Y = givenStartPt.Y;
+            if (signY < 0)
+            {
+                startPt.Y -= height;
+            }
+            endPt.X = startPt.X + width;
+            endPt.Y = startPt.Y + height;
+            /*It works but adding snapToStraight is complicated
+            int width = addPt.X - givenStartPt.X;
+            int height = addPt.Y - givenStartPt.Y;
+            startPt.X = givenStartPt.X + Math.Min(0, width);
+            startPt.Y = givenStartPt.Y + Math.Min(0, height);
+            endPt.X = startPt.X + Math.Abs(width);
+            endPt.Y = startPt.Y + Math.Abs(height);*/
         }
 
-        public override void Draw(Graphics drawSurface, bool snapOn)
+        public override void Draw(Graphics drawSurface)
         {
             if (startPt == endPt)
             {
                 return;
             }
-            int width = endPt.X - startPt.X;
-            int height = endPt.Y - startPt.Y;
-            int signY = Math.Sign(height);
-            int signX = Math.Sign(width);
-            width = Math.Abs(width);
-            height = Math.Abs(height);
-            if (snapOn && width != height)
-            {
-                width = height = Math.Max(width, height);
-            }
-            int stX = startPt.X;
-            if (signX < 0)
-            {
-                stX -= width;
-            }
-            int stY = startPt.Y;
-            if (signY < 0)
-            {
-                stY -= height;
-            }
-            rect = new Rectangle(stX, stY, width, height);
+            Rectangle rect = new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
             drawSurface.DrawRectangle(DrawingPen, rect);
         }
 
         public override Rectangle GetBoundingRectangle()
         {
-            return rect;
+            return new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
         }
     }
 
@@ -192,33 +202,13 @@ namespace SimplePaint
     {
         public Ellipse(Pen pen, Point startPoint) : base(pen, startPoint) { }
 
-        public override void Draw(Graphics drawSurface, bool snapOn)
+        public override void Draw(Graphics drawSurface)
         {
             if (startPt == endPt)
             {
                 return;
             }
-            int width = endPt.X - startPt.X;
-            int height = endPt.Y - startPt.Y;
-            int signY = Math.Sign(height);
-            int signX = Math.Sign(width);
-            width = Math.Abs(width);
-            height = Math.Abs(height);
-            if (snapOn && width != height)
-            {
-                width = height = Math.Max(width, height);
-            }
-            int stX = startPt.X;
-            if (signX < 0)
-            {
-                stX -= width;
-            }
-            int stY = startPt.Y;
-            if (signY < 0)
-            {
-                stY -= height;
-            }
-            rect = new Rectangle(stX, stY, width, height);
+            Rectangle rect = new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
             drawSurface.DrawEllipse(DrawingPen, rect);
         }
     }

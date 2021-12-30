@@ -25,13 +25,13 @@ namespace SimplePaint
             currentShape = (T)Activator.CreateInstance(typeof(T), args);
         }
 
-        public static void AddPoint(Point nextPt)
+        public static void AddPoint(Point nextPt, bool snapToStraight)
         {
             if (currentShape is null)
             {
                 throw new NullReferenceException();
             }
-            currentShape.AddPoint(nextPt);
+            currentShape.AddPoint(nextPt, snapToStraight);
         }
 
         public static IDrawable Finish()

@@ -75,7 +75,7 @@ namespace SimplePaint
             }
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
-                shapes.ElementAt(i).Draw(drawSurface, false);
+                shapes.ElementAt(i).Draw(drawSurface);
             }
         }
 
