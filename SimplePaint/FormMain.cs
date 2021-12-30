@@ -434,7 +434,8 @@ namespace SimplePaint
             (sender as Control).Refresh();
             Graphics gr = (sender as Control).CreateGraphics();
             gr.ScaleTransform(drawCanvas1.CanvasZoomFactor, drawCanvas1.CanvasZoomFactor);
-            ShapesFactory.Finish(e.Location).Draw(gr, ModifierKeys == Keys.Shift);
+            ShapesFactory.AddPoint(e.Location);
+            ShapesFactory.Finish().Draw(gr, ModifierKeys == Keys.Shift);
             return;
             Point endPt = e.Location;
             int width = endPt.X - startPt.X;
@@ -461,7 +462,7 @@ namespace SimplePaint
             {
                 return;
             }
-            currentDrawing?.AddShape(ShapesFactory.Finish(e.Location));
+            currentDrawing?.AddShape(ShapesFactory.Finish());
         }
 
         private void drawCanvas1_ShapesDrawRequest(object sender, PaintEventArgs e)

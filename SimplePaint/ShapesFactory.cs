@@ -25,7 +25,7 @@ namespace SimplePaint
             currentShape = (T)Activator.CreateInstance(typeof(T), args);
         }
 
-        public static void Continue(Point nextPt)
+        public static void AddPoint(Point nextPt)
         {
             if (currentShape is null)
             {
@@ -34,13 +34,12 @@ namespace SimplePaint
             currentShape.AddPoint(nextPt);
         }
 
-        public static IDrawable Finish(Point endPt)
+        public static IDrawable Finish()
         {
             if (currentShape is null)
             {
                 throw new NullReferenceException();
             }
-            currentShape.AddPoint(endPt);
             return currentShape;
         }
     }
