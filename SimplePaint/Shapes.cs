@@ -158,22 +158,27 @@ namespace SimplePaint
             {
                 return;
             }
-            int startX = Math.Min(startPt.X, endPt.X);
-            int startY = Math.Min(startPt.Y, endPt.Y);
-            int width = Math.Abs(endPt.X - startPt.X);
-            int height = Math.Abs(endPt.Y - startPt.Y);
+            int width = endPt.X - startPt.X;
+            int height = endPt.Y - startPt.Y;
+            int signY = Math.Sign(height);
+            int signX = Math.Sign(width);
+            width = Math.Abs(width);
+            height = Math.Abs(height);
             if (snapOn && width != height)
             {
-                if (width > height)
-                {
-                    height = width;
-                }
-                else if (height > width)
-                {
-                    width = height;
-                }
+                width = height = Math.Max(width, height);
             }
-            rect = new Rectangle(startX, startY, width, height);
+            int stX = startPt.X;
+            if (signX < 0)
+            {
+                stX -= width;
+            }
+            int stY = startPt.Y;
+            if (signY < 0)
+            {
+                stY -= height;
+            }
+            rect = new Rectangle(stX, stY, width, height);
             drawSurface.DrawRectangle(DrawingPen, rect);
         }
 
@@ -193,22 +198,27 @@ namespace SimplePaint
             {
                 return;
             }
-            int startX = Math.Min(startPt.X, endPt.X);
-            int startY = Math.Min(startPt.Y, endPt.Y);
-            int width = Math.Abs(endPt.X - startPt.X);
-            int height = Math.Abs(endPt.Y - startPt.Y);
+            int width = endPt.X - startPt.X;
+            int height = endPt.Y - startPt.Y;
+            int signY = Math.Sign(height);
+            int signX = Math.Sign(width);
+            width = Math.Abs(width);
+            height = Math.Abs(height);
             if (snapOn && width != height)
             {
-                if (width > height)
-                {
-                    height = width;
-                }
-                else if (height > width)
-                {
-                    width = height;
-                }
+                width = height = Math.Max(width, height);
             }
-            rect = new Rectangle(startX, startY, width, height);
+            int stX = startPt.X;
+            if (signX < 0)
+            {
+                stX -= width;
+            }
+            int stY = startPt.Y;
+            if (signY < 0)
+            {
+                stY -= height;
+            }
+            rect = new Rectangle(stX, stY, width, height);
             drawSurface.DrawEllipse(DrawingPen, rect);
         }
     }

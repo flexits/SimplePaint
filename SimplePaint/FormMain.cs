@@ -435,6 +435,18 @@ namespace SimplePaint
             Graphics gr = (sender as Control).CreateGraphics();
             gr.ScaleTransform(drawCanvas1.CanvasZoomFactor, drawCanvas1.CanvasZoomFactor);
             ShapesFactory.Finish(e.Location).Draw(gr, ModifierKeys == Keys.Shift);
+            return;
+            Point endPt = e.Location;
+            int width = endPt.X - startPt.X;
+            int height = endPt.Y - startPt.Y;
+            startPt.X += Math.Min(0, width);
+            startPt.Y += Math.Min(0, height);
+            width = Math.Abs(width);
+            height = Math.Abs(height);
+            label4.Text = startPt.X.ToString();
+            label5.Text = startPt.Y.ToString();
+            label6.Text = width.ToString();
+            label7.Text = height.ToString();
         }
 
         private void drawCanvas1_OnMouseUpScaled(object sender, MouseEventArgs e)
