@@ -70,6 +70,8 @@ namespace SimplePaint
             this.panelContainer = new System.Windows.Forms.Panel();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
             this.labelThicknessValue = new System.Windows.Forms.Label();
+            this.toolStripButtonRectangle = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEllipse = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelColors.SuspendLayout();
@@ -125,6 +127,8 @@ namespace SimplePaint
             this.toolStripButtonHand,
             this.toolStripButtonPencil,
             this.toolStripButtonFreehand,
+            this.toolStripButtonRectangle,
+            this.toolStripButtonEllipse,
             this.toolStripButtonEraser,
             this.toolStripSeparator1,
             this.toolStripButtonUndo,
@@ -167,7 +171,7 @@ namespace SimplePaint
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonSave.Text = "Сохранить как";
+            this.toolStripButtonSave.Text = "Сохранить рисунок как";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
             // toolStripSeparator3
@@ -478,6 +482,30 @@ namespace SimplePaint
             this.labelThicknessValue.TabIndex = 8;
             this.labelThicknessValue.Text = "1 px";
             // 
+            // toolStripButtonRectangle
+            // 
+            this.toolStripButtonRectangle.CheckOnClick = true;
+            this.toolStripButtonRectangle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRectangle.Image = global::SimplePaint.Properties.Resources.rectangle_40px;
+            this.toolStripButtonRectangle.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRectangle.Name = "toolStripButtonRectangle";
+            this.toolStripButtonRectangle.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonRectangle.Tag = "прямоугольник";
+            this.toolStripButtonRectangle.Text = "Рисовать прямоугольник";
+            this.toolStripButtonRectangle.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            // 
+            // toolStripButtonEllipse
+            // 
+            this.toolStripButtonEllipse.CheckOnClick = true;
+            this.toolStripButtonEllipse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEllipse.Image = global::SimplePaint.Properties.Resources.ellipse_40px;
+            this.toolStripButtonEllipse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEllipse.Name = "toolStripButtonEllipse";
+            this.toolStripButtonEllipse.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonEllipse.Tag = "окружность";
+            this.toolStripButtonEllipse.Text = "Рисовать окружность";
+            this.toolStripButtonEllipse.Click += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -551,6 +579,8 @@ namespace SimplePaint
         private DrawCanvas drawCanvas1;
         private System.Windows.Forms.Panel panelContainer;
         private System.Windows.Forms.Label labelThicknessValue;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRectangle;
+        private System.Windows.Forms.ToolStripButton toolStripButtonEllipse;
     }
 }
 

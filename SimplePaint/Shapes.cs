@@ -10,7 +10,7 @@ namespace SimplePaint
     public interface IDrawable : ICloneable
     {
         void AddPoint(Point pathPoint);
-        void Draw(Graphics drawSurface);
+        void Draw(Graphics drawSurface, bool snapOn);
         Rectangle GetBoundingRectangle();
     }
 
@@ -24,7 +24,7 @@ namespace SimplePaint
         }
 
         public abstract void AddPoint(Point pathPoint);
-        public abstract void Draw(Graphics drawSurface);
+        public abstract void Draw(Graphics drawSurface, bool snapOn);
         public abstract Rectangle GetBoundingRectangle();
 
         public object Clone()
@@ -36,8 +36,14 @@ namespace SimplePaint
 
     internal class Line : Shape
     {
-        private protected Point startPt { get; set; }
-        private protected Point endPt { get; set; }
+        //snap-on angle = 15 
+        private const float Tg15 = 0.27F;
+        private const float Tg75 = 3.73F;
+        private const float Tg30 = 0.58F;
+        private const float Tg60 = 1.73F;
+
+        private protected Point startPt;
+        private protected Point endPt;
 
         public Line(Pen pen, Point startPoint) : base(pen)
         {
@@ -50,8 +56,38 @@ namespace SimplePaint
             endPt = pathPoint;
         }
 
-        public override void Draw(Graphics drawSurface)
+        public override void Draw(Graphics drawSurface, bool snapOn)
         {
+            if (startPt == endPt)
+            {
+                return;
+            }
+            if (snapOn)
+            {
+                if (endPt.X != startPt.X && endPt.Y != startPt.Y)
+                {
+                    int width = endPt.X - startPt.X;
+                    int height = endPt.Y - startPt.Y;
+                    float tga = Math.Abs((float)width / height);
+                    if (tga < Tg15)
+                    {
+                        //vertical
+                        endPt.X = startPt.X;
+                    }
+                    else if (tga > Tg75)
+                    {
+                        //horizontal
+                        endPt.Y = startPt.Y; 
+                    }
+                    else if (tga > Tg30 || tga < Tg60)
+                    {
+                        //45%
+                        int hyp = (int)Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2));
+                        endPt.X = startPt.X + hyp * Math.Sign(width);
+                        endPt.Y = startPt.Y + hyp * Math.Sign(height);
+                    }
+                }
+            }
             drawSurface.DrawLine(DrawingPen, startPt, endPt);
         }
 
@@ -80,22 +116,100 @@ namespace SimplePaint
             pathPoints.Add(pathPoint);
         }
 
-        /*public Point[] GetPoints(float zoomFactor = 1.0F)
+        public override void Draw(Graphics drawSurface, bool snapOn)
         {
-            var result = pathPoints.Select(point => new Point((int)Math.Round(point.X * zoomFactor), (int)Math.Round(point.Y * zoomFactor)));
-            return result.ToArray();
-        }*/
-
-        public override void Draw(Graphics drawSurface)
-        {
+            if (pathPoints.Count <= 1)
+            {
+                return;
+            }
             drawSurface.DrawLines(DrawingPen, pathPoints.ToArray());
         }
 
         public override Rectangle GetBoundingRectangle()
         {
-            //amongst all points find the biggest and smallest X and Y
-            //then calculate rectangle
-            return Rectangle.Empty;
+            int minX = pathPoints.Min(n => n.X);
+            int minY = pathPoints.Max(n => n.Y);
+            int maxX = pathPoints.Max(n => n.X);
+            int maxY = pathPoints.Max(n => n.Y);
+            return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+        }
+    }
+
+    internal class Rectngl : Shape
+    {
+        private protected Point startPt;
+        private protected Point endPt;
+        private protected Rectangle rect = Rectangle.Empty;
+
+        public Rectngl(Pen pen, Point startPoint) : base(pen)
+        {
+            startPt = startPoint;
+            endPt = startPoint;
+        }
+
+        public override void AddPoint(Point pathPoint)
+        {
+            endPt = pathPoint;
+        }
+
+        public override void Draw(Graphics drawSurface, bool snapOn)
+        {
+            if (startPt == endPt)
+            {
+                return;
+            }
+            int startX = Math.Min(startPt.X, endPt.X);
+            int startY = Math.Min(startPt.Y, endPt.Y);
+            int width = Math.Abs(endPt.X - startPt.X);
+            int height = Math.Abs(endPt.Y - startPt.Y);
+            if (snapOn && width != height)
+            {
+                if (width > height)
+                {
+                    height = width;
+                }
+                else if (height > width)
+                {
+                    width = height;
+                }
+            }
+            rect = new Rectangle(startX, startY, width, height);
+            drawSurface.DrawRectangle(DrawingPen, rect);
+        }
+
+        public override Rectangle GetBoundingRectangle()
+        {
+            return rect;
+        }
+    }
+
+    internal class Ellipse : Rectngl
+    {
+        public Ellipse(Pen pen, Point startPoint) : base(pen, startPoint) { }
+
+        public override void Draw(Graphics drawSurface, bool snapOn)
+        {
+            if (startPt == endPt)
+            {
+                return;
+            }
+            int startX = Math.Min(startPt.X, endPt.X);
+            int startY = Math.Min(startPt.Y, endPt.Y);
+            int width = Math.Abs(endPt.X - startPt.X);
+            int height = Math.Abs(endPt.Y - startPt.Y);
+            if (snapOn && width != height)
+            {
+                if (width > height)
+                {
+                    height = width;
+                }
+                else if (height > width)
+                {
+                    width = height;
+                }
+            }
+            rect = new Rectangle(startX, startY, width, height);
+            drawSurface.DrawEllipse(DrawingPen, rect);
         }
     }
 }

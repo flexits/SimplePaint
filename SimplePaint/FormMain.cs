@@ -41,6 +41,8 @@ namespace SimplePaint
             Hand,
             Pencil,
             Freehand,
+            Rectangle,
+            Ellipse,
             Eraser
         }
 
@@ -176,6 +178,16 @@ namespace SimplePaint
                 else if (btnSender == toolStripButtonEraser)
                 {
                     currentTool = DrawingTools.Eraser;
+                    return;
+                }
+                else if (btnSender == toolStripButtonRectangle)
+                {
+                    currentTool = DrawingTools.Rectangle;
+                    return;
+                }
+                else if (btnSender == toolStripButtonEllipse)
+                {
+                    currentTool = DrawingTools.Ellipse;
                     return;
                 }
                 else
@@ -347,6 +359,7 @@ namespace SimplePaint
             }
             startPt = e.Location;
             Cursor.Clip = new Rectangle(drawCanvas1.PointToScreen(Point.Empty), drawCanvas1.Size);
+            Cursor.Current = Cursors.Cross;
             switch (currentTool)
             {
                 case DrawingTools.Hand:
@@ -354,18 +367,21 @@ namespace SimplePaint
                     Cursor.Clip = new Rectangle(panelContainer.PointToScreen(Point.Empty), panelContainer.Size);
                     break;
                 case DrawingTools.Pencil:
-                    Cursor.Current = Cursors.Cross;
                     ShapesFactory.Init<Line>(currentPen, e.Location);
                     break;
                 case DrawingTools.Freehand:
-                    Cursor.Current = Cursors.Cross;
                     ShapesFactory.Init<Freepath>(currentPen, e.Location);
                     break;
                 case DrawingTools.Eraser:
-                    Cursor.Current = Cursors.Cross;
                     Pen eraserPen = (Pen)currentPen.Clone();
                     eraserPen.Color = pictureBoxBackColor.BackColor;
                     ShapesFactory.Init<Freepath>(eraserPen, e.Location);
+                    break;
+                case DrawingTools.Rectangle:
+                    ShapesFactory.Init<Rectngl>(currentPen, e.Location);
+                    break;
+                case DrawingTools.Ellipse:
+                    ShapesFactory.Init<Ellipse>(currentPen, e.Location);
                     break;
                 default:
                     return;
@@ -418,7 +434,7 @@ namespace SimplePaint
             (sender as Control).Refresh();
             Graphics gr = (sender as Control).CreateGraphics();
             gr.ScaleTransform(drawCanvas1.CanvasZoomFactor, drawCanvas1.CanvasZoomFactor);
-            ShapesFactory.Finish(e.Location).Draw(gr);
+            ShapesFactory.Finish(e.Location).Draw(gr, ModifierKeys == Keys.Shift);
         }
 
         private void drawCanvas1_OnMouseUpScaled(object sender, MouseEventArgs e)
