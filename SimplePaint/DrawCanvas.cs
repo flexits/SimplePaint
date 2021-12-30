@@ -22,15 +22,20 @@ namespace SimplePaint
 
         public SmoothingMode CanvasSmoothing { get; set; } = SmoothingMode.None;
 
+        public Size CanvasSizeOriginal { get; private set; }
+
         public DrawCanvas()
         {
             InitializeComponent();
             DoubleBuffered = true;
-            Width = canvasSizeOriginal.Width;
-            Height = canvasSizeOriginal.Height;
+            CanvasSizeOriginal = Size;//for VS Constructor
         }
 
-        public Size canvasSizeOriginal { get; set; }
+        public void SetSize(Size size)
+        {
+            CanvasSizeOriginal = size;
+            this.Size = size;
+        }
 
         public void CenterParent()
         {
@@ -78,7 +83,7 @@ namespace SimplePaint
             e.Graphics.SmoothingMode = CanvasSmoothing;
             e.Graphics.ScaleTransform(CanvasZoomFactor, CanvasZoomFactor);
             ShapesDrawRequest?.Invoke(this, e);
-            this.Size = new Size((int)(canvasSizeOriginal.Width * CanvasZoomFactor), (int)(canvasSizeOriginal.Height * CanvasZoomFactor));
+            this.Size = new Size((int)(CanvasSizeOriginal.Width * CanvasZoomFactor), (int)(CanvasSizeOriginal.Height * CanvasZoomFactor));
         }
 
         public event MouseEventHandler OnMouseDownScaled;

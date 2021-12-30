@@ -93,6 +93,16 @@ namespace SimplePaint.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap drag_40px {
+            get {
+                object obj = ResourceManager.GetObject("drag_40px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ellipse_40px {
             get {
                 object obj = ResourceManager.GetObject("ellipse_40px", resourceCulture);
@@ -106,6 +116,16 @@ namespace SimplePaint.Properties {
         internal static System.Drawing.Bitmap eraser_40px {
             get {
                 object obj = ResourceManager.GetObject("eraser_40px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap fill_color_40px {
+            get {
+                object obj = ResourceManager.GetObject("fill_color_40px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

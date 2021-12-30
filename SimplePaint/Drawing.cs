@@ -33,7 +33,7 @@ namespace SimplePaint
 
         private Bitmap lining;
 
-        public bool DrawingChanged => shapes.Count > 0;
+        public bool DrawingChanged => shapes.Count > 0 || lining != null;
 
         public Size Size { get; set; }
 

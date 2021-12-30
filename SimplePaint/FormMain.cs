@@ -35,17 +35,6 @@ namespace SimplePaint
         private Pen currentPen;
         private Point startPt;
 
-        private enum DrawingTools
-        {
-            None,
-            Hand,
-            Pencil,
-            Freehand,
-            Rectangle,
-            Ellipse,
-            Eraser
-        }
-
         public FormMain()
         {
             InitializeComponent();
@@ -77,6 +66,10 @@ namespace SimplePaint
                     (tsitem as ToolStripStatusLabel).Text = string.Empty;
                 }
             }
+            if (setEnabled)
+            {
+                toolStripButtonMove.PerformClick();
+            }
             toolStripButtonNew.Enabled = true;
             toolStripButtonOpen.Enabled = true;
         }
@@ -85,9 +78,19 @@ namespace SimplePaint
         {
             //reset all drawing tools to their defaults
             currentTool = DrawingTools.None;
+            statusLabelTool.Text = string.Empty;
+            foreach (ToolStripItem tsitem in toolStripTools.Items)
+            {
+                if (tsitem is ToolStripButton && (tsitem as ToolStripButton).CheckOnClick)
+                {
+                    (tsitem as ToolStripButton).Checked = false;
+                }
+            }
+
             currentPen = new Pen(Color.Black, 1);
             currentPen.DashStyle = DashStyle.Solid;
             startPt = new Point(0, 0);
+
             drawCanvas1.CanvasSmoothing = SmoothingMode.None;
 
             pictureBoxToolColor.BackColor = Color.Black;
@@ -159,7 +162,10 @@ namespace SimplePaint
                         }
                     }
                 }
-                statusLabelTool.Text = "Инструмент: " + btnSender.Tag.ToString();
+                if (btnSender.Tag != null)
+                {
+                    statusLabelTool.Text = "Инструмент: " + btnSender.Tag.ToString();
+                }
                 if (btnSender == toolStripButtonPencil)
                 {
                     currentTool = DrawingTools.Pencil;
@@ -170,9 +176,9 @@ namespace SimplePaint
                     currentTool = DrawingTools.Freehand;
                     return;
                 }
-                else if (btnSender == toolStripButtonHand)
+                else if (btnSender == toolStripButtonMove)
                 {
-                    currentTool = DrawingTools.Hand;
+                    currentTool = DrawingTools.Move;
                     return;
                 }
                 else if (btnSender == toolStripButtonEraser)
@@ -188,6 +194,11 @@ namespace SimplePaint
                 else if (btnSender == toolStripButtonEllipse)
                 {
                     currentTool = DrawingTools.Ellipse;
+                    return;
+                }
+                else if (btnSender == toolStripButtonFill)
+                {
+                    currentTool = DrawingTools.Fill;
                     return;
                 }
                 else
@@ -274,9 +285,14 @@ namespace SimplePaint
                 currentDrawing = new Drawing();
                 currentDrawing.Updated += CurrentDrawing_Updated;
                 currentDrawing.Size = dialogNew.SelectedDimensions;
-                drawCanvas1.canvasSizeOriginal = currentDrawing.Size;
+                drawCanvas1.SetSize(currentDrawing.Size);
+                drawCanvas1.ZoomReset();
             }
             ControlsActivation(resultOK || changesDetected);
+            //resultOK true = ControlsActivation true
+            //resultOK false && changesDetected false = ControlsActivation false
+            //resultOK false && changesDetected true = ControlsActivation true
+            //
         }
 
         private void toolStripButtonOpen_Click(object sender, EventArgs e)
@@ -292,7 +308,8 @@ namespace SimplePaint
                     currentDrawing = new Drawing();
                     currentDrawing.Updated += CurrentDrawing_Updated;
                     currentDrawing.AddBitmap(btmp, true);
-                    drawCanvas1.canvasSizeOriginal = currentDrawing.Size;
+                    drawCanvas1.SetSize(currentDrawing.Size);
+                    drawCanvas1.ZoomReset();
                     resultOK = true;
                 }
                 catch
@@ -362,7 +379,7 @@ namespace SimplePaint
             Cursor.Current = Cursors.Cross;
             switch (currentTool)
             {
-                case DrawingTools.Hand:
+                case DrawingTools.Move:
                     Cursor.Current = Cursors.SizeAll;
                     Cursor.Clip = new Rectangle(panelContainer.PointToScreen(Point.Empty), panelContainer.Size);
                     break;
@@ -383,7 +400,12 @@ namespace SimplePaint
                 case DrawingTools.Ellipse:
                     ShapesFactory.Init<Ellipse>(currentPen, e.Location);
                     break;
+                case DrawingTools.Fill:
+                    //fill
+                    break;
                 default:
+                    Cursor.Current = Cursors.Arrow;
+                    Cursor.Clip = Rectangle.Empty;
                     return;
             }
         }
@@ -395,14 +417,14 @@ namespace SimplePaint
             {
                 return;
             }
-            if (currentTool == DrawingTools.None)
+            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Fill)
             {
                 return;
             }
-            if (currentTool == DrawingTools.Hand)
+            if (currentTool == DrawingTools.Move)
             {
                 //move canvas
-                if (drawCanvas1.Width <= panelContainer.Width && drawCanvas1.Height <= panelContainer.Height)
+                /*if (drawCanvas1.Width <= panelContainer.Width && drawCanvas1.Height <= panelContainer.Height)
                 {
                     panelContainer.AutoScroll = false;
                 }
@@ -423,8 +445,10 @@ namespace SimplePaint
                 if (diffX == 0 && diffY == diffX)
                 {
                     return;
-                }
+                }*/
 
+                int diffX = startPt.X - e.X;
+                int diffY = startPt.Y - e.Y;
                 Point canvasLocationNew = drawCanvas1.Location;
                 canvasLocationNew.X -= diffX;
                 canvasLocationNew.Y -= diffY;
@@ -446,7 +470,7 @@ namespace SimplePaint
             {
                 return;
             }
-            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Hand)
+            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Move || currentTool == DrawingTools.Fill)
             {
                 return;
             }

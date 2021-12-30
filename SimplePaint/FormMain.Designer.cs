@@ -35,30 +35,22 @@ namespace SimplePaint
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTools = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonHand = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFreehand = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonZoomReset = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.panelColors = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.labelThicknessValue = new System.Windows.Forms.Label();
             this.checkBoxSmoothing = new System.Windows.Forms.CheckBox();
             this.comboBoxStyle = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.trackBarWidth = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBoxToolColor = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBackColor = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -69,23 +61,33 @@ namespace SimplePaint
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelContainer = new System.Windows.Forms.Panel();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
-            this.labelThicknessValue = new System.Windows.Forms.Label();
+            this.pictureBoxToolColor = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBackColor = new System.Windows.Forms.PictureBox();
+            this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonMove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonFreehand = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRectangle = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEllipse = new System.Windows.Forms.ToolStripButton();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonFill = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonZoomReset = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonHand = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.panelContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -131,11 +133,13 @@ namespace SimplePaint
             this.toolStripButtonSave,
             this.toolStripSeparator3,
             this.toolStripButtonHand,
+            this.toolStripButtonMove,
             this.toolStripButtonPencil,
             this.toolStripButtonFreehand,
             this.toolStripButtonRectangle,
             this.toolStripButtonEllipse,
             this.toolStripButtonEraser,
+            this.toolStripButtonFill,
             this.toolStripSeparator1,
             this.toolStripButtonUndo,
             this.toolStripButtonClear,
@@ -150,158 +154,20 @@ namespace SimplePaint
             this.toolStripTools.TabIndex = 1;
             this.toolStripTools.Text = "toolStrip1";
             // 
-            // toolStripButtonNew
-            // 
-            this.toolStripButtonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonNew.Image = global::SimplePaint.Properties.Resources.create_40px;
-            this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonNew.Text = "Новый рисунок";
-            this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
-            // 
-            // toolStripButtonOpen
-            // 
-            this.toolStripButtonOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonOpen.Image = global::SimplePaint.Properties.Resources.opened_folder_40px;
-            this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonOpen.Name = "toolStripButtonOpen";
-            this.toolStripButtonOpen.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonOpen.Text = "Открыть файл";
-            this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
-            // 
-            // toolStripButtonSave
-            // 
-            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonSave.Image = global::SimplePaint.Properties.Resources.save_40px;
-            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonSave.Text = "Сохранить рисунок как";
-            this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
-            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
-            // 
-            // toolStripButtonHand
-            // 
-            this.toolStripButtonHand.CheckOnClick = true;
-            this.toolStripButtonHand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonHand.Image = global::SimplePaint.Properties.Resources.hand_40px;
-            this.toolStripButtonHand.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonHand.Name = "toolStripButtonHand";
-            this.toolStripButtonHand.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonHand.Tag = "селектор";
-            this.toolStripButtonHand.Text = "Перемещать";
-            this.toolStripButtonHand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
-            // 
-            // toolStripButtonPencil
-            // 
-            this.toolStripButtonPencil.CheckOnClick = true;
-            this.toolStripButtonPencil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonPencil.Image = global::SimplePaint.Properties.Resources.pencil_40px;
-            this.toolStripButtonPencil.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonPencil.Name = "toolStripButtonPencil";
-            this.toolStripButtonPencil.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonPencil.Tag = "прямые линии (Shift+угол)";
-            this.toolStripButtonPencil.Text = "Рисовать прямые линии";
-            this.toolStripButtonPencil.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
-            // 
-            // toolStripButtonFreehand
-            // 
-            this.toolStripButtonFreehand.CheckOnClick = true;
-            this.toolStripButtonFreehand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFreehand.Image = global::SimplePaint.Properties.Resources.freehand_40px;
-            this.toolStripButtonFreehand.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonFreehand.Name = "toolStripButtonFreehand";
-            this.toolStripButtonFreehand.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonFreehand.Tag = "произвольные контуры";
-            this.toolStripButtonFreehand.Text = "Рисовать произвольный контур";
-            this.toolStripButtonFreehand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
-            // 
-            // toolStripButtonEraser
-            // 
-            this.toolStripButtonEraser.CheckOnClick = true;
-            this.toolStripButtonEraser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonEraser.Image = global::SimplePaint.Properties.Resources.eraser_40px;
-            this.toolStripButtonEraser.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonEraser.Name = "toolStripButtonEraser";
-            this.toolStripButtonEraser.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonEraser.Tag = "ластик";
-            this.toolStripButtonEraser.Text = "Стирать контуры";
-            this.toolStripButtonEraser.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
             // 
-            // toolStripButtonUndo
-            // 
-            this.toolStripButtonUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonUndo.Image = global::SimplePaint.Properties.Resources.undo_40px;
-            this.toolStripButtonUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonUndo.Name = "toolStripButtonUndo";
-            this.toolStripButtonUndo.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonUndo.Text = "Отменить";
-            this.toolStripButtonUndo.Click += new System.EventHandler(this.toolStripButtonUndo_Click);
-            // 
-            // toolStripButtonClear
-            // 
-            this.toolStripButtonClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonClear.Image = global::SimplePaint.Properties.Resources.clear_40px;
-            this.toolStripButtonClear.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonClear.Name = "toolStripButtonClear";
-            this.toolStripButtonClear.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonClear.Text = "Отменить всё";
-            this.toolStripButtonClear.Click += new System.EventHandler(this.toolStripButtonClear_Click);
-            // 
-            // toolStripButtonRedo
-            // 
-            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRedo.Image = global::SimplePaint.Properties.Resources.redo_40px;
-            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
-            this.toolStripButtonRedo.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonRedo.Text = "Вернуть";
-            this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
-            // 
-            // toolStripButtonZoomIn
-            // 
-            this.toolStripButtonZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomIn.Image = global::SimplePaint.Properties.Resources.zoom_in_40px;
-            this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
-            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonZoomIn.Text = "Увеличить масштаб";
-            this.toolStripButtonZoomIn.Click += new System.EventHandler(this.buttonZoomIn_Click);
-            // 
-            // toolStripButtonZoomReset
-            // 
-            this.toolStripButtonZoomReset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomReset.Image = global::SimplePaint.Properties.Resources.find_and_replace_40px;
-            this.toolStripButtonZoomReset.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonZoomReset.Name = "toolStripButtonZoomReset";
-            this.toolStripButtonZoomReset.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonZoomReset.Text = "Масштаб 100%";
-            this.toolStripButtonZoomReset.Click += new System.EventHandler(this.buttonZoomReset_Click);
-            // 
-            // toolStripButtonZoomOut
-            // 
-            this.toolStripButtonZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomOut.Image = global::SimplePaint.Properties.Resources.zoom_out_40px;
-            this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
-            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonZoomOut.Text = "Уменьшить масштаб";
-            this.toolStripButtonZoomOut.Click += new System.EventHandler(this.buttonZoomOut_Click);
             // 
             // panelColors
             // 
@@ -326,6 +192,69 @@ namespace SimplePaint
             this.panelColors.Name = "panelColors";
             this.panelColors.Size = new System.Drawing.Size(152, 501);
             this.panelColors.TabIndex = 3;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(68, 343);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(35, 13);
+            this.label9.TabIndex = 14;
+            this.label9.Text = "label9";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(23, 343);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(35, 13);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "label8";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(68, 309);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(35, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "label7";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(23, 309);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "label6";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(68, 268);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "label5";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(23, 268);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(35, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "label4";
+            // 
+            // labelThicknessValue
+            // 
+            this.labelThicknessValue.AutoSize = true;
+            this.labelThicknessValue.Location = new System.Drawing.Point(105, 83);
+            this.labelThicknessValue.Name = "labelThicknessValue";
+            this.labelThicknessValue.Size = new System.Drawing.Size(27, 13);
+            this.labelThicknessValue.TabIndex = 8;
+            this.labelThicknessValue.Text = "1 px";
             // 
             // checkBoxSmoothing
             // 
@@ -377,28 +306,6 @@ namespace SimplePaint
             this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Ширина линии:";
-            // 
-            // pictureBoxToolColor
-            // 
-            this.pictureBoxToolColor.BackColor = System.Drawing.Color.Black;
-            this.pictureBoxToolColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxToolColor.Location = new System.Drawing.Point(43, 25);
-            this.pictureBoxToolColor.Name = "pictureBoxToolColor";
-            this.pictureBoxToolColor.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxToolColor.TabIndex = 2;
-            this.pictureBoxToolColor.TabStop = false;
-            this.pictureBoxToolColor.Click += new System.EventHandler(this.pictureBoxToolColor_Click);
-            // 
-            // pictureBoxBackColor
-            // 
-            this.pictureBoxBackColor.BackColor = System.Drawing.Color.White;
-            this.pictureBoxBackColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxBackColor.Location = new System.Drawing.Point(58, 41);
-            this.pictureBoxBackColor.Name = "pictureBoxBackColor";
-            this.pictureBoxBackColor.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxBackColor.TabIndex = 1;
-            this.pictureBoxBackColor.TabStop = false;
-            this.pictureBoxBackColor.Click += new System.EventHandler(this.pictureBoxBackColor_Click);
             // 
             // label1
             // 
@@ -458,7 +365,6 @@ namespace SimplePaint
             // 
             // panelContainer
             // 
-            this.panelContainer.AutoScroll = true;
             this.panelContainer.AutoSize = true;
             this.panelContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -473,11 +379,11 @@ namespace SimplePaint
             // drawCanvas1
             // 
             this.drawCanvas1.BackColor = System.Drawing.Color.White;
-            this.drawCanvas1.canvasSizeOriginal = new System.Drawing.Size(100, 100);
             this.drawCanvas1.CanvasSmoothing = System.Drawing.Drawing2D.SmoothingMode.None;
+            this.drawCanvas1.CanvasZoomFactor = 1F;
             this.drawCanvas1.Location = new System.Drawing.Point(0, 0);
             this.drawCanvas1.Name = "drawCanvas1";
-            this.drawCanvas1.Size = new System.Drawing.Size(100, 100);
+            this.drawCanvas1.Size = new System.Drawing.Size(150, 150);
             this.drawCanvas1.TabIndex = 0;
             this.drawCanvas1.ZoomStep = 0.1F;
             this.drawCanvas1.ShapesDrawRequest += new System.Windows.Forms.PaintEventHandler(this.drawCanvas1_ShapesDrawRequest);
@@ -485,14 +391,93 @@ namespace SimplePaint
             this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
             this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
             // 
-            // labelThicknessValue
+            // pictureBoxToolColor
             // 
-            this.labelThicknessValue.AutoSize = true;
-            this.labelThicknessValue.Location = new System.Drawing.Point(105, 83);
-            this.labelThicknessValue.Name = "labelThicknessValue";
-            this.labelThicknessValue.Size = new System.Drawing.Size(27, 13);
-            this.labelThicknessValue.TabIndex = 8;
-            this.labelThicknessValue.Text = "1 px";
+            this.pictureBoxToolColor.BackColor = System.Drawing.Color.Black;
+            this.pictureBoxToolColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxToolColor.Location = new System.Drawing.Point(43, 25);
+            this.pictureBoxToolColor.Name = "pictureBoxToolColor";
+            this.pictureBoxToolColor.Size = new System.Drawing.Size(32, 32);
+            this.pictureBoxToolColor.TabIndex = 2;
+            this.pictureBoxToolColor.TabStop = false;
+            this.pictureBoxToolColor.Click += new System.EventHandler(this.pictureBoxToolColor_Click);
+            // 
+            // pictureBoxBackColor
+            // 
+            this.pictureBoxBackColor.BackColor = System.Drawing.Color.White;
+            this.pictureBoxBackColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxBackColor.Location = new System.Drawing.Point(58, 41);
+            this.pictureBoxBackColor.Name = "pictureBoxBackColor";
+            this.pictureBoxBackColor.Size = new System.Drawing.Size(32, 32);
+            this.pictureBoxBackColor.TabIndex = 1;
+            this.pictureBoxBackColor.TabStop = false;
+            this.pictureBoxBackColor.Click += new System.EventHandler(this.pictureBoxBackColor_Click);
+            // 
+            // toolStripButtonNew
+            // 
+            this.toolStripButtonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonNew.Image = global::SimplePaint.Properties.Resources.create_40px;
+            this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonNew.Name = "toolStripButtonNew";
+            this.toolStripButtonNew.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonNew.Text = "Новый рисунок";
+            this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
+            // 
+            // toolStripButtonOpen
+            // 
+            this.toolStripButtonOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonOpen.Image = global::SimplePaint.Properties.Resources.opened_folder_40px;
+            this.toolStripButtonOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonOpen.Name = "toolStripButtonOpen";
+            this.toolStripButtonOpen.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonOpen.Text = "Открыть файл";
+            this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
+            // 
+            // toolStripButtonSave
+            // 
+            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSave.Image = global::SimplePaint.Properties.Resources.save_40px;
+            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSave.Name = "toolStripButtonSave";
+            this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonSave.Text = "Сохранить рисунок как";
+            this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
+            // 
+            // toolStripButtonMove
+            // 
+            this.toolStripButtonMove.CheckOnClick = true;
+            this.toolStripButtonMove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonMove.Image = global::SimplePaint.Properties.Resources.drag_40px;
+            this.toolStripButtonMove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonMove.Name = "toolStripButtonMove";
+            this.toolStripButtonMove.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonMove.Tag = "перемещение";
+            this.toolStripButtonMove.Text = "Перемещать рисунок";
+            this.toolStripButtonMove.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            // 
+            // toolStripButtonPencil
+            // 
+            this.toolStripButtonPencil.CheckOnClick = true;
+            this.toolStripButtonPencil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPencil.Image = global::SimplePaint.Properties.Resources.pencil_40px;
+            this.toolStripButtonPencil.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPencil.Name = "toolStripButtonPencil";
+            this.toolStripButtonPencil.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonPencil.Tag = "прямые линии (Shift+угол)";
+            this.toolStripButtonPencil.Text = "Рисовать прямые линии";
+            this.toolStripButtonPencil.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            // 
+            // toolStripButtonFreehand
+            // 
+            this.toolStripButtonFreehand.CheckOnClick = true;
+            this.toolStripButtonFreehand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFreehand.Image = global::SimplePaint.Properties.Resources.freehand_40px;
+            this.toolStripButtonFreehand.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFreehand.Name = "toolStripButtonFreehand";
+            this.toolStripButtonFreehand.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonFreehand.Tag = "произвольные контуры";
+            this.toolStripButtonFreehand.Text = "Рисовать произвольный контур";
+            this.toolStripButtonFreehand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
             // toolStripButtonRectangle
             // 
@@ -516,61 +501,102 @@ namespace SimplePaint
             this.toolStripButtonEllipse.Size = new System.Drawing.Size(36, 36);
             this.toolStripButtonEllipse.Tag = "эллипс (Shift+круг)";
             this.toolStripButtonEllipse.Text = "Рисовать окружность";
-            this.toolStripButtonEllipse.Click += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            this.toolStripButtonEllipse.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
-            // label4
+            // toolStripButtonEraser
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 268);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "label4";
+            this.toolStripButtonEraser.CheckOnClick = true;
+            this.toolStripButtonEraser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEraser.Image = global::SimplePaint.Properties.Resources.eraser_40px;
+            this.toolStripButtonEraser.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEraser.Name = "toolStripButtonEraser";
+            this.toolStripButtonEraser.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonEraser.Tag = "ластик";
+            this.toolStripButtonEraser.Text = "Стирать контуры";
+            this.toolStripButtonEraser.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
-            // label5
+            // toolStripButtonFill
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(68, 268);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "label5";
+            this.toolStripButtonFill.CheckOnClick = true;
+            this.toolStripButtonFill.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonFill.Image = global::SimplePaint.Properties.Resources.fill_color_40px;
+            this.toolStripButtonFill.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonFill.Name = "toolStripButtonFill";
+            this.toolStripButtonFill.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonFill.Text = "toolStripButton1";
+            this.toolStripButtonFill.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
-            // label6
+            // toolStripButtonUndo
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(23, 309);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "label6";
+            this.toolStripButtonUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonUndo.Image = global::SimplePaint.Properties.Resources.undo_40px;
+            this.toolStripButtonUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonUndo.Name = "toolStripButtonUndo";
+            this.toolStripButtonUndo.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonUndo.Text = "Отменить";
+            this.toolStripButtonUndo.Click += new System.EventHandler(this.toolStripButtonUndo_Click);
             // 
-            // label7
+            // toolStripButtonClear
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(68, 309);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(35, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "label7";
+            this.toolStripButtonClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonClear.Image = global::SimplePaint.Properties.Resources.clear_40px;
+            this.toolStripButtonClear.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonClear.Name = "toolStripButtonClear";
+            this.toolStripButtonClear.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonClear.Text = "Отменить всё";
+            this.toolStripButtonClear.Click += new System.EventHandler(this.toolStripButtonClear_Click);
             // 
-            // label8
+            // toolStripButtonRedo
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(23, 343);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(35, 13);
-            this.label8.TabIndex = 13;
-            this.label8.Text = "label8";
+            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRedo.Image = global::SimplePaint.Properties.Resources.redo_40px;
+            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
+            this.toolStripButtonRedo.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonRedo.Text = "Вернуть";
+            this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
             // 
-            // label9
+            // toolStripButtonZoomIn
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(68, 343);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(35, 13);
-            this.label9.TabIndex = 14;
-            this.label9.Text = "label9";
+            this.toolStripButtonZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonZoomIn.Image = global::SimplePaint.Properties.Resources.zoom_in_40px;
+            this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
+            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonZoomIn.Text = "Увеличить масштаб";
+            this.toolStripButtonZoomIn.Click += new System.EventHandler(this.buttonZoomIn_Click);
+            // 
+            // toolStripButtonZoomReset
+            // 
+            this.toolStripButtonZoomReset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonZoomReset.Image = global::SimplePaint.Properties.Resources.find_and_replace_40px;
+            this.toolStripButtonZoomReset.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonZoomReset.Name = "toolStripButtonZoomReset";
+            this.toolStripButtonZoomReset.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonZoomReset.Text = "Масштаб 100%";
+            this.toolStripButtonZoomReset.Click += new System.EventHandler(this.buttonZoomReset_Click);
+            // 
+            // toolStripButtonZoomOut
+            // 
+            this.toolStripButtonZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonZoomOut.Image = global::SimplePaint.Properties.Resources.zoom_out_40px;
+            this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
+            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonZoomOut.Text = "Уменьшить масштаб";
+            this.toolStripButtonZoomOut.Click += new System.EventHandler(this.buttonZoomOut_Click);
+            // 
+            // toolStripButtonHand
+            // 
+            this.toolStripButtonHand.CheckOnClick = true;
+            this.toolStripButtonHand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonHand.Image = global::SimplePaint.Properties.Resources.hand_40px;
+            this.toolStripButtonHand.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonHand.Name = "toolStripButtonHand";
+            this.toolStripButtonHand.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonHand.Tag = "выбор";
+            this.toolStripButtonHand.Text = "Выбирать фигуры";
+            this.toolStripButtonHand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
             // FormMain
             // 
@@ -593,11 +619,11 @@ namespace SimplePaint
             this.panelColors.ResumeLayout(false);
             this.panelColors.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.panelContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -621,7 +647,7 @@ namespace SimplePaint
         private System.Windows.Forms.ToolStripButton toolStripButtonOpen;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton toolStripButtonHand;
+        private System.Windows.Forms.ToolStripButton toolStripButtonMove;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomReset;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
@@ -653,6 +679,8 @@ namespace SimplePaint
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFill;
+        private System.Windows.Forms.ToolStripButton toolStripButtonHand;
     }
 }
 
