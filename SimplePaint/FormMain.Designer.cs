@@ -69,6 +69,7 @@ namespace SimplePaint
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelContainer = new System.Windows.Forms.Panel();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
+            this.labelThicknessValue = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelColors.SuspendLayout();
@@ -86,7 +87,7 @@ namespace SimplePaint
             this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(814, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -135,7 +136,7 @@ namespace SimplePaint
             this.toolStripButtonZoomOut});
             this.toolStripTools.Location = new System.Drawing.Point(0, 24);
             this.toolStripTools.Name = "toolStripTools";
-            this.toolStripTools.Size = new System.Drawing.Size(800, 39);
+            this.toolStripTools.Size = new System.Drawing.Size(814, 39);
             this.toolStripTools.TabIndex = 1;
             this.toolStripTools.Text = "toolStrip1";
             // 
@@ -295,6 +296,7 @@ namespace SimplePaint
             // panelColors
             // 
             this.panelColors.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelColors.Controls.Add(this.labelThicknessValue);
             this.panelColors.Controls.Add(this.checkBoxSmoothing);
             this.panelColors.Controls.Add(this.comboBoxStyle);
             this.panelColors.Controls.Add(this.label3);
@@ -304,9 +306,9 @@ namespace SimplePaint
             this.panelColors.Controls.Add(this.pictureBoxBackColor);
             this.panelColors.Controls.Add(this.label1);
             this.panelColors.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelColors.Location = new System.Drawing.Point(648, 63);
+            this.panelColors.Location = new System.Drawing.Point(662, 63);
             this.panelColors.Name = "panelColors";
-            this.panelColors.Size = new System.Drawing.Size(152, 365);
+            this.panelColors.Size = new System.Drawing.Size(152, 501);
             this.panelColors.TabIndex = 3;
             // 
             // checkBoxSmoothing
@@ -402,9 +404,9 @@ namespace SimplePaint
             this.statusLabelPosition,
             this.statusLabelScale,
             this.statusLabelTool});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 564);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(814, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -428,19 +430,28 @@ namespace SimplePaint
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "JPEG|*.jpg|Bitmap|*.bmp|PNG|*.png|Все файлы|*.*";
+            this.openFileDialog1.Filter = "Bitmap|*.bmp|GIF|*.gif|JPEG|*.jpg|PNG|*.png|Все графические файлы|*.bmp;*.gif;*.j" +
+    "pg;*.png";
+            this.openFileDialog1.FilterIndex = 5;
             this.openFileDialog1.Title = "Открыть графический файл";
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "Растр BMP|*.bmp|Сжатый растр без потерь PNG|*.png|Сжатый растр JPG|*.jpg";
+            this.saveFileDialog1.FilterIndex = 2;
             // 
             // panelContainer
             // 
             this.panelContainer.AutoScroll = true;
+            this.panelContainer.AutoSize = true;
+            this.panelContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panelContainer.Controls.Add(this.drawCanvas1);
             this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContainer.Location = new System.Drawing.Point(0, 63);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(648, 365);
+            this.panelContainer.Size = new System.Drawing.Size(662, 501);
             this.panelContainer.TabIndex = 2;
             // 
             // drawCanvas1
@@ -458,11 +469,20 @@ namespace SimplePaint
             this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
             this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
             // 
+            // labelThicknessValue
+            // 
+            this.labelThicknessValue.AutoSize = true;
+            this.labelThicknessValue.Location = new System.Drawing.Point(105, 83);
+            this.labelThicknessValue.Name = "labelThicknessValue";
+            this.labelThicknessValue.Size = new System.Drawing.Size(27, 13);
+            this.labelThicknessValue.TabIndex = 8;
+            this.labelThicknessValue.Text = "1 px";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(814, 586);
             this.Controls.Add(this.panelContainer);
             this.Controls.Add(this.panelColors);
             this.Controls.Add(this.toolStripTools);
@@ -472,7 +492,6 @@ namespace SimplePaint
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormMain";
             this.Text = "SimplePaint";
-            this.Shown += new System.EventHandler(this.FormMain_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStripTools.ResumeLayout(false);
@@ -531,6 +550,7 @@ namespace SimplePaint
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private DrawCanvas drawCanvas1;
         private System.Windows.Forms.Panel panelContainer;
+        private System.Windows.Forms.Label labelThicknessValue;
     }
 }
 

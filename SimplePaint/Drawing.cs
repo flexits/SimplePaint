@@ -15,6 +15,7 @@ namespace SimplePaint
 
         event UpdateHandler Updated;
         void AddShape(IDrawable shape);
+        void AddBitmap(Bitmap bitmap, bool resizeDrawing);
         void DrawAll(Graphics drawSurface);
         void Undo();
         void Redo();
@@ -29,6 +30,8 @@ namespace SimplePaint
         private Stack<IDrawable> shapes;
 
         private Stack<IDrawable> discarded;
+
+        private Bitmap lining;
 
         public bool DrawingChanged => shapes.Count > 0;
 
@@ -51,8 +54,25 @@ namespace SimplePaint
             Updated?.Invoke();
         }
 
+        public void AddBitmap(Bitmap bitmap, bool resizeDrawing)
+        {
+            if (bitmap is null)
+            {
+                return;
+            }
+            lining = bitmap;
+            if (resizeDrawing)
+            {
+                Size = bitmap.Size;
+            }
+        }
+
         public void DrawAll(Graphics drawSurface)
         {
+            if (lining != null)
+            {
+                drawSurface.DrawImage(lining, 0, 0);
+            }
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
                 shapes.ElementAt(i).Draw(drawSurface);

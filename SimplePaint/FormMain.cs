@@ -15,7 +15,6 @@ namespace SimplePaint
 {
     public partial class FormMain : Form
     {
-        //TODO save and load file
         //TODO load background image, crop and rotate
         //TODO display grid and snap cursor position while drawing
         //TODO fill shape tool
@@ -26,11 +25,8 @@ namespace SimplePaint
         //TODO objects Z-axis
 
         /*
-         * Для лабы: 
-         * сохранять и загружать растр +(скролл если не вмещается в экран);
-         * левой рисовать, правой стирать (менять цвет на белый)
-         + задавать цвет, толщину и стиль линии
-         + undo и redo 
+         * неадекватная работа прокрутки
+         * неадекватное перемещение формы при уменьшении в 0,5 раз и меньше
          */
 
         private IDrawing currentDrawing;
@@ -48,7 +44,6 @@ namespace SimplePaint
             Eraser
         }
 
-
         public FormMain()
         {
             InitializeComponent();
@@ -57,17 +52,13 @@ namespace SimplePaint
             {
                 _ = comboBoxStyle.Items.Add(style);
             }
-            ResetDrawing();
+            ResetDrawingTools();
             ControlsActivation(false);
-        }
-
-        private void FormMain_Shown(object sender, EventArgs e)
-        {
-            toolStripButtonNew.PerformClick();
         }
 
         private void ControlsActivation(bool setEnabled)
         {
+            //disable controls when no drawing opened or created; enable otherwise
             drawCanvas1.Visible = setEnabled;
             panelColors.Enabled = setEnabled;
             foreach (ToolStripItem tsitem in toolStripTools.Items)
@@ -88,8 +79,9 @@ namespace SimplePaint
             toolStripButtonOpen.Enabled = true;
         }
 
-        private void ResetDrawing()
+        private void ResetDrawingTools()
         {
+            //reset all drawing tools to their defaults
             currentTool = DrawingTools.None;
             currentPen = new Pen(Color.Black, 1);
             currentPen.DashStyle = DashStyle.Solid;
@@ -129,8 +121,24 @@ namespace SimplePaint
             currentDrawing?.UndoAll();
         }
 
+        private void buttonZoomIn_Click(object sender, EventArgs e)
+        {
+            drawCanvas1.ZoomIn();
+        }
+
+        private void buttonZoomOut_Click(object sender, EventArgs e)
+        {
+            drawCanvas1.ZoomOut();
+        }
+
+        private void buttonZoomReset_Click(object sender, EventArgs e)
+        {
+            drawCanvas1.ZoomReset();
+        }
+
         private void toolStripButtonToolSelect_CheckedChanged(object sender, EventArgs e)
         {
+            //make tool selection buttons behave as RadioButton (if one on = others off)
             ToolStripButton btnSender = sender as ToolStripButton;
             ToolStrip tstrip = btnSender.Owner as ToolStrip;
             if (btnSender is null || tstrip is null)
@@ -184,21 +192,6 @@ namespace SimplePaint
             }
         }
 
-        private void buttonZoomIn_Click(object sender, EventArgs e)
-        {
-            drawCanvas1.ZoomIn();
-        }
-
-        private void buttonZoomOut_Click(object sender, EventArgs e)
-        {
-            drawCanvas1.ZoomOut();
-        }
-
-        private void buttonZoomReset_Click(object sender, EventArgs e)
-        {
-            drawCanvas1.ZoomReset();
-        }
-
         private void pictureBoxToolColor_Click(object sender, EventArgs e)
         {
             colorDialog1.Color = pictureBoxToolColor.BackColor;
@@ -223,6 +216,7 @@ namespace SimplePaint
 
         private void trackBarWidth_ValueChanged(object sender, EventArgs e)
         {
+            labelThicknessValue.Text = trackBarWidth.Value.ToString() + " px";
             if (currentPen is null)
             {
                 return;
@@ -264,12 +258,11 @@ namespace SimplePaint
             bool resultOK = dialogNew.ShowDialog(this) == DialogResult.OK;
             if (resultOK)
             {
-                ResetDrawing();
+                ResetDrawingTools();
                 currentDrawing = new Drawing();
                 currentDrawing.Updated += CurrentDrawing_Updated;
                 currentDrawing.Size = dialogNew.SelectedDimensions;
-                drawCanvas1.canvasSizeOriginal = dialogNew.SelectedDimensions;
-                //drawCanvas1.CenterParent();
+                drawCanvas1.canvasSizeOriginal = currentDrawing.Size;
             }
             ControlsActivation(resultOK || changesDetected);
         }
@@ -280,9 +273,21 @@ namespace SimplePaint
             bool resultOK = openFileDialog1.ShowDialog(this) == DialogResult.OK;
             if (resultOK)
             {
-                ResetDrawing();
-                LoadFile();
-                //drawCanvas1.CenterParent();
+                try
+                {
+                    Bitmap btmp = new Bitmap(openFileDialog1.FileName);
+                    ResetDrawingTools();
+                    currentDrawing = new Drawing();
+                    currentDrawing.Updated += CurrentDrawing_Updated;
+                    currentDrawing.AddBitmap(btmp, true);
+                    drawCanvas1.canvasSizeOriginal = currentDrawing.Size;
+                    resultOK = true;
+                }
+                catch
+                {
+                    _ = MessageBox.Show("Не удалось открыть файл!", "Ошибка открытия", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    resultOK = false;
+                }
             }
             ControlsActivation(resultOK || changesDetected);
         }
@@ -312,8 +317,6 @@ namespace SimplePaint
             {
                 return;
             }
-            saveFileDialog1.Filter = "Растр BMP|*.bmp|PNG|*.png|JPG|*.jpg";
-            saveFileDialog1.FilterIndex = 1;
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 switch (saveFileDialog1.FilterIndex)
@@ -331,14 +334,9 @@ namespace SimplePaint
             }
         }
 
-        private void LoadFile()
-        {
-            throw new NotImplementedException();
-        }
-
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            
+            new Form1().Show();
         }
 
         private void drawCanvas1_OnMouseDownScaled(object sender, MouseEventArgs e)

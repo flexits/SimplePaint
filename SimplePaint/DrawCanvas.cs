@@ -13,9 +13,12 @@ namespace SimplePaint
 {
     public partial class DrawCanvas : UserControl
     {
-        public float CanvasZoomFactor { get; private set; } = 1.0F;
+        private const float DEFAULT_ZOOM_FACTOR = 1.0F;
+        private const float ZOOM_STEP = 0.1F;
 
-        public float ZoomStep { get; set; } = 0.1F;
+        public float CanvasZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
+
+        public float ZoomStep { get; set; } = ZOOM_STEP;
 
         public SmoothingMode CanvasSmoothing { get; set; } = SmoothingMode.None;
 
@@ -62,10 +65,8 @@ namespace SimplePaint
         public Bitmap GetBitmap()
         {
             ZoomReset();
-            Bitmap btmp = new Bitmap(this.Width, this.Height, CreateGraphics());
-            Rectangle cr = this.ClientRectangle;
-            cr = new Rectangle(0, 0, this.Width, this.Height);
-            this.DrawToBitmap(btmp, cr);
+            Bitmap btmp = new Bitmap(Width, Height, CreateGraphics());
+            DrawToBitmap(btmp, new Rectangle(0, 0, Width, Height));
             return btmp;
         }
 
@@ -78,7 +79,6 @@ namespace SimplePaint
             e.Graphics.ScaleTransform(CanvasZoomFactor, CanvasZoomFactor);
             ShapesDrawRequest?.Invoke(this, e);
             this.Size = new Size((int)(canvasSizeOriginal.Width * CanvasZoomFactor), (int)(canvasSizeOriginal.Height * CanvasZoomFactor));
-            //CenterParent();
         }
 
         public event MouseEventHandler OnMouseDownScaled;
@@ -112,8 +112,8 @@ namespace SimplePaint
         {
             //здесь проблема
             //при малых zoomFactor (<= 0.5 примерно)
-            //координаты очень быстро становятся неадекватными,
-            //из-за этого при перемещении дрожит изображение и даже уезжает далеко за пределы экрана
+            //при перемещении дрожит изображение и даже уезжает далеко за пределы экрана
+            //потому что координаты принимают надекватно большие значения
             Point unscaledPoint = Point.Empty;
             unscaledPoint.X = (int)Math.Round(scaledPoint.X / zoomFactor);
             unscaledPoint.Y = (int)Math.Round(scaledPoint.Y / zoomFactor);
