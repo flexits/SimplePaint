@@ -17,21 +17,18 @@ namespace SimplePaint
     {
         //TODO load background image, crop and rotate
         //TODO display grid and snap cursor position while drawing
-        //TODO fill shape tool
-        //TODO freehand curve, rectangle (Shift+square), ellipse (Shift+circle) drawing tool
-        //TODO pencil tool with shift makes straight lines
         //TODO selector tool to move, resize and delete drawn shapes
+        //TODO fill shape tool
+        //TODO freehand curves by points
         //TODO shape intersections
         //TODO objects Z-axis
 
         /*
-         * неадекватная работа прокрутки
+         * нужны ползунки прокрутки
          * неадекватное перемещение формы при уменьшении в 0,5 раз и меньше
          */
 
         private IDrawing currentDrawing;
-
-        //private Point startPt;
 
         public FormMain()
         {
@@ -96,7 +93,6 @@ namespace SimplePaint
             pictureBoxBackColor.BackColor = Color.White;
             trackBarWidth.Value = 1;
             comboBoxStyle.SelectedIndex = 0;
-            //startPt = new Point(0, 0);
 
             drawCanvas1.CanvasSmoothing = SmoothingMode.None;
             checkBoxSmoothing.Checked = false;
@@ -372,109 +368,18 @@ namespace SimplePaint
 
         private void drawCanvas1_OnMouseDownScaled(object sender, MouseEventArgs e)
         {
-            Cursor.Clip = DrawToolBox.GetCursorClip();
-            Cursor.Current = DrawToolBox.GetCursorStyle();
             DrawToolBox.ProcessMouseDown(e);
-            /*if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-            startPt = e.Location;
-            Cursor.Clip = new Rectangle(drawCanvas1.PointToScreen(Point.Empty), drawCanvas1.Size);
-            Cursor.Current = Cursors.Cross;
-            switch (currentTool)
-            {
-                case DrawingTools.Move:
-                    Cursor.Current = Cursors.SizeAll;
-                    Cursor.Clip = new Rectangle(panelContainer.PointToScreen(Point.Empty), panelContainer.Size);
-                    break;
-                case DrawingTools.Pencil:
-                    ShapesFactory.Init<Line>(currentPen, e.Location);
-                    break;
-                case DrawingTools.Freehand:
-                    ShapesFactory.Init<Freepath>(currentPen, e.Location);
-                    break;
-                case DrawingTools.Eraser:
-                    Pen eraserPen = (Pen)currentPen.Clone();
-                    eraserPen.Color = pictureBoxBackColor.BackColor;
-                    ShapesFactory.Init<Freepath>(eraserPen, e.Location);
-                    break;
-                case DrawingTools.Rectangle:
-                    ShapesFactory.Init<Rectngl>(currentPen, e.Location);
-                    break;
-                case DrawingTools.Ellipse:
-                    ShapesFactory.Init<Ellipse>(currentPen, e.Location);
-                    break;
-                case DrawingTools.Fill:
-                    //fill
-                    break;
-                default:
-                    Cursor.Current = Cursors.Arrow;
-                    Cursor.Clip = Rectangle.Empty;
-                    return;
-            }*/
         }
 
         private void drawCanvas1_OnMouseMoveScaled(object sender, MouseEventArgs e)
         {
             DrawToolBox.ProcessMouseMove(e);
             statusLabelPosition.Text = e.X.ToString() + "; " + e.Y.ToString();
-            return;
-            /*if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Fill)
-            {
-                return;
-            }
-            if (currentTool == DrawingTools.Move)
-            {
-                //move canvas
-            //
-                if (drawCanvas1.Width <= panelContainer.Width && drawCanvas1.Height <= panelContainer.Height)
-                {
-                    panelContainer.AutoScroll = false;
-                }
-                else
-                {
-                    panelContainer.AutoScroll = true;
-                }
-                int diffX = startPt.X - e.X;
-                int diffY = startPt.Y - e.Y;
-                if (diffX < 0 && panelContainer.DisplayRectangle.Width >= drawCanvas1.Width + panelContainer.Width)
-                {
-                    diffX = 0;
-                }
-                if (diffY < 0 && panelContainer.DisplayRectangle.Height >= drawCanvas1.Height + panelContainer.Height)
-                {
-                    diffY = 0;
-                }
-                if (diffX == 0 && diffY == diffX)
-                {
-                    return;
-                }
-            //
-                int diffX = startPt.X - e.X;
-                int diffY = startPt.Y - e.Y;
-                Point canvasLocationNew = drawCanvas1.Location;
-                canvasLocationNew.X -= diffX;
-                canvasLocationNew.Y -= diffY;
-                drawCanvas1.Location = canvasLocationNew;
-                return;
-            }
-            (sender as Control).Refresh();
-            Graphics gr = (sender as Control).CreateGraphics();
-            gr.ScaleTransform(drawCanvas1.CanvasZoomFactor, drawCanvas1.CanvasZoomFactor);
-            ShapesFactory.AddPoint(e.Location, ModifierKeys == Keys.Shift);
-            ShapesFactory.Finish().Draw(gr);*/
         }
 
         private void drawCanvas1_OnMouseUpScaled(object sender, MouseEventArgs e)
         {
             DrawToolBox.ProcessMouseUp(e);
-            Cursor.Current = Cursors.Arrow;
-            Cursor.Clip = Rectangle.Empty;
         }
 
         private void drawCanvas1_ShapesDrawRequest(object sender, PaintEventArgs e)

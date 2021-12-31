@@ -81,30 +81,14 @@ namespace SimplePaint
                 case DrawingTools.Eraser:
                     currentTool = new ToolEraser(currentPalette, currentCanvas, currentDrawing);
                     break;
-                case DrawingTools.Selector:
                 case DrawingTools.Move:
+                    currentTool = new ToolCanvasMove(currentPalette, currentCanvas, currentDrawing);
+                    break;
+                case DrawingTools.Selector:
                 case DrawingTools.Fill:
                     currentTool = null;
                     break;
             }
-        }
-
-        public static Cursor GetCursorStyle()
-        {
-            if (currentTool is null)
-            {
-                return Cursors.Default;
-            }
-            return currentTool.GetCursorStyle();
-        }
-
-        public static Rectangle GetCursorClip()
-        {
-            if (currentTool is null)
-            {
-                return Rectangle.Empty;
-            }
-            return currentTool.GetCursorClip();
         }
 
         public static void ProcessMouseDown(MouseEventArgs e)
@@ -125,8 +109,6 @@ namespace SimplePaint
 
     internal interface IDrawingTool
     {
-        Cursor GetCursorStyle();
-        Rectangle GetCursorClip();
         void ProcessMouseDown(MouseEventArgs e);
         void ProcessMouseMove(MouseEventArgs e);
         void ProcessMouseUp(MouseEventArgs e);
@@ -143,8 +125,6 @@ namespace SimplePaint
             this.canvas = canvas;
             this.drawing = drawing;
         }
-        public abstract Cursor GetCursorStyle();
-        public abstract Rectangle GetCursorClip();
         public abstract void ProcessMouseDown(MouseEventArgs e);
         public abstract void ProcessMouseMove(MouseEventArgs e);
         public abstract void ProcessMouseUp(MouseEventArgs e);
@@ -154,15 +134,18 @@ namespace SimplePaint
     {
         public GenericTool(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
-        public override Cursor GetCursorStyle() { return Cursors.Cross; }
-        public override Rectangle GetCursorClip() { return new Rectangle(canvas.PointToScreen(Point.Empty), canvas.Size); }
-
         public override void ProcessMouseDown(MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left)
             {
                 return;
             }
+            if (canvas is null)
+            {
+                throw new NullReferenceException();
+            }
+            Cursor.Current = Cursors.Cross;
+            Cursor.Clip = new Rectangle(canvas.PointToScreen(Point.Empty), canvas.Size);
             ShapesFactory.Init<T>(palette.ForegroundPen, e.Location);
         }
 
@@ -194,6 +177,8 @@ namespace SimplePaint
                 return;
             }
             drawing?.AddShape(ShapesFactory.Finish());
+            Cursor.Current = Cursors.Arrow;
+            Cursor.Clip = Rectangle.Empty;
         }
     }
 
@@ -206,7 +191,60 @@ namespace SimplePaint
             {
                 return;
             }
+            if (canvas is null)
+            {
+                throw new NullReferenceException();
+            }
+            Cursor.Current = Cursors.Cross;
+            Cursor.Clip = new Rectangle(canvas.PointToScreen(Point.Empty), canvas.Size);
             ShapesFactory.Init<Freepath>(palette.BackgroundPen, e.Location);
+        }
+    }
+
+    internal class ToolCanvasMove : DrawingTool
+    {
+        public ToolCanvasMove(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
+
+        private Point startPt;
+
+        public override void ProcessMouseDown(MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            if (canvas is null)
+            {
+                throw new NullReferenceException();
+            }
+            startPt = e.Location;
+            Cursor.Current = Cursors.SizeAll;
+            Panel panelContainer = canvas.Parent as Panel;
+            Cursor.Clip = new Rectangle(panelContainer.PointToScreen(Point.Empty), panelContainer.Size);
+        }
+
+        public override void ProcessMouseMove(MouseEventArgs e)
+        {
+            if (canvas is null)
+            {
+                throw new NullReferenceException();
+            }
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            int diffX = startPt.X - e.X;
+            int diffY = startPt.Y - e.Y;
+            Point canvasLocationNew = canvas.Location;
+            canvasLocationNew.X -= diffX;
+            canvasLocationNew.Y -= diffY;
+            canvas.Location = canvasLocationNew;
+        }
+
+        public override void ProcessMouseUp(MouseEventArgs e)
+        {
+            Cursor.Current = Cursors.Arrow;
+            Cursor.Clip = Rectangle.Empty;
         }
     }
 }
