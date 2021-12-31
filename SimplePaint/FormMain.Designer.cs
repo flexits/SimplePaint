@@ -56,14 +56,22 @@ namespace SimplePaint
             this.toolStripButtonZoomReset = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.panelColors = new System.Windows.Forms.Panel();
+            this.groupBoxBackground = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBoxBackColor = new System.Windows.Forms.PictureBox();
+            this.groupBoxFill = new System.Windows.Forms.GroupBox();
+            this.checkBoxNoFill = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.pictureBoxFillColor = new System.Windows.Forms.PictureBox();
+            this.groupBoxOutline = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.labelThicknessValue = new System.Windows.Forms.Label();
             this.checkBoxSmoothing = new System.Windows.Forms.CheckBox();
-            this.comboBoxStyle = new System.Windows.Forms.ComboBox();
+            this.pictureBoxToolColor = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.comboBoxStyle = new System.Windows.Forms.ComboBox();
             this.trackBarWidth = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBoxToolColor = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBackColor = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabelPosition = new System.Windows.Forms.ToolStripStatusLabel();
@@ -73,26 +81,18 @@ namespace SimplePaint
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelContainer = new System.Windows.Forms.Panel();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
-            this.groupBoxOutline = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.groupBoxFill = new System.Windows.Forms.GroupBox();
-            this.groupBoxBackground = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pictureBoxFillColor = new System.Windows.Forms.PictureBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.checkBoxNoFill = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelColors.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).BeginInit();
+            this.groupBoxBackground.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).BeginInit();
+            this.groupBoxFill.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFillColor)).BeginInit();
+            this.groupBoxOutline.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.panelContainer.SuspendLayout();
-            this.groupBoxOutline.SuspendLayout();
-            this.groupBoxFill.SuspendLayout();
-            this.groupBoxBackground.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFillColor)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -372,6 +372,108 @@ namespace SimplePaint
             this.panelColors.Size = new System.Drawing.Size(152, 501);
             this.panelColors.TabIndex = 3;
             // 
+            // groupBoxBackground
+            // 
+            this.groupBoxBackground.Controls.Add(this.label1);
+            this.groupBoxBackground.Controls.Add(this.pictureBoxBackColor);
+            this.groupBoxBackground.Location = new System.Drawing.Point(3, 260);
+            this.groupBoxBackground.Name = "groupBoxBackground";
+            this.groupBoxBackground.Size = new System.Drawing.Size(142, 57);
+            this.groupBoxBackground.TabIndex = 11;
+            this.groupBoxBackground.TabStop = false;
+            this.groupBoxBackground.Text = "Фон";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Цвет";
+            // 
+            // pictureBoxBackColor
+            // 
+            this.pictureBoxBackColor.BackColor = System.Drawing.Color.White;
+            this.pictureBoxBackColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxBackColor.Location = new System.Drawing.Point(80, 19);
+            this.pictureBoxBackColor.Name = "pictureBoxBackColor";
+            this.pictureBoxBackColor.Size = new System.Drawing.Size(54, 24);
+            this.pictureBoxBackColor.TabIndex = 1;
+            this.pictureBoxBackColor.TabStop = false;
+            this.pictureBoxBackColor.Click += new System.EventHandler(this.pictureBoxBackColor_Click);
+            // 
+            // groupBoxFill
+            // 
+            this.groupBoxFill.Controls.Add(this.checkBoxNoFill);
+            this.groupBoxFill.Controls.Add(this.label5);
+            this.groupBoxFill.Controls.Add(this.pictureBoxFillColor);
+            this.groupBoxFill.Location = new System.Drawing.Point(4, 179);
+            this.groupBoxFill.Name = "groupBoxFill";
+            this.groupBoxFill.Size = new System.Drawing.Size(142, 75);
+            this.groupBoxFill.TabIndex = 10;
+            this.groupBoxFill.TabStop = false;
+            this.groupBoxFill.Text = "Заливка";
+            // 
+            // checkBoxNoFill
+            // 
+            this.checkBoxNoFill.AutoSize = true;
+            this.checkBoxNoFill.Checked = true;
+            this.checkBoxNoFill.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxNoFill.Location = new System.Drawing.Point(6, 49);
+            this.checkBoxNoFill.Name = "checkBoxNoFill";
+            this.checkBoxNoFill.Size = new System.Drawing.Size(89, 17);
+            this.checkBoxNoFill.TabIndex = 12;
+            this.checkBoxNoFill.Text = "без заливки";
+            this.checkBoxNoFill.UseVisualStyleBackColor = true;
+            this.checkBoxNoFill.CheckedChanged += new System.EventHandler(this.checkBoxFill_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 25);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Цвет";
+            // 
+            // pictureBoxFillColor
+            // 
+            this.pictureBoxFillColor.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBoxFillColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxFillColor.Location = new System.Drawing.Point(80, 19);
+            this.pictureBoxFillColor.Name = "pictureBoxFillColor";
+            this.pictureBoxFillColor.Size = new System.Drawing.Size(54, 24);
+            this.pictureBoxFillColor.TabIndex = 2;
+            this.pictureBoxFillColor.TabStop = false;
+            this.pictureBoxFillColor.Click += new System.EventHandler(this.pictureBoxFillColor_Click);
+            // 
+            // groupBoxOutline
+            // 
+            this.groupBoxOutline.Controls.Add(this.label4);
+            this.groupBoxOutline.Controls.Add(this.labelThicknessValue);
+            this.groupBoxOutline.Controls.Add(this.checkBoxSmoothing);
+            this.groupBoxOutline.Controls.Add(this.pictureBoxToolColor);
+            this.groupBoxOutline.Controls.Add(this.label3);
+            this.groupBoxOutline.Controls.Add(this.comboBoxStyle);
+            this.groupBoxOutline.Controls.Add(this.trackBarWidth);
+            this.groupBoxOutline.Controls.Add(this.label2);
+            this.groupBoxOutline.Location = new System.Drawing.Point(4, 3);
+            this.groupBoxOutline.Name = "groupBoxOutline";
+            this.groupBoxOutline.Size = new System.Drawing.Size(141, 170);
+            this.groupBoxOutline.TabIndex = 9;
+            this.groupBoxOutline.TabStop = false;
+            this.groupBoxOutline.Text = "Контур";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 22);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(68, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Цвет линии:";
+            // 
             // labelThicknessValue
             // 
             this.labelThicknessValue.AutoSize = true;
@@ -392,15 +494,16 @@ namespace SimplePaint
             this.checkBoxSmoothing.UseVisualStyleBackColor = true;
             this.checkBoxSmoothing.CheckedChanged += new System.EventHandler(this.checkBoxSmoothing_CheckedChanged);
             // 
-            // comboBoxStyle
+            // pictureBoxToolColor
             // 
-            this.comboBoxStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxStyle.FormattingEnabled = true;
-            this.comboBoxStyle.Location = new System.Drawing.Point(6, 110);
-            this.comboBoxStyle.Name = "comboBoxStyle";
-            this.comboBoxStyle.Size = new System.Drawing.Size(128, 21);
-            this.comboBoxStyle.TabIndex = 6;
-            this.comboBoxStyle.SelectedValueChanged += new System.EventHandler(this.comboBoxStyle_SelectedValueChanged);
+            this.pictureBoxToolColor.BackColor = System.Drawing.Color.Black;
+            this.pictureBoxToolColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxToolColor.Location = new System.Drawing.Point(80, 16);
+            this.pictureBoxToolColor.Name = "pictureBoxToolColor";
+            this.pictureBoxToolColor.Size = new System.Drawing.Size(54, 24);
+            this.pictureBoxToolColor.TabIndex = 2;
+            this.pictureBoxToolColor.TabStop = false;
+            this.pictureBoxToolColor.Click += new System.EventHandler(this.pictureBoxToolColor_Click);
             // 
             // label3
             // 
@@ -410,6 +513,16 @@ namespace SimplePaint
             this.label3.Size = new System.Drawing.Size(73, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Стиль линии:";
+            // 
+            // comboBoxStyle
+            // 
+            this.comboBoxStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxStyle.FormattingEnabled = true;
+            this.comboBoxStyle.Location = new System.Drawing.Point(6, 110);
+            this.comboBoxStyle.Name = "comboBoxStyle";
+            this.comboBoxStyle.Size = new System.Drawing.Size(128, 21);
+            this.comboBoxStyle.TabIndex = 6;
+            this.comboBoxStyle.SelectedValueChanged += new System.EventHandler(this.comboBoxStyle_SelectedValueChanged);
             // 
             // trackBarWidth
             // 
@@ -431,28 +544,6 @@ namespace SimplePaint
             this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Ширина линии:";
-            // 
-            // pictureBoxToolColor
-            // 
-            this.pictureBoxToolColor.BackColor = System.Drawing.Color.Black;
-            this.pictureBoxToolColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxToolColor.Location = new System.Drawing.Point(80, 16);
-            this.pictureBoxToolColor.Name = "pictureBoxToolColor";
-            this.pictureBoxToolColor.Size = new System.Drawing.Size(54, 24);
-            this.pictureBoxToolColor.TabIndex = 2;
-            this.pictureBoxToolColor.TabStop = false;
-            this.pictureBoxToolColor.Click += new System.EventHandler(this.pictureBoxToolColor_Click);
-            // 
-            // pictureBoxBackColor
-            // 
-            this.pictureBoxBackColor.BackColor = System.Drawing.Color.White;
-            this.pictureBoxBackColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxBackColor.Location = new System.Drawing.Point(80, 19);
-            this.pictureBoxBackColor.Name = "pictureBoxBackColor";
-            this.pictureBoxBackColor.Size = new System.Drawing.Size(54, 24);
-            this.pictureBoxBackColor.TabIndex = 1;
-            this.pictureBoxBackColor.TabStop = false;
-            this.pictureBoxBackColor.Click += new System.EventHandler(this.pictureBoxBackColor_Click);
             // 
             // colorDialog1
             // 
@@ -528,97 +619,6 @@ namespace SimplePaint
             this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
             this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
             // 
-            // groupBoxOutline
-            // 
-            this.groupBoxOutline.Controls.Add(this.label4);
-            this.groupBoxOutline.Controls.Add(this.labelThicknessValue);
-            this.groupBoxOutline.Controls.Add(this.checkBoxSmoothing);
-            this.groupBoxOutline.Controls.Add(this.pictureBoxToolColor);
-            this.groupBoxOutline.Controls.Add(this.label3);
-            this.groupBoxOutline.Controls.Add(this.comboBoxStyle);
-            this.groupBoxOutline.Controls.Add(this.trackBarWidth);
-            this.groupBoxOutline.Controls.Add(this.label2);
-            this.groupBoxOutline.Location = new System.Drawing.Point(4, 3);
-            this.groupBoxOutline.Name = "groupBoxOutline";
-            this.groupBoxOutline.Size = new System.Drawing.Size(141, 170);
-            this.groupBoxOutline.TabIndex = 9;
-            this.groupBoxOutline.TabStop = false;
-            this.groupBoxOutline.Text = "Контур";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 22);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 13);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Цвет линии:";
-            // 
-            // groupBoxFill
-            // 
-            this.groupBoxFill.Controls.Add(this.checkBoxNoFill);
-            this.groupBoxFill.Controls.Add(this.label5);
-            this.groupBoxFill.Controls.Add(this.pictureBoxFillColor);
-            this.groupBoxFill.Location = new System.Drawing.Point(4, 179);
-            this.groupBoxFill.Name = "groupBoxFill";
-            this.groupBoxFill.Size = new System.Drawing.Size(142, 75);
-            this.groupBoxFill.TabIndex = 10;
-            this.groupBoxFill.TabStop = false;
-            this.groupBoxFill.Text = "Заливка";
-            // 
-            // groupBoxBackground
-            // 
-            this.groupBoxBackground.Controls.Add(this.label1);
-            this.groupBoxBackground.Controls.Add(this.pictureBoxBackColor);
-            this.groupBoxBackground.Location = new System.Drawing.Point(3, 260);
-            this.groupBoxBackground.Name = "groupBoxBackground";
-            this.groupBoxBackground.Size = new System.Drawing.Size(142, 57);
-            this.groupBoxBackground.TabIndex = 11;
-            this.groupBoxBackground.TabStop = false;
-            this.groupBoxBackground.Text = "Фон";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Цвет";
-            // 
-            // pictureBoxFillColor
-            // 
-            this.pictureBoxFillColor.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBoxFillColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxFillColor.Location = new System.Drawing.Point(80, 19);
-            this.pictureBoxFillColor.Name = "pictureBoxFillColor";
-            this.pictureBoxFillColor.Size = new System.Drawing.Size(54, 24);
-            this.pictureBoxFillColor.TabIndex = 2;
-            this.pictureBoxFillColor.TabStop = false;
-            this.pictureBoxFillColor.Click += new System.EventHandler(this.pictureBoxFillColor_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 25);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(32, 13);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Цвет";
-            // 
-            // checkBoxNoFill
-            // 
-            this.checkBoxNoFill.AutoSize = true;
-            this.checkBoxNoFill.Checked = true;
-            this.checkBoxNoFill.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxNoFill.Location = new System.Drawing.Point(6, 49);
-            this.checkBoxNoFill.Name = "checkBoxNoFill";
-            this.checkBoxNoFill.Size = new System.Drawing.Size(89, 17);
-            this.checkBoxNoFill.TabIndex = 12;
-            this.checkBoxNoFill.Text = "Прозрачный";
-            this.checkBoxNoFill.UseVisualStyleBackColor = true;
-            this.checkBoxNoFill.CheckedChanged += new System.EventHandler(this.checkBoxFill_CheckedChanged);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -638,19 +638,19 @@ namespace SimplePaint
             this.toolStripTools.ResumeLayout(false);
             this.toolStripTools.PerformLayout();
             this.panelColors.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).EndInit();
+            this.groupBoxBackground.ResumeLayout(false);
+            this.groupBoxBackground.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).EndInit();
+            this.groupBoxFill.ResumeLayout(false);
+            this.groupBoxFill.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFillColor)).EndInit();
+            this.groupBoxOutline.ResumeLayout(false);
+            this.groupBoxOutline.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.panelContainer.ResumeLayout(false);
-            this.groupBoxOutline.ResumeLayout(false);
-            this.groupBoxOutline.PerformLayout();
-            this.groupBoxFill.ResumeLayout(false);
-            this.groupBoxFill.PerformLayout();
-            this.groupBoxBackground.ResumeLayout(false);
-            this.groupBoxBackground.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFillColor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

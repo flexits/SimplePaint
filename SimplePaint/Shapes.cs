@@ -12,6 +12,7 @@ namespace SimplePaint
         void AddPoint(Point pathPoint, bool snapToStraight);
         void Draw(Graphics drawSurface);
         Rectangle GetBoundingRectangle();
+        bool HitTest(Point point);
     }
 
     internal abstract class Shape : IDrawable
@@ -29,11 +30,14 @@ namespace SimplePaint
         public abstract void AddPoint(Point pathPoint, bool snapToStraight);
         public abstract void Draw(Graphics drawSurface);
         public abstract Rectangle GetBoundingRectangle();
+        public abstract bool HitTest(Point point);
 
         public object Clone()
         {
-            //clone Pen too!
-            return this.MemberwiseClone();
+            Shape newShape = this.MemberwiseClone() as Shape;
+            newShape.DrawingPen = DrawingPen.Clone() as Pen;
+            newShape.FillBrush = FillBrush.Clone() as Brush;
+            return newShape;
         }
     }
 
@@ -104,6 +108,13 @@ namespace SimplePaint
             int height = Math.Abs(endPt.Y - startPt.Y);
             return new Rectangle(coordX, coordY, width, height);
         }
+
+        public override bool HitTest(Point ptToTest)
+        {
+            GraphicsPath gpath = new GraphicsPath();
+            gpath.AddLine(startPt, endPt);
+            return gpath.IsOutlineVisible(ptToTest, DrawingPen);
+        }
     }
 
     internal class Freepath : Shape
@@ -137,6 +148,13 @@ namespace SimplePaint
             int maxX = pathPoints.Max(n => n.X);
             int maxY = pathPoints.Max(n => n.Y);
             return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+        }
+
+        public override bool HitTest(Point ptToTest)
+        {
+            GraphicsPath gpath = new GraphicsPath();
+            gpath.AddLines(pathPoints.ToArray());
+            return gpath.IsOutlineVisible(ptToTest, DrawingPen);
         }
     }
 
@@ -185,13 +203,18 @@ namespace SimplePaint
             endPt.Y = startPt.Y + Math.Abs(height);*/
         }
 
+        protected Rectangle GenerateRect()
+        {
+            return new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
+        }
+
         public override void Draw(Graphics drawSurface)
         {
             if (startPt == endPt)
             {
                 return;
             }
-            Rectangle rect = new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
+            Rectangle rect = GenerateRect();
             drawSurface.DrawRectangle(DrawingPen, rect);
             if (FillBrush != null)
             {
@@ -201,7 +224,21 @@ namespace SimplePaint
 
         public override Rectangle GetBoundingRectangle()
         {
-            return new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
+            return GenerateRect();
+        }
+
+        public override bool HitTest(Point ptToTest)
+        {
+            GraphicsPath gpath = new GraphicsPath();
+            gpath.AddRectangle(GenerateRect());
+            if (FillBrush is null)
+            {
+                return gpath.IsOutlineVisible(ptToTest, DrawingPen);
+            }
+            else
+            {
+                return gpath.IsVisible(ptToTest);
+            }
         }
     }
 
@@ -215,11 +252,25 @@ namespace SimplePaint
             {
                 return;
             }
-            Rectangle rect = new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
+            Rectangle rect = GenerateRect();
             drawSurface.DrawEllipse(DrawingPen, rect);
             if (FillBrush != null)
             {
                 drawSurface.FillEllipse(FillBrush, rect);
+            }
+        }
+
+        public override bool HitTest(Point ptToTest)
+        {
+            GraphicsPath gpath = new GraphicsPath();
+            gpath.AddEllipse(GenerateRect());
+            if (FillBrush is null)
+            {
+                return gpath.IsOutlineVisible(ptToTest, DrawingPen);
+            }
+            else
+            {
+                return gpath.IsVisible(ptToTest);
             }
         }
     }

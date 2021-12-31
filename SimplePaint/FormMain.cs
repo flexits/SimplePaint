@@ -168,14 +168,9 @@ namespace SimplePaint
                 {
                     statusLabelTool.Text = "Инструмент: " + btnSender.Tag.ToString();
                 }
-                if (btnSender == toolStripButtonPencil)
+                if (btnSender == toolStripButtonHand)
                 {
-                    DrawToolBox.Select(DrawingTools.Pencil);
-                    return;
-                }
-                else if (btnSender == toolStripButtonFreehand)
-                {
-                    DrawToolBox.Select(DrawingTools.Freehand);
+                    DrawToolBox.Select(DrawingTools.Selector);
                     return;
                 }
                 else if (btnSender == toolStripButtonMove)
@@ -183,9 +178,14 @@ namespace SimplePaint
                     DrawToolBox.Select(DrawingTools.Move);
                     return;
                 }
-                else if (btnSender == toolStripButtonEraser)
+                else if (btnSender == toolStripButtonPencil)
                 {
-                    DrawToolBox.Select(DrawingTools.Eraser);
+                    DrawToolBox.Select(DrawingTools.Pencil);
+                    return;
+                }
+                else if (btnSender == toolStripButtonFreehand)
+                {
+                    DrawToolBox.Select(DrawingTools.Freehand);
                     return;
                 }
                 else if (btnSender == toolStripButtonRectangle)
@@ -196,6 +196,11 @@ namespace SimplePaint
                 else if (btnSender == toolStripButtonEllipse)
                 {
                     DrawToolBox.Select(DrawingTools.Ellipse);
+                    return;
+                }
+                else if (btnSender == toolStripButtonEraser)
+                {
+                    DrawToolBox.Select(DrawingTools.Eraser);
                     return;
                 }
                 else if (btnSender == toolStripButtonFill)
@@ -266,7 +271,7 @@ namespace SimplePaint
             }
             else
             {
-                pictureBoxFillColor.BackColor = Color.White;
+                pictureBoxFillColor.BackColor = pictureBoxToolColor.BackColor;
                 DrawToolBox.CurrentPalette.FillBrush = new SolidBrush(pictureBoxFillColor.BackColor);
             }
         }

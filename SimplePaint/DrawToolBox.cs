@@ -85,8 +85,10 @@ namespace SimplePaint
                     currentTool = new ToolCanvasMove(currentPalette, currentCanvas, currentDrawing);
                     break;
                 case DrawingTools.Selector:
+                    currentTool = new ToolShapeSelect(currentPalette, currentCanvas, currentDrawing);
+                    break;
                 case DrawingTools.Fill:
-                    currentTool = null;
+                    currentTool = new ToolShapeFill(currentPalette, currentCanvas, currentDrawing);
                     break;
             }
         }
@@ -246,5 +248,71 @@ namespace SimplePaint
             Cursor.Current = Cursors.Arrow;
             Cursor.Clip = Rectangle.Empty;
         }
+    }
+
+    internal class ToolShapeSelect : DrawingTool
+    {
+        public ToolShapeSelect(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
+
+        private Point startPt;
+        private IDrawable selectedShape;
+
+        public override void ProcessMouseDown(MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            selectedShape = drawing.GetShapeByPoint(e.Location);
+            if (selectedShape is null)
+            {
+                return;
+            }
+            MessageBox.Show("found!");
+            startPt = e.Location;
+        }
+
+        public override void ProcessMouseMove(MouseEventArgs e)
+        {
+            if (canvas is null)
+            {
+                throw new NullReferenceException();
+            }
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            //move shape
+            //selectedShape.Move(inf offsetX, int offsetY)
+            throw new NotImplementedException();
+        }
+
+        public override void ProcessMouseUp(MouseEventArgs e) { }
+    }
+
+    internal class ToolShapeFill : DrawingTool
+    {
+        public ToolShapeFill(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
+
+        private IDrawable selectedShape;
+
+        public override void ProcessMouseDown(MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+            selectedShape = drawing.GetShapeByPoint(e.Location);
+            if (selectedShape is null)
+            {
+                return;
+            }
+            //selectedShape.Fill(palette.FillBrush)
+            throw new NotImplementedException();
+        }
+
+        public override void ProcessMouseMove(MouseEventArgs e) { }
+
+        public override void ProcessMouseUp(MouseEventArgs e) { }
     }
 }

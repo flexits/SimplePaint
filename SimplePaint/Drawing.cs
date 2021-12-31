@@ -21,11 +21,12 @@ namespace SimplePaint
         void Redo();
         void UndoAll();
         void Clear();
+        IDrawable GetShapeByPoint(Point ptToSearch);
     }
 
     class Drawing : IDrawing
     {
-        public event UpdateHandler Updated; //TODO send bounding rectangle as an argument to make Inalidate(Rectangle) possible
+        public event UpdateHandler Updated; //TODO send bounding rectangle as an argument to make Invalidate(Rectangle) possible
 
         private Stack<IDrawable> shapes;
 
@@ -122,6 +123,18 @@ namespace SimplePaint
             shapes.Clear();
             discarded.Clear();
             Updated?.Invoke();
+        }
+
+        public IDrawable GetShapeByPoint(Point ptToSearch)
+        {
+            foreach (IDrawable shape in shapes)
+            {
+                if (shape.HitTest(ptToSearch))
+                {
+                    return shape;
+                }
+            }
+            return null;
         }
     }
 }
