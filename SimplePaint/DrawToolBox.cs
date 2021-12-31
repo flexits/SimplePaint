@@ -28,7 +28,7 @@ namespace SimplePaint
         {
             ForegroundPen = new Pen(Color.Black, 1);
             BackgroundPen = new Pen(Color.White, 1);
-            FillBrush = new SolidBrush(Color.White);
+            FillBrush = null;
         }
         public Pen ForegroundPen { get; set; }
         public Pen BackgroundPen { get; set; }
@@ -146,7 +146,7 @@ namespace SimplePaint
             }
             Cursor.Current = Cursors.Cross;
             Cursor.Clip = new Rectangle(canvas.PointToScreen(Point.Empty), canvas.Size);
-            ShapesFactory.Init<T>(palette.ForegroundPen, e.Location);
+            ShapesFactory.Init<T>(palette.ForegroundPen, palette.FillBrush, e.Location);
         }
 
         public override void ProcessMouseMove(MouseEventArgs e)
@@ -197,7 +197,7 @@ namespace SimplePaint
             }
             Cursor.Current = Cursors.Cross;
             Cursor.Clip = new Rectangle(canvas.PointToScreen(Point.Empty), canvas.Size);
-            ShapesFactory.Init<Freepath>(palette.BackgroundPen, e.Location);
+            ShapesFactory.Init<Freepath>(palette.BackgroundPen, palette.FillBrush, e.Location);
         }
     }
 

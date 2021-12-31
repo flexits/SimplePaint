@@ -242,6 +242,35 @@ namespace SimplePaint
             }
         }
 
+        private void pictureBoxFillColor_Click(object sender, EventArgs e)
+        {
+            if (checkBoxNoFill.Checked)
+            {
+                return;
+            }
+            colorDialog1.Color = pictureBoxBackColor.BackColor;
+            if (colorDialog1.ShowDialog(this) == DialogResult.OK)
+            {
+                Color selectedColor = colorDialog1.Color;
+                pictureBoxFillColor.BackColor = selectedColor;
+                DrawToolBox.CurrentPalette.FillBrush = new SolidBrush(selectedColor);
+            }
+        }
+
+        private void checkBoxFill_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxNoFill.Checked)
+            {
+                pictureBoxFillColor.BackColor = SystemColors.Control;
+                DrawToolBox.CurrentPalette.FillBrush = null;
+            }
+            else
+            {
+                pictureBoxFillColor.BackColor = Color.White;
+                DrawToolBox.CurrentPalette.FillBrush = new SolidBrush(pictureBoxFillColor.BackColor);
+            }
+        }
+
         private void trackBarWidth_ValueChanged(object sender, EventArgs e)
         {
             labelThicknessValue.Text = trackBarWidth.Value.ToString() + " px";

@@ -35,9 +35,26 @@ namespace SimplePaint
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTools = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonHand = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonMove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonFreehand = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRectangle = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEllipse = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonFill = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonZoomReset = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.panelColors = new System.Windows.Forms.Panel();
             this.labelThicknessValue = new System.Windows.Forms.Label();
             this.checkBoxSmoothing = new System.Windows.Forms.CheckBox();
@@ -45,7 +62,8 @@ namespace SimplePaint
             this.label3 = new System.Windows.Forms.Label();
             this.trackBarWidth = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBoxToolColor = new System.Windows.Forms.PictureBox();
+            this.pictureBoxBackColor = new System.Windows.Forms.PictureBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabelPosition = new System.Windows.Forms.ToolStripStatusLabel();
@@ -55,33 +73,26 @@ namespace SimplePaint
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelContainer = new System.Windows.Forms.Panel();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
-            this.pictureBoxToolColor = new System.Windows.Forms.PictureBox();
-            this.pictureBoxBackColor = new System.Windows.Forms.PictureBox();
-            this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonMove = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonPencil = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFreehand = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRectangle = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonEllipse = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonEraser = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonFill = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonUndo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRedo = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonZoomReset = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonHand = new System.Windows.Forms.ToolStripButton();
+            this.groupBoxOutline = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.groupBoxFill = new System.Windows.Forms.GroupBox();
+            this.groupBoxBackground = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBoxFillColor = new System.Windows.Forms.PictureBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.checkBoxNoFill = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
             this.panelColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).BeginInit();
-            this.statusStrip1.SuspendLayout();
-            this.panelContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).BeginInit();
+            this.statusStrip1.SuspendLayout();
+            this.panelContainer.SuspendLayout();
+            this.groupBoxOutline.SuspendLayout();
+            this.groupBoxFill.SuspendLayout();
+            this.groupBoxBackground.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFillColor)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -148,205 +159,6 @@ namespace SimplePaint
             this.toolStripTools.TabIndex = 1;
             this.toolStripTools.Text = "toolStrip1";
             // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
-            // 
-            // panelColors
-            // 
-            this.panelColors.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelColors.Controls.Add(this.labelThicknessValue);
-            this.panelColors.Controls.Add(this.checkBoxSmoothing);
-            this.panelColors.Controls.Add(this.comboBoxStyle);
-            this.panelColors.Controls.Add(this.label3);
-            this.panelColors.Controls.Add(this.trackBarWidth);
-            this.panelColors.Controls.Add(this.label2);
-            this.panelColors.Controls.Add(this.pictureBoxToolColor);
-            this.panelColors.Controls.Add(this.pictureBoxBackColor);
-            this.panelColors.Controls.Add(this.label1);
-            this.panelColors.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelColors.Location = new System.Drawing.Point(662, 63);
-            this.panelColors.Name = "panelColors";
-            this.panelColors.Size = new System.Drawing.Size(152, 501);
-            this.panelColors.TabIndex = 3;
-            // 
-            // labelThicknessValue
-            // 
-            this.labelThicknessValue.AutoSize = true;
-            this.labelThicknessValue.Location = new System.Drawing.Point(105, 83);
-            this.labelThicknessValue.Name = "labelThicknessValue";
-            this.labelThicknessValue.Size = new System.Drawing.Size(27, 13);
-            this.labelThicknessValue.TabIndex = 8;
-            this.labelThicknessValue.Text = "1 px";
-            // 
-            // checkBoxSmoothing
-            // 
-            this.checkBoxSmoothing.AutoSize = true;
-            this.checkBoxSmoothing.Location = new System.Drawing.Point(9, 199);
-            this.checkBoxSmoothing.Name = "checkBoxSmoothing";
-            this.checkBoxSmoothing.Size = new System.Drawing.Size(94, 17);
-            this.checkBoxSmoothing.TabIndex = 7;
-            this.checkBoxSmoothing.Text = "Сглаживание";
-            this.checkBoxSmoothing.UseVisualStyleBackColor = true;
-            this.checkBoxSmoothing.CheckedChanged += new System.EventHandler(this.checkBoxSmoothing_CheckedChanged);
-            // 
-            // comboBoxStyle
-            // 
-            this.comboBoxStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxStyle.FormattingEnabled = true;
-            this.comboBoxStyle.Location = new System.Drawing.Point(9, 163);
-            this.comboBoxStyle.Name = "comboBoxStyle";
-            this.comboBoxStyle.Size = new System.Drawing.Size(137, 21);
-            this.comboBoxStyle.TabIndex = 6;
-            this.comboBoxStyle.SelectedValueChanged += new System.EventHandler(this.comboBoxStyle_SelectedValueChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 147);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(73, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Стиль линии:";
-            // 
-            // trackBarWidth
-            // 
-            this.trackBarWidth.Location = new System.Drawing.Point(9, 99);
-            this.trackBarWidth.Maximum = 20;
-            this.trackBarWidth.Minimum = 1;
-            this.trackBarWidth.Name = "trackBarWidth";
-            this.trackBarWidth.Size = new System.Drawing.Size(137, 45);
-            this.trackBarWidth.TabIndex = 4;
-            this.trackBarWidth.Value = 1;
-            this.trackBarWidth.ValueChanged += new System.EventHandler(this.trackBarWidth_ValueChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(6, 83);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Ширина линии:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(6, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(140, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Цвет инструмента / фона:";
-            // 
-            // colorDialog1
-            // 
-            this.colorDialog1.FullOpen = true;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statusLabelPosition,
-            this.statusLabelScale,
-            this.statusLabelTool});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 564);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(814, 22);
-            this.statusStrip1.TabIndex = 4;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // statusLabelPosition
-            // 
-            this.statusLabelPosition.Name = "statusLabelPosition";
-            this.statusLabelPosition.Size = new System.Drawing.Size(25, 17);
-            this.statusLabelPosition.Text = "0; 0";
-            // 
-            // statusLabelScale
-            // 
-            this.statusLabelScale.Name = "statusLabelScale";
-            this.statusLabelScale.Size = new System.Drawing.Size(34, 17);
-            this.statusLabelScale.Text = "Scale";
-            // 
-            // statusLabelTool
-            // 
-            this.statusLabelTool.Name = "statusLabelTool";
-            this.statusLabelTool.Size = new System.Drawing.Size(29, 17);
-            this.statusLabelTool.Text = "Tool";
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.Filter = "Bitmap|*.bmp|GIF|*.gif|JPEG|*.jpg|PNG|*.png|Все графические файлы|*.bmp;*.gif;*.j" +
-    "pg;*.png";
-            this.openFileDialog1.FilterIndex = 5;
-            this.openFileDialog1.Title = "Открыть графический файл";
-            // 
-            // saveFileDialog1
-            // 
-            this.saveFileDialog1.Filter = "Растр BMP|*.bmp|Сжатый растр без потерь PNG|*.png|Сжатый растр JPG|*.jpg";
-            this.saveFileDialog1.FilterIndex = 2;
-            // 
-            // panelContainer
-            // 
-            this.panelContainer.AutoSize = true;
-            this.panelContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelContainer.Controls.Add(this.drawCanvas1);
-            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContainer.Location = new System.Drawing.Point(0, 63);
-            this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(662, 501);
-            this.panelContainer.TabIndex = 2;
-            // 
-            // drawCanvas1
-            // 
-            this.drawCanvas1.BackColor = System.Drawing.Color.White;
-            this.drawCanvas1.CanvasSmoothing = System.Drawing.Drawing2D.SmoothingMode.None;
-            this.drawCanvas1.CanvasZoomFactor = 1F;
-            this.drawCanvas1.Location = new System.Drawing.Point(0, 0);
-            this.drawCanvas1.Name = "drawCanvas1";
-            this.drawCanvas1.Size = new System.Drawing.Size(150, 150);
-            this.drawCanvas1.TabIndex = 0;
-            this.drawCanvas1.ZoomStep = 0.1F;
-            this.drawCanvas1.ShapesDrawRequest += new System.Windows.Forms.PaintEventHandler(this.drawCanvas1_ShapesDrawRequest);
-            this.drawCanvas1.OnMouseDownScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseDownScaled);
-            this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
-            this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
-            // 
-            // pictureBoxToolColor
-            // 
-            this.pictureBoxToolColor.BackColor = System.Drawing.Color.Black;
-            this.pictureBoxToolColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxToolColor.Location = new System.Drawing.Point(43, 25);
-            this.pictureBoxToolColor.Name = "pictureBoxToolColor";
-            this.pictureBoxToolColor.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxToolColor.TabIndex = 2;
-            this.pictureBoxToolColor.TabStop = false;
-            this.pictureBoxToolColor.Click += new System.EventHandler(this.pictureBoxToolColor_Click);
-            // 
-            // pictureBoxBackColor
-            // 
-            this.pictureBoxBackColor.BackColor = System.Drawing.Color.White;
-            this.pictureBoxBackColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBoxBackColor.Location = new System.Drawing.Point(58, 41);
-            this.pictureBoxBackColor.Name = "pictureBoxBackColor";
-            this.pictureBoxBackColor.Size = new System.Drawing.Size(32, 32);
-            this.pictureBoxBackColor.TabIndex = 1;
-            this.pictureBoxBackColor.TabStop = false;
-            this.pictureBoxBackColor.Click += new System.EventHandler(this.pictureBoxBackColor_Click);
-            // 
             // toolStripButtonNew
             // 
             this.toolStripButtonNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -376,6 +188,23 @@ namespace SimplePaint
             this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
             this.toolStripButtonSave.Text = "Сохранить рисунок как";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
+            // 
+            // toolStripButtonHand
+            // 
+            this.toolStripButtonHand.CheckOnClick = true;
+            this.toolStripButtonHand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonHand.Image = global::SimplePaint.Properties.Resources.hand_40px;
+            this.toolStripButtonHand.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonHand.Name = "toolStripButtonHand";
+            this.toolStripButtonHand.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonHand.Tag = "выбор";
+            this.toolStripButtonHand.Text = "Выбирать фигуры";
+            this.toolStripButtonHand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
             // toolStripButtonMove
             // 
@@ -457,8 +286,14 @@ namespace SimplePaint
             this.toolStripButtonFill.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonFill.Name = "toolStripButtonFill";
             this.toolStripButtonFill.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonFill.Text = "toolStripButton1";
+            this.toolStripButtonFill.Tag = "заливка фигуры";
+            this.toolStripButtonFill.Text = "Залить фигуру";
             this.toolStripButtonFill.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
             // 
             // toolStripButtonUndo
             // 
@@ -490,6 +325,11 @@ namespace SimplePaint
             this.toolStripButtonRedo.Text = "Вернуть";
             this.toolStripButtonRedo.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
+            // 
             // toolStripButtonZoomIn
             // 
             this.toolStripButtonZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -520,17 +360,264 @@ namespace SimplePaint
             this.toolStripButtonZoomOut.Text = "Уменьшить масштаб";
             this.toolStripButtonZoomOut.Click += new System.EventHandler(this.buttonZoomOut_Click);
             // 
-            // toolStripButtonHand
+            // panelColors
             // 
-            this.toolStripButtonHand.CheckOnClick = true;
-            this.toolStripButtonHand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonHand.Image = global::SimplePaint.Properties.Resources.hand_40px;
-            this.toolStripButtonHand.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonHand.Name = "toolStripButtonHand";
-            this.toolStripButtonHand.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonHand.Tag = "выбор";
-            this.toolStripButtonHand.Text = "Выбирать фигуры";
-            this.toolStripButtonHand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
+            this.panelColors.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelColors.Controls.Add(this.groupBoxBackground);
+            this.panelColors.Controls.Add(this.groupBoxFill);
+            this.panelColors.Controls.Add(this.groupBoxOutline);
+            this.panelColors.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panelColors.Location = new System.Drawing.Point(662, 63);
+            this.panelColors.Name = "panelColors";
+            this.panelColors.Size = new System.Drawing.Size(152, 501);
+            this.panelColors.TabIndex = 3;
+            // 
+            // labelThicknessValue
+            // 
+            this.labelThicknessValue.AutoSize = true;
+            this.labelThicknessValue.Location = new System.Drawing.Point(107, 43);
+            this.labelThicknessValue.Name = "labelThicknessValue";
+            this.labelThicknessValue.Size = new System.Drawing.Size(27, 13);
+            this.labelThicknessValue.TabIndex = 8;
+            this.labelThicknessValue.Text = "1 px";
+            // 
+            // checkBoxSmoothing
+            // 
+            this.checkBoxSmoothing.AutoSize = true;
+            this.checkBoxSmoothing.Location = new System.Drawing.Point(6, 137);
+            this.checkBoxSmoothing.Name = "checkBoxSmoothing";
+            this.checkBoxSmoothing.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxSmoothing.TabIndex = 7;
+            this.checkBoxSmoothing.Text = "Сглаживание";
+            this.checkBoxSmoothing.UseVisualStyleBackColor = true;
+            this.checkBoxSmoothing.CheckedChanged += new System.EventHandler(this.checkBoxSmoothing_CheckedChanged);
+            // 
+            // comboBoxStyle
+            // 
+            this.comboBoxStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxStyle.FormattingEnabled = true;
+            this.comboBoxStyle.Location = new System.Drawing.Point(6, 110);
+            this.comboBoxStyle.Name = "comboBoxStyle";
+            this.comboBoxStyle.Size = new System.Drawing.Size(128, 21);
+            this.comboBoxStyle.TabIndex = 6;
+            this.comboBoxStyle.SelectedValueChanged += new System.EventHandler(this.comboBoxStyle_SelectedValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 91);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Стиль линии:";
+            // 
+            // trackBarWidth
+            // 
+            this.trackBarWidth.Location = new System.Drawing.Point(6, 59);
+            this.trackBarWidth.Maximum = 20;
+            this.trackBarWidth.Minimum = 1;
+            this.trackBarWidth.Name = "trackBarWidth";
+            this.trackBarWidth.Size = new System.Drawing.Size(129, 45);
+            this.trackBarWidth.TabIndex = 4;
+            this.trackBarWidth.Value = 1;
+            this.trackBarWidth.ValueChanged += new System.EventHandler(this.trackBarWidth_ValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label2.Location = new System.Drawing.Point(6, 43);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(82, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Ширина линии:";
+            // 
+            // pictureBoxToolColor
+            // 
+            this.pictureBoxToolColor.BackColor = System.Drawing.Color.Black;
+            this.pictureBoxToolColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxToolColor.Location = new System.Drawing.Point(80, 16);
+            this.pictureBoxToolColor.Name = "pictureBoxToolColor";
+            this.pictureBoxToolColor.Size = new System.Drawing.Size(54, 24);
+            this.pictureBoxToolColor.TabIndex = 2;
+            this.pictureBoxToolColor.TabStop = false;
+            this.pictureBoxToolColor.Click += new System.EventHandler(this.pictureBoxToolColor_Click);
+            // 
+            // pictureBoxBackColor
+            // 
+            this.pictureBoxBackColor.BackColor = System.Drawing.Color.White;
+            this.pictureBoxBackColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxBackColor.Location = new System.Drawing.Point(80, 19);
+            this.pictureBoxBackColor.Name = "pictureBoxBackColor";
+            this.pictureBoxBackColor.Size = new System.Drawing.Size(54, 24);
+            this.pictureBoxBackColor.TabIndex = 1;
+            this.pictureBoxBackColor.TabStop = false;
+            this.pictureBoxBackColor.Click += new System.EventHandler(this.pictureBoxBackColor_Click);
+            // 
+            // colorDialog1
+            // 
+            this.colorDialog1.FullOpen = true;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabelPosition,
+            this.statusLabelScale,
+            this.statusLabelTool});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 564);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(814, 22);
+            this.statusStrip1.TabIndex = 4;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // statusLabelPosition
+            // 
+            this.statusLabelPosition.Name = "statusLabelPosition";
+            this.statusLabelPosition.Size = new System.Drawing.Size(25, 17);
+            this.statusLabelPosition.Text = "0; 0";
+            // 
+            // statusLabelScale
+            // 
+            this.statusLabelScale.Name = "statusLabelScale";
+            this.statusLabelScale.Size = new System.Drawing.Size(34, 17);
+            this.statusLabelScale.Text = "Scale";
+            // 
+            // statusLabelTool
+            // 
+            this.statusLabelTool.Name = "statusLabelTool";
+            this.statusLabelTool.Size = new System.Drawing.Size(29, 17);
+            this.statusLabelTool.Text = "Tool";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "Bitmap|*.bmp|GIF|*.gif|JPEG|*.jpg|PNG|*.png|Все графические файлы|*.bmp;*.gif;*.j" +
+    "pg;*.png";
+            this.openFileDialog1.FilterIndex = 5;
+            this.openFileDialog1.Title = "Открыть графический файл";
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "Растр BMP|*.bmp|Сжатый растр без потерь PNG|*.png|Сжатый растр JPG|*.jpg";
+            this.saveFileDialog1.FilterIndex = 2;
+            // 
+            // panelContainer
+            // 
+            this.panelContainer.AutoSize = true;
+            this.panelContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelContainer.Controls.Add(this.drawCanvas1);
+            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContainer.Location = new System.Drawing.Point(0, 63);
+            this.panelContainer.Name = "panelContainer";
+            this.panelContainer.Size = new System.Drawing.Size(662, 501);
+            this.panelContainer.TabIndex = 2;
+            // 
+            // drawCanvas1
+            // 
+            this.drawCanvas1.BackColor = System.Drawing.Color.White;
+            this.drawCanvas1.CanvasSmoothing = System.Drawing.Drawing2D.SmoothingMode.None;
+            this.drawCanvas1.CanvasZoomFactor = 1F;
+            this.drawCanvas1.Location = new System.Drawing.Point(0, 0);
+            this.drawCanvas1.Name = "drawCanvas1";
+            this.drawCanvas1.Size = new System.Drawing.Size(150, 150);
+            this.drawCanvas1.TabIndex = 0;
+            this.drawCanvas1.ZoomStep = 0.1F;
+            this.drawCanvas1.ShapesDrawRequest += new System.Windows.Forms.PaintEventHandler(this.drawCanvas1_ShapesDrawRequest);
+            this.drawCanvas1.OnMouseDownScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseDownScaled);
+            this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
+            this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
+            // 
+            // groupBoxOutline
+            // 
+            this.groupBoxOutline.Controls.Add(this.label4);
+            this.groupBoxOutline.Controls.Add(this.labelThicknessValue);
+            this.groupBoxOutline.Controls.Add(this.checkBoxSmoothing);
+            this.groupBoxOutline.Controls.Add(this.pictureBoxToolColor);
+            this.groupBoxOutline.Controls.Add(this.label3);
+            this.groupBoxOutline.Controls.Add(this.comboBoxStyle);
+            this.groupBoxOutline.Controls.Add(this.trackBarWidth);
+            this.groupBoxOutline.Controls.Add(this.label2);
+            this.groupBoxOutline.Location = new System.Drawing.Point(4, 3);
+            this.groupBoxOutline.Name = "groupBoxOutline";
+            this.groupBoxOutline.Size = new System.Drawing.Size(141, 170);
+            this.groupBoxOutline.TabIndex = 9;
+            this.groupBoxOutline.TabStop = false;
+            this.groupBoxOutline.Text = "Контур";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 22);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(68, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Цвет линии:";
+            // 
+            // groupBoxFill
+            // 
+            this.groupBoxFill.Controls.Add(this.checkBoxNoFill);
+            this.groupBoxFill.Controls.Add(this.label5);
+            this.groupBoxFill.Controls.Add(this.pictureBoxFillColor);
+            this.groupBoxFill.Location = new System.Drawing.Point(4, 179);
+            this.groupBoxFill.Name = "groupBoxFill";
+            this.groupBoxFill.Size = new System.Drawing.Size(142, 75);
+            this.groupBoxFill.TabIndex = 10;
+            this.groupBoxFill.TabStop = false;
+            this.groupBoxFill.Text = "Заливка";
+            // 
+            // groupBoxBackground
+            // 
+            this.groupBoxBackground.Controls.Add(this.label1);
+            this.groupBoxBackground.Controls.Add(this.pictureBoxBackColor);
+            this.groupBoxBackground.Location = new System.Drawing.Point(3, 260);
+            this.groupBoxBackground.Name = "groupBoxBackground";
+            this.groupBoxBackground.Size = new System.Drawing.Size(142, 57);
+            this.groupBoxBackground.TabIndex = 11;
+            this.groupBoxBackground.TabStop = false;
+            this.groupBoxBackground.Text = "Фон";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Цвет";
+            // 
+            // pictureBoxFillColor
+            // 
+            this.pictureBoxFillColor.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBoxFillColor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBoxFillColor.Location = new System.Drawing.Point(80, 19);
+            this.pictureBoxFillColor.Name = "pictureBoxFillColor";
+            this.pictureBoxFillColor.Size = new System.Drawing.Size(54, 24);
+            this.pictureBoxFillColor.TabIndex = 2;
+            this.pictureBoxFillColor.TabStop = false;
+            this.pictureBoxFillColor.Click += new System.EventHandler(this.pictureBoxFillColor_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 25);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Цвет";
+            // 
+            // checkBoxNoFill
+            // 
+            this.checkBoxNoFill.AutoSize = true;
+            this.checkBoxNoFill.Checked = true;
+            this.checkBoxNoFill.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxNoFill.Location = new System.Drawing.Point(6, 49);
+            this.checkBoxNoFill.Name = "checkBoxNoFill";
+            this.checkBoxNoFill.Size = new System.Drawing.Size(89, 17);
+            this.checkBoxNoFill.TabIndex = 12;
+            this.checkBoxNoFill.Text = "Прозрачный";
+            this.checkBoxNoFill.UseVisualStyleBackColor = true;
+            this.checkBoxNoFill.CheckedChanged += new System.EventHandler(this.checkBoxFill_CheckedChanged);
             // 
             // FormMain
             // 
@@ -551,13 +638,19 @@ namespace SimplePaint
             this.toolStripTools.ResumeLayout(false);
             this.toolStripTools.PerformLayout();
             this.panelColors.ResumeLayout(false);
-            this.panelColors.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.panelContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxToolColor)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBackColor)).EndInit();
+            this.groupBoxOutline.ResumeLayout(false);
+            this.groupBoxOutline.PerformLayout();
+            this.groupBoxFill.ResumeLayout(false);
+            this.groupBoxFill.PerformLayout();
+            this.groupBoxBackground.ResumeLayout(false);
+            this.groupBoxBackground.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxFillColor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -587,7 +680,6 @@ namespace SimplePaint
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
         private System.Windows.Forms.PictureBox pictureBoxToolColor;
         private System.Windows.Forms.PictureBox pictureBoxBackColor;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar trackBarWidth;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBoxStyle;
@@ -609,6 +701,14 @@ namespace SimplePaint
         private System.Windows.Forms.ToolStripButton toolStripButtonEllipse;
         private System.Windows.Forms.ToolStripButton toolStripButtonFill;
         private System.Windows.Forms.ToolStripButton toolStripButtonHand;
+        private System.Windows.Forms.GroupBox groupBoxFill;
+        private System.Windows.Forms.GroupBox groupBoxOutline;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox groupBoxBackground;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBoxNoFill;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox pictureBoxFillColor;
     }
 }
 

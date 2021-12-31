@@ -18,9 +18,12 @@ namespace SimplePaint
     {
         public Pen DrawingPen { get; set; }
 
-        private protected Shape(Pen pen)
+        public Brush FillBrush { get; set; }
+
+        private protected Shape(Pen pen, Brush brush)
         {
             DrawingPen = pen;
+            FillBrush = brush;
         }
 
         public abstract void AddPoint(Point pathPoint, bool snapToStraight);
@@ -45,7 +48,7 @@ namespace SimplePaint
         private protected Point startPt;
         private protected Point endPt;
 
-        public Line(Pen pen, Point startPoint) : base(pen)
+        public Line(Pen pen, Brush brush, Point startPoint) : base(pen, brush)
         {
             startPt = startPoint;
             endPt = startPoint;
@@ -107,7 +110,7 @@ namespace SimplePaint
     { 
         private protected List<Point> pathPoints;
         
-        public Freepath(Pen pen, Point startPoint) : base(pen)
+        public Freepath(Pen pen, Brush brush, Point startPoint) : base(pen, brush)
         {
             pathPoints = new List<Point>();
             pathPoints.Add(startPoint);
@@ -144,7 +147,7 @@ namespace SimplePaint
         private protected Point startPt;
         private protected Point endPt;
 
-        public Rectngl(Pen pen, Point startPoint) : base(pen)
+        public Rectngl(Pen pen, Brush brush, Point startPoint) : base(pen, brush)
         {
             givenStartPt = startPoint;
         }
@@ -190,6 +193,10 @@ namespace SimplePaint
             }
             Rectangle rect = new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
             drawSurface.DrawRectangle(DrawingPen, rect);
+            if (FillBrush != null)
+            {
+                drawSurface.FillRectangle(FillBrush, rect);
+            }
         }
 
         public override Rectangle GetBoundingRectangle()
@@ -200,7 +207,7 @@ namespace SimplePaint
 
     internal class Ellipse : Rectngl
     {
-        public Ellipse(Pen pen, Point startPoint) : base(pen, startPoint) { }
+        public Ellipse(Pen pen, Brush brush, Point startPoint) : base(pen, brush, startPoint) { }
 
         public override void Draw(Graphics drawSurface)
         {
@@ -210,6 +217,10 @@ namespace SimplePaint
             }
             Rectangle rect = new Rectangle(startPt, new Size(endPt.X - startPt.X, endPt.Y - startPt.Y));
             drawSurface.DrawEllipse(DrawingPen, rect);
+            if (FillBrush != null)
+            {
+                drawSurface.FillEllipse(FillBrush, rect);
+            }
         }
     }
 }

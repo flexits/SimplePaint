@@ -8,9 +8,9 @@ namespace SimplePaint
     {
         private static IDrawable currentShape = null;
 
-        public static void Init<T>(Pen pen, Point startPt) where T : IDrawable
+        public static void Init<T>(Pen pen, Brush brush, Point startPt) where T : IDrawable
         {
-            object[] args = { null, startPt };
+            object[] args = { null, brush, startPt };
             if (pen is null)
             {
                 args[0] = new Pen(Color.Black, 1)
