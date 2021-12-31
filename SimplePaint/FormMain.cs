@@ -31,9 +31,7 @@ namespace SimplePaint
 
         private IDrawing currentDrawing;
 
-        private DrawingTools currentTool;
-        private Pen currentPen;
-        private Point startPt;
+        //private Point startPt;
 
         public FormMain()
         {
@@ -43,6 +41,7 @@ namespace SimplePaint
             {
                 _ = comboBoxStyle.Items.Add(style);
             }
+            DrawToolBox.SetCanvas(drawCanvas1);
             ResetDrawingTools();
             ControlsActivation(false);
         }
@@ -76,8 +75,8 @@ namespace SimplePaint
 
         private void ResetDrawingTools()
         {
-            //reset all drawing tools to their defaults
-            currentTool = DrawingTools.None;
+            //reset all drawing tools and corresponding controls to their defaults
+            DrawToolBox.Select(DrawingTools.None);
             statusLabelTool.Text = string.Empty;
             foreach (ToolStripItem tsitem in toolStripTools.Items)
             {
@@ -87,17 +86,21 @@ namespace SimplePaint
                 }
             }
 
-            currentPen = new Pen(Color.Black, 1);
-            currentPen.DashStyle = DashStyle.Solid;
-            startPt = new Point(0, 0);
-
-            drawCanvas1.CanvasSmoothing = SmoothingMode.None;
-
+            DrawToolBox.CurrentPalette.ForegroundPen.Color = Color.Black;
+            DrawToolBox.CurrentPalette.ForegroundPen.Width = 1;
+            DrawToolBox.CurrentPalette.ForegroundPen.DashStyle = DashStyle.Solid;
+            DrawToolBox.CurrentPalette.BackgroundPen.Color = Color.White;
+            DrawToolBox.CurrentPalette.BackgroundPen.Width = 1;
+            DrawToolBox.CurrentPalette.BackgroundPen.DashStyle = DashStyle.Solid;
             pictureBoxToolColor.BackColor = Color.Black;
             pictureBoxBackColor.BackColor = Color.White;
             trackBarWidth.Value = 1;
             comboBoxStyle.SelectedIndex = 0;
+            //startPt = new Point(0, 0);
+
+            drawCanvas1.CanvasSmoothing = SmoothingMode.None;
             checkBoxSmoothing.Checked = false;
+
             drawCanvas1.Invalidate();
         }
 
@@ -143,7 +146,10 @@ namespace SimplePaint
 
         private void toolStripButtonToolSelect_CheckedChanged(object sender, EventArgs e)
         {
-            //make tool selection buttons behave as RadioButton (if one on = others off)
+            //make tool selection buttons behave as RadioButton (if one is on = others are off);
+            //select proper tool in DrawToolBox when a button is checked;
+            //write Tag string of the checked button to the status bar
+
             ToolStripButton btnSender = sender as ToolStripButton;
             ToolStrip tstrip = btnSender.Owner as ToolStrip;
             if (btnSender is null || tstrip is null)
@@ -168,49 +174,51 @@ namespace SimplePaint
                 }
                 if (btnSender == toolStripButtonPencil)
                 {
-                    currentTool = DrawingTools.Pencil;
+                    DrawToolBox.Select(DrawingTools.Pencil);
                     return;
                 }
                 else if (btnSender == toolStripButtonFreehand)
                 {
-                    currentTool = DrawingTools.Freehand;
+                    DrawToolBox.Select(DrawingTools.Freehand);
                     return;
                 }
                 else if (btnSender == toolStripButtonMove)
                 {
-                    currentTool = DrawingTools.Move;
+                    DrawToolBox.Select(DrawingTools.Move);
                     return;
                 }
                 else if (btnSender == toolStripButtonEraser)
                 {
-                    currentTool = DrawingTools.Eraser;
+                    DrawToolBox.Select(DrawingTools.Eraser);
                     return;
                 }
                 else if (btnSender == toolStripButtonRectangle)
                 {
-                    currentTool = DrawingTools.Rectangle;
+                    DrawToolBox.Select(DrawingTools.Rectangle);
                     return;
                 }
                 else if (btnSender == toolStripButtonEllipse)
                 {
-                    currentTool = DrawingTools.Ellipse;
+                    DrawToolBox.Select(DrawingTools.Ellipse);
                     return;
                 }
                 else if (btnSender == toolStripButtonFill)
                 {
-                    currentTool = DrawingTools.Fill;
+                    DrawToolBox.Select(DrawingTools.Fill);
                     return;
                 }
                 else
                 {
-                    currentTool = DrawingTools.None;
+                    //other button
+                    DrawToolBox.Select(DrawingTools.None);
                     statusLabelTool.Text = string.Empty;
                     return;
                 }
             }
             else
             {
-                currentTool = DrawingTools.None;
+                //unchecked button
+                DrawToolBox.Select(DrawingTools.None);
                 statusLabelTool.Text = string.Empty;
             }
         }
@@ -221,8 +229,8 @@ namespace SimplePaint
             if (colorDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 Color selectedColor = colorDialog1.Color;
-                currentPen.Color = selectedColor;
                 pictureBoxToolColor.BackColor = selectedColor;
+                DrawToolBox.CurrentPalette.ForegroundPen.Color = selectedColor;
             }
         }
 
@@ -232,28 +240,24 @@ namespace SimplePaint
             if (colorDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 Color selectedColor = colorDialog1.Color;
-                drawCanvas1.BackColor = selectedColor;
                 pictureBoxBackColor.BackColor = selectedColor;
+                drawCanvas1.BackColor = selectedColor;
+                DrawToolBox.CurrentPalette.BackgroundPen.Color = selectedColor;
             }
         }
 
         private void trackBarWidth_ValueChanged(object sender, EventArgs e)
         {
             labelThicknessValue.Text = trackBarWidth.Value.ToString() + " px";
-            if (currentPen is null)
-            {
-                return;
-            }
-            currentPen.Width = trackBarWidth.Value;
+            DrawToolBox.CurrentPalette.ForegroundPen.Width = trackBarWidth.Value;
+            DrawToolBox.CurrentPalette.BackgroundPen.Width = trackBarWidth.Value;
         }
 
         private void comboBoxStyle_SelectedValueChanged(object sender, EventArgs e)
         {
-            if (currentPen is null)
-            {
-                return;
-            }
-            currentPen.DashStyle = DashStyles.GetDashStyleByName(comboBoxStyle.SelectedItem.ToString());
+            var dstyle = DashStyles.GetDashStyleByName(comboBoxStyle.SelectedItem.ToString());
+            DrawToolBox.CurrentPalette.ForegroundPen.DashStyle = dstyle;
+            DrawToolBox.CurrentPalette.BackgroundPen.DashStyle = dstyle;
         }
 
         private void checkBoxSmoothing_CheckedChanged(object sender, EventArgs e)
@@ -287,12 +291,9 @@ namespace SimplePaint
                 currentDrawing.Size = dialogNew.SelectedDimensions;
                 drawCanvas1.SetSize(currentDrawing.Size);
                 drawCanvas1.ZoomReset();
+                DrawToolBox.SetDrawing(currentDrawing);
             }
             ControlsActivation(resultOK || changesDetected);
-            //resultOK true = ControlsActivation true
-            //resultOK false && changesDetected false = ControlsActivation false
-            //resultOK false && changesDetected true = ControlsActivation true
-            //
         }
 
         private void toolStripButtonOpen_Click(object sender, EventArgs e)
@@ -310,6 +311,7 @@ namespace SimplePaint
                     currentDrawing.AddBitmap(btmp, true);
                     drawCanvas1.SetSize(currentDrawing.Size);
                     drawCanvas1.ZoomReset();
+                    DrawToolBox.SetDrawing(currentDrawing);
                     resultOK = true;
                 }
                 catch
@@ -370,7 +372,10 @@ namespace SimplePaint
 
         private void drawCanvas1_OnMouseDownScaled(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left)
+            Cursor.Clip = DrawToolBox.GetCursorClip();
+            Cursor.Current = DrawToolBox.GetCursorStyle();
+            DrawToolBox.ProcessMouseDown(e);
+            /*if (e.Button != MouseButtons.Left)
             {
                 return;
             }
@@ -407,13 +412,15 @@ namespace SimplePaint
                     Cursor.Current = Cursors.Arrow;
                     Cursor.Clip = Rectangle.Empty;
                     return;
-            }
+            }*/
         }
 
         private void drawCanvas1_OnMouseMoveScaled(object sender, MouseEventArgs e)
         {
+            DrawToolBox.ProcessMouseMove(e);
             statusLabelPosition.Text = e.X.ToString() + "; " + e.Y.ToString();
-            if (e.Button != MouseButtons.Left)
+            return;
+            /*if (e.Button != MouseButtons.Left)
             {
                 return;
             }
@@ -424,7 +431,8 @@ namespace SimplePaint
             if (currentTool == DrawingTools.Move)
             {
                 //move canvas
-                /*if (drawCanvas1.Width <= panelContainer.Width && drawCanvas1.Height <= panelContainer.Height)
+            //
+                if (drawCanvas1.Width <= panelContainer.Width && drawCanvas1.Height <= panelContainer.Height)
                 {
                     panelContainer.AutoScroll = false;
                 }
@@ -445,8 +453,8 @@ namespace SimplePaint
                 if (diffX == 0 && diffY == diffX)
                 {
                     return;
-                }*/
-
+                }
+            //
                 int diffX = startPt.X - e.X;
                 int diffY = startPt.Y - e.Y;
                 Point canvasLocationNew = drawCanvas1.Location;
@@ -459,22 +467,14 @@ namespace SimplePaint
             Graphics gr = (sender as Control).CreateGraphics();
             gr.ScaleTransform(drawCanvas1.CanvasZoomFactor, drawCanvas1.CanvasZoomFactor);
             ShapesFactory.AddPoint(e.Location, ModifierKeys == Keys.Shift);
-            ShapesFactory.Finish().Draw(gr);
+            ShapesFactory.Finish().Draw(gr);*/
         }
 
         private void drawCanvas1_OnMouseUpScaled(object sender, MouseEventArgs e)
         {
+            DrawToolBox.ProcessMouseUp(e);
             Cursor.Current = Cursors.Arrow;
             Cursor.Clip = Rectangle.Empty;
-            if (e.Button != MouseButtons.Left)
-            {
-                return;
-            }
-            if (currentTool == DrawingTools.None || currentTool == DrawingTools.Move || currentTool == DrawingTools.Fill)
-            {
-                return;
-            }
-            currentDrawing?.AddShape(ShapesFactory.Finish());
         }
 
         private void drawCanvas1_ShapesDrawRequest(object sender, PaintEventArgs e)
