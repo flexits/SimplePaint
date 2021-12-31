@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace SimplePaint
 {
-    public delegate void UpdateHandler();
+    public delegate void UpdateHandler(Rectangle updatedBounds);
     interface IDrawing
     {
         bool DrawingChanged { get; }
@@ -26,7 +26,7 @@ namespace SimplePaint
 
     class Drawing : IDrawing
     {
-        public event UpdateHandler Updated; //TODO send bounding rectangle as an argument to make Invalidate(Rectangle) possible
+        public event UpdateHandler Updated;
 
         private Stack<IDrawable> shapes;
 
@@ -52,7 +52,7 @@ namespace SimplePaint
             }
             shapes.Push(shape);
             discarded.Clear();
-            Updated?.Invoke();
+            Updated?.Invoke(shape.GetBoundingRectangle());
         }
 
         public void AddBitmap(Bitmap bitmap, bool resizeDrawing)
@@ -86,8 +86,9 @@ namespace SimplePaint
             {
                 return;
             }
-            discarded.Push(shapes.Pop());
-            Updated?.Invoke();
+            IDrawable shape = shapes.Pop();
+            discarded.Push(shape);
+            Updated?.Invoke(shape.GetBoundingRectangle());
         }
 
         public void Redo()
@@ -96,8 +97,9 @@ namespace SimplePaint
             {
                 return;
             }
-            shapes.Push(discarded.Pop());
-            Updated?.Invoke();
+            IDrawable shape = discarded.Pop();
+            shapes.Push(shape);
+            Updated?.Invoke(shape.GetBoundingRectangle());
         }
 
         public void UndoAll()
@@ -115,14 +117,14 @@ namespace SimplePaint
             {
                 discarded.Push(temp.Pop());
             }
-            Updated?.Invoke();
+            Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
         public void Clear()
         {
             shapes.Clear();
             discarded.Clear();
-            Updated?.Invoke();
+            Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
         public IDrawable GetShapeByPoint(Point ptToSearch)

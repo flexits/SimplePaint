@@ -100,9 +100,13 @@ namespace SimplePaint
             drawCanvas1.Invalidate();
         }
 
-        private void CurrentDrawing_Updated()
+        private void CurrentDrawing_Updated(Rectangle updatedBounds)
         {
-            drawCanvas1.Invalidate();
+            //increase update rectangle by 5 px each direction
+            Rectangle region = updatedBounds;
+            region.Inflate(10, 10);
+            region.Offset(-5, -5);
+            drawCanvas1.Invalidate(region);
         }
 
         private void toolStripMenuItemExit_Click(object sender, EventArgs e)
