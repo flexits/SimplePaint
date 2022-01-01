@@ -15,6 +15,9 @@ namespace SimplePaint
 {
     public partial class FormMain : Form
     {
+        private const int REDRAW_REGION_INFLATE = 5;
+        private const int SCROLL_MARGIN_ADD = 20;
+
         //TODO load background image, crop and rotate
         //TODO display grid and snap cursor position while drawing
         //TODO selector tool to move, resize and delete drawn shapes
@@ -24,8 +27,7 @@ namespace SimplePaint
         //TODO objects Z-axis
 
         /*
-         * нужны ползунки прокрутки
-         * неадекватное перемещение формы при уменьшении в 0,5 раз и меньше
+         * неадекватное перемещение формы инструментом перетаскивания при уменьшении в 0,5 раз и меньше
          */
 
         private IDrawing currentDrawing;
@@ -100,12 +102,22 @@ namespace SimplePaint
             drawCanvas1.Invalidate();
         }
 
+        private void CenterCanvasInContainer()
+        {
+            int locY = (panelContainer.ClientSize.Height - drawCanvas1.Height - containerHScroll.Height) / 2;
+            int locX = (panelContainer.ClientSize.Width - drawCanvas1.Width - containerVScroll.Width) / 2;
+            containerVScroll.Value = locY;
+            containerHScroll.Value = locX;
+        }
+
         private void CurrentDrawing_Updated(Rectangle updatedBounds)
         {
-            //increase update rectangle by 5 px each direction
+            //increase update rectangle by REDRAW_REGION_INFLATE px each direction
+            int offset = REDRAW_REGION_INFLATE * -1;
+            int inflate = REDRAW_REGION_INFLATE * 2;
             Rectangle region = updatedBounds;
-            region.Inflate(10, 10);
-            region.Offset(-5, -5);
+            region.Inflate(inflate, inflate);
+            region.Offset(offset, offset);
             drawCanvas1.Invalidate(region);
         }
 
@@ -142,6 +154,8 @@ namespace SimplePaint
         private void buttonZoomReset_Click(object sender, EventArgs e)
         {
             drawCanvas1.ZoomReset();
+            ScrollInit();
+            CenterCanvasInContainer();
         }
 
         private void toolStripButtonToolSelect_CheckedChanged(object sender, EventArgs e)
@@ -311,6 +325,34 @@ namespace SimplePaint
             }
         }
 
+        private void ScrollInit()
+        {
+            int pictureH = Math.Max(panelContainer.ClientSize.Height, drawCanvas1.Height);
+            int height = (int)(pictureH * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;
+            containerVScroll.Minimum = -1 * height;
+            containerVScroll.Maximum = height;
+            containerVScroll.Value = drawCanvas1.Location.Y;
+            int pictureW = Math.Max(panelContainer.ClientSize.Width, drawCanvas1.Width);
+            int width = (int)(pictureW * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;
+            containerHScroll.Minimum = -1 * width;
+            containerHScroll.Maximum = width;
+            containerHScroll.Value = drawCanvas1.Location.X;
+        }
+
+        private void containerVScroll_ValueChanged(object sender, EventArgs e)
+        {
+            Point canvasLocation = drawCanvas1.Location;
+            canvasLocation.Y = containerVScroll.Value;
+            drawCanvas1.Location = canvasLocation;
+        }
+
+        private void containerHScroll_ValueChanged(object sender, EventArgs e)
+        {
+            Point canvasLocation = drawCanvas1.Location;
+            canvasLocation.X = containerHScroll.Value;
+            drawCanvas1.Location = canvasLocation;
+        }
+
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
             bool changesDetected = DetectChangesAndSave();
@@ -325,6 +367,8 @@ namespace SimplePaint
                 currentDrawing.Size = dialogNew.SelectedDimensions;
                 drawCanvas1.SetSize(currentDrawing.Size);
                 drawCanvas1.ZoomReset();
+                CenterCanvasInContainer();
+                ScrollInit();
                 DrawToolBox.SetDrawing(currentDrawing);
             }
             ControlsActivation(resultOK || changesDetected);
@@ -345,6 +389,8 @@ namespace SimplePaint
                     currentDrawing.AddBitmap(btmp, true);
                     drawCanvas1.SetSize(currentDrawing.Size);
                     drawCanvas1.ZoomReset();
+                    CenterCanvasInContainer();
+                    ScrollInit();
                     DrawToolBox.SetDrawing(currentDrawing);
                     resultOK = true;
                 }
@@ -424,6 +470,11 @@ namespace SimplePaint
         {
             currentDrawing?.DrawAll(e.Graphics);
             statusLabelScale.Text = "Масштаб " + Math.Round(drawCanvas1.CanvasZoomFactor * 100) + "%";
+        }
+
+        private void drawCanvas1_SizeChanged(object sender, EventArgs e)
+        {
+            ScrollInit();
         }
     }
 }

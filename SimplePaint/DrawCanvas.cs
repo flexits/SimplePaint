@@ -15,7 +15,9 @@ namespace SimplePaint
     {
         private const float DEFAULT_ZOOM_FACTOR = 1.0F;
         private const float ZOOM_STEP = 0.1F;
+        private const int CONTAINER_MARGIN = 17;
 
+        public event PaintEventHandler ShapesDrawRequest;
         public float CanvasZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
 
         public float ZoomStep { get; set; } = ZOOM_STEP;
@@ -39,8 +41,8 @@ namespace SimplePaint
 
         public void CenterParent()
         {
-            int locY = (Parent.ClientSize.Height - Height) / 2;
-            int locX = (Parent.ClientSize.Width - Width) / 2;
+            int locY = (Parent.ClientSize.Height - Height - CONTAINER_MARGIN) / 2;
+            int locX = (Parent.ClientSize.Width - Width - CONTAINER_MARGIN) / 2;
             Location = new Point(locX, locY);
         }
 
@@ -64,7 +66,7 @@ namespace SimplePaint
         {
             CanvasZoomFactor = 1.0F;
             Invalidate();
-            CenterParent();
+            //CenterParent();
         }
 
         public Bitmap GetBitmap()
@@ -75,15 +77,13 @@ namespace SimplePaint
             return btmp;
         }
 
-        public event PaintEventHandler ShapesDrawRequest;
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
             e.Graphics.SmoothingMode = CanvasSmoothing;
             e.Graphics.ScaleTransform(CanvasZoomFactor, CanvasZoomFactor);
             ShapesDrawRequest?.Invoke(this, e);
-            this.Size = new Size((int)(CanvasSizeOriginal.Width * CanvasZoomFactor), (int)(CanvasSizeOriginal.Height * CanvasZoomFactor));
+            Size = new Size((int)(CanvasSizeOriginal.Width * CanvasZoomFactor), (int)(CanvasSizeOriginal.Height * CanvasZoomFactor));
         }
 
         public event MouseEventHandler OnMouseDownScaled;

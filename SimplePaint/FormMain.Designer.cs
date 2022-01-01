@@ -80,6 +80,8 @@ namespace SimplePaint
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelContainer = new System.Windows.Forms.Panel();
+            this.containerVScroll = new System.Windows.Forms.VScrollBar();
+            this.containerHScroll = new System.Windows.Forms.HScrollBar();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
@@ -102,7 +104,7 @@ namespace SimplePaint
             this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(814, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(834, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -155,7 +157,7 @@ namespace SimplePaint
             this.toolStripButtonZoomOut});
             this.toolStripTools.Location = new System.Drawing.Point(0, 24);
             this.toolStripTools.Name = "toolStripTools";
-            this.toolStripTools.Size = new System.Drawing.Size(814, 39);
+            this.toolStripTools.Size = new System.Drawing.Size(834, 39);
             this.toolStripTools.TabIndex = 1;
             this.toolStripTools.Text = "toolStrip1";
             // 
@@ -347,7 +349,7 @@ namespace SimplePaint
             this.toolStripButtonZoomReset.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomReset.Name = "toolStripButtonZoomReset";
             this.toolStripButtonZoomReset.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonZoomReset.Text = "Масштаб 100%";
+            this.toolStripButtonZoomReset.Text = "Сбросить масштаб и положение";
             this.toolStripButtonZoomReset.Click += new System.EventHandler(this.buttonZoomReset_Click);
             // 
             // toolStripButtonZoomOut
@@ -367,9 +369,9 @@ namespace SimplePaint
             this.panelColors.Controls.Add(this.groupBoxFill);
             this.panelColors.Controls.Add(this.groupBoxOutline);
             this.panelColors.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelColors.Location = new System.Drawing.Point(662, 63);
+            this.panelColors.Location = new System.Drawing.Point(682, 63);
             this.panelColors.Name = "panelColors";
-            this.panelColors.Size = new System.Drawing.Size(152, 501);
+            this.panelColors.Size = new System.Drawing.Size(152, 521);
             this.panelColors.TabIndex = 3;
             // 
             // groupBoxBackground
@@ -555,9 +557,9 @@ namespace SimplePaint
             this.statusLabelPosition,
             this.statusLabelScale,
             this.statusLabelTool});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 564);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 584);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(814, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(834, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -597,12 +599,32 @@ namespace SimplePaint
             this.panelContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panelContainer.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panelContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelContainer.Controls.Add(this.containerHScroll);
+            this.panelContainer.Controls.Add(this.containerVScroll);
             this.panelContainer.Controls.Add(this.drawCanvas1);
             this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContainer.Location = new System.Drawing.Point(0, 63);
             this.panelContainer.Name = "panelContainer";
-            this.panelContainer.Size = new System.Drawing.Size(662, 501);
+            this.panelContainer.Size = new System.Drawing.Size(682, 521);
             this.panelContainer.TabIndex = 2;
+            // 
+            // containerVScroll
+            // 
+            this.containerVScroll.Dock = System.Windows.Forms.DockStyle.Right;
+            this.containerVScroll.Location = new System.Drawing.Point(661, 0);
+            this.containerVScroll.Name = "containerVScroll";
+            this.containerVScroll.Size = new System.Drawing.Size(17, 517);
+            this.containerVScroll.TabIndex = 1;
+            this.containerVScroll.ValueChanged += new System.EventHandler(this.containerVScroll_ValueChanged);
+            // 
+            // containerHScroll
+            // 
+            this.containerHScroll.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.containerHScroll.Location = new System.Drawing.Point(0, 500);
+            this.containerHScroll.Name = "containerHScroll";
+            this.containerHScroll.Size = new System.Drawing.Size(661, 17);
+            this.containerHScroll.TabIndex = 2;
+            this.containerHScroll.ValueChanged += new System.EventHandler(this.containerHScroll_ValueChanged);
             // 
             // drawCanvas1
             // 
@@ -618,12 +640,13 @@ namespace SimplePaint
             this.drawCanvas1.OnMouseDownScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseDownScaled);
             this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
             this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
+            this.drawCanvas1.SizeChanged += new System.EventHandler(this.drawCanvas1_SizeChanged);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(814, 586);
+            this.ClientSize = new System.Drawing.Size(834, 606);
             this.Controls.Add(this.panelContainer);
             this.Controls.Add(this.panelColors);
             this.Controls.Add(this.toolStripTools);
@@ -709,6 +732,8 @@ namespace SimplePaint
         private System.Windows.Forms.CheckBox checkBoxNoFill;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pictureBoxFillColor;
+        private System.Windows.Forms.VScrollBar containerVScroll;
+        private System.Windows.Forms.HScrollBar containerHScroll;
     }
 }
 
