@@ -331,14 +331,14 @@ namespace SimplePaint
         private void ScrollInit()
         {
             int pictureH = Math.Max(panelContainer.ClientSize.Height, drawCanvas1.Height);
-            int height = (int)(pictureH * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;
-            containerVScroll.Minimum = -1 * height;
-            containerVScroll.Maximum = height;
+            //int height = (int)(pictureH * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;//error here on zoom_out
+            containerVScroll.Minimum = -1 * pictureH;
+            containerVScroll.Maximum = pictureH;
             containerVScroll.Value = drawCanvas1.Location.Y;
             int pictureW = Math.Max(panelContainer.ClientSize.Width, drawCanvas1.Width);
-            int width = (int)(pictureW * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;
-            containerHScroll.Minimum = -1 * width;
-            containerHScroll.Maximum = width;
+            //int width = (int)(pictureW * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;
+            containerHScroll.Minimum = -1 * pictureW;
+            containerHScroll.Maximum = pictureW;
             containerHScroll.Value = drawCanvas1.Location.X;
         }
 
