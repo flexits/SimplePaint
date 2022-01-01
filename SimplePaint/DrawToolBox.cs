@@ -283,6 +283,7 @@ namespace SimplePaint
                 return;
             }
             //move shape
+            //drawing.Move manages undo/redo and then calls
             //selectedShape.Move(inf offsetX, int offsetY)
             throw new NotImplementedException();
         }

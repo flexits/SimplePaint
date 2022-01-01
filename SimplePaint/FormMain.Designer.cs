@@ -635,7 +635,6 @@ namespace SimplePaint
             this.drawCanvas1.Name = "drawCanvas1";
             this.drawCanvas1.Size = new System.Drawing.Size(150, 150);
             this.drawCanvas1.TabIndex = 0;
-            this.drawCanvas1.ZoomStep = 0.1F;
             this.drawCanvas1.ShapesDrawRequest += new System.Windows.Forms.PaintEventHandler(this.drawCanvas1_ShapesDrawRequest);
             this.drawCanvas1.OnMouseDownScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseDownScaled);
             this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);

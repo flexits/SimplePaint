@@ -50,6 +50,8 @@ namespace SimplePaint
             //disable controls when no drawing opened or created; enable otherwise
             drawCanvas1.Visible = setEnabled;
             panelColors.Enabled = setEnabled;
+            containerHScroll.Enabled = setEnabled;
+            containerVScroll.Enabled = setEnabled;
             foreach (ToolStripItem tsitem in toolStripTools.Items)
             {
                 if (tsitem is ToolStripButton)
@@ -104,6 +106,7 @@ namespace SimplePaint
 
         private void CenterCanvasInContainer()
         {
+            //TODO срабатывает со второго раза на масштабированном изображении
             int locY = (panelContainer.ClientSize.Height - drawCanvas1.Height - containerHScroll.Height) / 2;
             int locX = (panelContainer.ClientSize.Width - drawCanvas1.Width - containerVScroll.Width) / 2;
             containerVScroll.Value = locY;

@@ -15,22 +15,20 @@ namespace SimplePaint
     {
         private const float DEFAULT_ZOOM_FACTOR = 1.0F;
         private const float ZOOM_STEP = 0.1F;
-        private const int CONTAINER_MARGIN = 17;
 
-        public event PaintEventHandler ShapesDrawRequest;
         public float CanvasZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
-
-        public float ZoomStep { get; set; } = ZOOM_STEP;
 
         public SmoothingMode CanvasSmoothing { get; set; } = SmoothingMode.None;
 
         public Size CanvasSizeOriginal { get; private set; }
 
+        public event PaintEventHandler ShapesDrawRequest;
+
         public DrawCanvas()
         {
             InitializeComponent();
             DoubleBuffered = true;
-            CanvasSizeOriginal = Size;//for VS Constructor
+            CanvasSizeOriginal = Size; //needed for VS Constructor
         }
 
         public void SetSize(Size size)
@@ -39,26 +37,19 @@ namespace SimplePaint
             this.Size = size;
         }
 
-        public void CenterParent()
-        {
-            int locY = (Parent.ClientSize.Height - Height - CONTAINER_MARGIN) / 2;
-            int locX = (Parent.ClientSize.Width - Width - CONTAINER_MARGIN) / 2;
-            Location = new Point(locX, locY);
-        }
-
         public void ZoomIn()
         {
-            CanvasZoomFactor += ZoomStep;
+            CanvasZoomFactor += ZOOM_STEP;
             Invalidate();
         }
 
         public void ZoomOut()
         {
-            if (CanvasZoomFactor <= ZoomStep)
+            if (CanvasZoomFactor <= ZOOM_STEP)
             {
                 return;
             }
-            CanvasZoomFactor -= ZoomStep;
+            CanvasZoomFactor -= ZOOM_STEP;
             Invalidate();
         }
 
@@ -66,7 +57,6 @@ namespace SimplePaint
         {
             CanvasZoomFactor = 1.0F;
             Invalidate();
-            //CenterParent();
         }
 
         public Bitmap GetBitmap()
@@ -115,7 +105,7 @@ namespace SimplePaint
 
         private Point UnscalePoint(Point scaledPoint, float zoomFactor)
         {
-            //здесь проблема
+            //TODO здесь проблема
             //при малых zoomFactor (<= 0.5 примерно)
             //при перемещении дрожит изображение и даже уезжает далеко за пределы экрана
             //потому что координаты принимают надекватно большие значения
