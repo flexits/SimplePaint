@@ -105,10 +105,10 @@ namespace SimplePaint
 
         private Point UnscalePoint(Point scaledPoint, float zoomFactor)
         {
-            //TODO здесь проблема
-            //при малых zoomFactor (<= 0.5 примерно)
-            //при перемещении дрожит изображение и даже уезжает далеко за пределы экрана
-            //потому что координаты принимают надекватно большие значения
+            //TODO unexpected behaviour here
+            //if zoomFactor set to <= 0.5 approx.
+            //the canvas flickers and tends to run far across the screen bounds
+            //because unscaledPoint value becomes 
             Point unscaledPoint = Point.Empty;
             unscaledPoint.X = (int)Math.Round(scaledPoint.X / zoomFactor);
             unscaledPoint.Y = (int)Math.Round(scaledPoint.Y / zoomFactor);

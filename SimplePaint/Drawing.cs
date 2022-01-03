@@ -21,17 +21,19 @@ namespace SimplePaint
         void Redo();
         void UndoAll();
         void Clear();
-        IDrawable SelectShapeByPoint(Point ptToSearch);
+        IDrawable SelectShapeByPoint(Point ptToSearch, bool includeInside = false);
         void MoveSelectedShape(Point offset);
+        void FillSelectedShape(Brush fill);
+        void DiscardSelectedShape();
     }
 
     class Drawing : IDrawing
     {
         public event UpdateHandler Updated;
 
-        private Stack<IDrawable> shapes;
+        private readonly StackList<IDrawable> shapes;
 
-        private Stack<IDrawable> discarded;
+        private readonly StackList<IDrawable> discarded;
 
         private int currentZOrder;
 
@@ -45,8 +47,8 @@ namespace SimplePaint
 
         public Drawing()
         {
-            shapes = new Stack<IDrawable>();
-            discarded = new Stack<IDrawable>();
+            shapes = new StackList<IDrawable>();
+            discarded = new StackList<IDrawable>();
             currentZOrder = 0;
             selectedShapeIndex = -1;
         }
@@ -122,7 +124,6 @@ namespace SimplePaint
             {
                 discarded.Push(shapes.ElementAt(i));
             }
-            //меняется порядок при последовательных нажатиях кнопки
             shapes.Clear();
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
@@ -135,12 +136,12 @@ namespace SimplePaint
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
-        public IDrawable SelectShapeByPoint(Point ptToSearch)
+        public IDrawable SelectShapeByPoint(Point ptToSearch, bool includeInside)
         {
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
                 IDrawable shape = shapes.ElementAt(i);
-                if (shape.HitTest(ptToSearch))
+                if (shape.HitTest(ptToSearch, includeInside))
                 {
                     selectedShapeIndex = i;
                     return shape;
@@ -157,9 +158,34 @@ namespace SimplePaint
                 return;
             }
             IDrawable shape = shapes.ElementAt(selectedShapeIndex);
-            discarded.Push(shape);//неправильно, нужно только один раз 
+            //TODO undo and redo operations
             shape.Move(offset);
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
+        }
+
+        public void FillSelectedShape(Brush fill)
+        {
+            if (selectedShapeIndex < 0)
+            {
+                return;
+            }
+            IDrawable shape = shapes.ElementAt(selectedShapeIndex);
+            //TODO undo and redo operations
+            shape.FillBrush = fill;
+            Updated?.Invoke(shape.GetBoundingRectangle());
+        }
+
+        public void DiscardSelectedShape()
+        {
+            if (selectedShapeIndex < 0)
+            {
+                return;
+            }
+            IDrawable shape = shapes.ElementAt(selectedShapeIndex);
+            discarded.Push(shape); // it will work on Redo(), not Undo()
+            shapes.RemoveAt(selectedShapeIndex);
+            selectedShapeIndex = -1;
+            Updated?.Invoke(shape.GetBoundingRectangle());
         }
     }
 }

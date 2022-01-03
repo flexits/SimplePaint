@@ -80,8 +80,8 @@ namespace SimplePaint
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelContainer = new System.Windows.Forms.Panel();
-            this.containerVScroll = new System.Windows.Forms.VScrollBar();
             this.containerHScroll = new System.Windows.Forms.HScrollBar();
+            this.containerVScroll = new System.Windows.Forms.VScrollBar();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
@@ -204,7 +204,7 @@ namespace SimplePaint
             this.toolStripButtonHand.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonHand.Name = "toolStripButtonHand";
             this.toolStripButtonHand.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonHand.Tag = "выбор";
+            this.toolStripButtonHand.Tag = "выбор (Del: удалить выбранное)";
             this.toolStripButtonHand.Text = "Выбирать фигуры";
             this.toolStripButtonHand.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
@@ -228,7 +228,7 @@ namespace SimplePaint
             this.toolStripButtonPencil.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonPencil.Name = "toolStripButtonPencil";
             this.toolStripButtonPencil.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonPencil.Tag = "прямые линии (Shift+угол)";
+            this.toolStripButtonPencil.Tag = "прямые линии (Shift+ЛКМ: прямой угол)";
             this.toolStripButtonPencil.Text = "Рисовать прямые линии";
             this.toolStripButtonPencil.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
@@ -252,7 +252,7 @@ namespace SimplePaint
             this.toolStripButtonRectangle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRectangle.Name = "toolStripButtonRectangle";
             this.toolStripButtonRectangle.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonRectangle.Tag = "прямоугольник (Shift+квадрат)";
+            this.toolStripButtonRectangle.Tag = "прямоугольник (Shift+ЛКМ: квадрат)";
             this.toolStripButtonRectangle.Text = "Рисовать прямоугольник";
             this.toolStripButtonRectangle.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
@@ -264,7 +264,7 @@ namespace SimplePaint
             this.toolStripButtonEllipse.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonEllipse.Name = "toolStripButtonEllipse";
             this.toolStripButtonEllipse.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonEllipse.Tag = "эллипс (Shift+круг)";
+            this.toolStripButtonEllipse.Tag = "эллипс (Shift+ЛКМ: круг)";
             this.toolStripButtonEllipse.Text = "Рисовать окружность";
             this.toolStripButtonEllipse.CheckedChanged += new System.EventHandler(this.toolStripButtonToolSelect_CheckedChanged);
             // 
@@ -608,15 +608,6 @@ namespace SimplePaint
             this.panelContainer.Size = new System.Drawing.Size(682, 521);
             this.panelContainer.TabIndex = 2;
             // 
-            // containerVScroll
-            // 
-            this.containerVScroll.Dock = System.Windows.Forms.DockStyle.Right;
-            this.containerVScroll.Location = new System.Drawing.Point(661, 0);
-            this.containerVScroll.Name = "containerVScroll";
-            this.containerVScroll.Size = new System.Drawing.Size(17, 517);
-            this.containerVScroll.TabIndex = 1;
-            this.containerVScroll.ValueChanged += new System.EventHandler(this.containerVScroll_ValueChanged);
-            // 
             // containerHScroll
             // 
             this.containerHScroll.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -625,6 +616,15 @@ namespace SimplePaint
             this.containerHScroll.Size = new System.Drawing.Size(661, 17);
             this.containerHScroll.TabIndex = 2;
             this.containerHScroll.ValueChanged += new System.EventHandler(this.containerHScroll_ValueChanged);
+            // 
+            // containerVScroll
+            // 
+            this.containerVScroll.Dock = System.Windows.Forms.DockStyle.Right;
+            this.containerVScroll.Location = new System.Drawing.Point(661, 0);
+            this.containerVScroll.Name = "containerVScroll";
+            this.containerVScroll.Size = new System.Drawing.Size(17, 517);
+            this.containerVScroll.TabIndex = 1;
+            this.containerVScroll.ValueChanged += new System.EventHandler(this.containerVScroll_ValueChanged);
             // 
             // drawCanvas1
             // 
@@ -640,6 +640,7 @@ namespace SimplePaint
             this.drawCanvas1.OnMouseUpScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseUpScaled);
             this.drawCanvas1.OnMouseMoveScaled += new System.Windows.Forms.MouseEventHandler(this.drawCanvas1_OnMouseMoveScaled);
             this.drawCanvas1.SizeChanged += new System.EventHandler(this.drawCanvas1_SizeChanged);
+            this.drawCanvas1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.drawCanvas1_KeyDown);
             // 
             // FormMain
             // 

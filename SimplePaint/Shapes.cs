@@ -9,11 +9,12 @@ namespace SimplePaint
 {
     public interface IDrawable : ICloneable
     {
+        Brush FillBrush { get; set; }
         int ZOrder { get; set; }
         void AddPoint(Point pathPoint, bool snapToStraight);
         void Draw(Graphics drawSurface);
         Rectangle GetBoundingRectangle();
-        bool HitTest(Point point);
+        bool HitTest(Point point, bool includeInside);
         void Move(Point offset);
     }
 
@@ -33,7 +34,7 @@ namespace SimplePaint
         public abstract void AddPoint(Point pathPoint, bool snapToStraight);
         public abstract void Draw(Graphics drawSurface);
         public abstract Rectangle GetBoundingRectangle();
-        public abstract bool HitTest(Point point);
+        public abstract bool HitTest(Point point, bool includeInside);
         public abstract void Move(Point offset);
 
         public object Clone()
@@ -113,7 +114,7 @@ namespace SimplePaint
             return new Rectangle(coordX, coordY, width, height);
         }
 
-        public override bool HitTest(Point ptToTest)
+        public override bool HitTest(Point ptToTest, bool includeInside)
         {
             GraphicsPath gpath = new GraphicsPath();
             gpath.AddLine(startPt, endPt);
@@ -160,7 +161,7 @@ namespace SimplePaint
             return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
 
-        public override bool HitTest(Point ptToTest)
+        public override bool HitTest(Point ptToTest, bool includeInside)
         {
             GraphicsPath gpath = new GraphicsPath();
             gpath.AddLines(pathPoints.ToArray());
@@ -245,26 +246,22 @@ namespace SimplePaint
             return GenerateRect();
         }
 
-        public override bool HitTest(Point ptToTest)
+        public override bool HitTest(Point ptToTest, bool includeInside)
         {
             GraphicsPath gpath = new GraphicsPath();
             gpath.AddRectangle(GenerateRect());
-            if (FillBrush is null)
+            bool result = gpath.IsOutlineVisible(ptToTest, DrawingPen);
+            if (includeInside || FillBrush != null)
             {
-                return gpath.IsOutlineVisible(ptToTest, DrawingPen);
+                result = result || gpath.IsVisible(ptToTest);
             }
-            else
-            {
-                return gpath.IsVisible(ptToTest);
-            }
+            return result;
         }
 
         public override void Move(Point offset)
         {
-            startPt = PointMath.PtAdd(startPt, offset);
-            endPt = PointMath.PtAdd(endPt, offset);
-            /*startPt.Offset(offset);
-            endPt.Offset(offset);*/
+            startPt.Offset(offset);
+            endPt.Offset(offset);
         }
     }
 
@@ -286,18 +283,16 @@ namespace SimplePaint
             }
         }
 
-        public override bool HitTest(Point ptToTest)
+        public override bool HitTest(Point ptToTest, bool includeInside)
         {
             GraphicsPath gpath = new GraphicsPath();
             gpath.AddEllipse(GenerateRect());
-            if (FillBrush is null)
+            bool result = gpath.IsOutlineVisible(ptToTest, DrawingPen);
+            if (includeInside || FillBrush != null)
             {
-                return gpath.IsOutlineVisible(ptToTest, DrawingPen);
+                result = result || gpath.IsVisible(ptToTest);
             }
-            else
-            {
-                return gpath.IsVisible(ptToTest);
-            }
+            return result;
         }
     }
 

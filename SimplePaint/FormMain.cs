@@ -15,20 +15,31 @@ namespace SimplePaint
 {
     public partial class FormMain : Form
     {
-        private const int REDRAW_REGION_INFLATE = 5;
-        private const int SCROLL_MARGIN_ADD = 20;
+        /* default settins */
+        private const int DEFAULT_PEN_WIDTH = 5;
+        private readonly Color DEFAULT_PEN_COLOR = Color.Black;
+        private readonly Color DEFAULT_BACK_COLOR = Color.White;
+        private readonly (DashStyle, int) DEFAULT_LINE_STYLE = (DashStyle.Solid, 0);
+        private readonly (SmoothingMode, bool) DEFAULT_SMOOTHING_ON = (SmoothingMode.AntiAlias, true);
 
-        //TODO load background image, crop and rotate
-        //TODO display grid and snap cursor position while drawing
-        //TODO selector tool to move, resize and delete drawn shapes
-        //TODO fill shape tool
-        //TODO freehand curves by points
-        //TODO shape intersections
-        //TODO objects Z-axis
-
+        /* features */
         /*
-         * неадекватное перемещение формы инструментом перетаскивания при уменьшении в 0,5 раз и меньше
-         */
+        TODO highlight the selected shape
+        TODO display grid and snap cursor position while drawing
+        TODO some tool to resize and rotate the selected shape
+        TODO tool to draw curves by points (Bezier etc.)
+        TODO shape intersections
+        TODO objects Z-axis ordering
+        TODO load background image, crop and rotate it      
+        TODO serialize shapes to save the drawing as an editable vector set
+        */
+
+        /* errors: */
+        /*
+        TODO when moving zoomed out canvas by mouse, it behaves unexpetedly - problem in DrawCanvas.UnscalePoint()
+        TODO center canvas unexpected behaviour - it centeres ont the second click sometimes - problem in CenterCanvasInContainer()
+        TODO scrolling is weird sometimes
+        */
 
         private IDrawing currentDrawing;
 
@@ -87,19 +98,18 @@ namespace SimplePaint
                 }
             }
 
-            DrawToolBox.CurrentPalette.ForegroundPen.Color = Color.Black;
-            DrawToolBox.CurrentPalette.ForegroundPen.Width = 1;
-            DrawToolBox.CurrentPalette.ForegroundPen.DashStyle = DashStyle.Solid;
-            DrawToolBox.CurrentPalette.BackgroundPen.Color = Color.White;
-            DrawToolBox.CurrentPalette.BackgroundPen.Width = 1;
-            DrawToolBox.CurrentPalette.BackgroundPen.DashStyle = DashStyle.Solid;
-            pictureBoxToolColor.BackColor = Color.Black;
-            pictureBoxBackColor.BackColor = Color.White;
-            trackBarWidth.Value = 1;
-            comboBoxStyle.SelectedIndex = 0;
-
-            drawCanvas1.CanvasSmoothing = SmoothingMode.None;
-            checkBoxSmoothing.Checked = false;
+            DrawToolBox.CurrentPalette.ForegroundPen.Color = DEFAULT_PEN_COLOR;
+            DrawToolBox.CurrentPalette.ForegroundPen.Width = DEFAULT_PEN_WIDTH;
+            DrawToolBox.CurrentPalette.ForegroundPen.DashStyle = DEFAULT_LINE_STYLE.Item1;
+            DrawToolBox.CurrentPalette.BackgroundPen.Color = DEFAULT_BACK_COLOR;
+            DrawToolBox.CurrentPalette.BackgroundPen.Width = DEFAULT_PEN_WIDTH;
+            DrawToolBox.CurrentPalette.BackgroundPen.DashStyle = DEFAULT_LINE_STYLE.Item1;
+            pictureBoxToolColor.BackColor = DEFAULT_PEN_COLOR;
+            pictureBoxBackColor.BackColor = DEFAULT_BACK_COLOR;
+            trackBarWidth.Value = DEFAULT_PEN_WIDTH;
+            comboBoxStyle.SelectedIndex = DEFAULT_LINE_STYLE.Item2;
+            drawCanvas1.CanvasSmoothing = DEFAULT_SMOOTHING_ON.Item1;
+            checkBoxSmoothing.Checked = DEFAULT_SMOOTHING_ON.Item2;
 
             drawCanvas1.Invalidate();
         }
@@ -115,13 +125,17 @@ namespace SimplePaint
 
         private void CurrentDrawing_Updated(Rectangle updatedBounds)
         {
+            //TODO update only the region that changed
+            //private const int REDRAW_REGION_INFLATE = 5;
+            //private const int SCROLL_MARGIN_ADD = 20;
             //increase update rectangle by REDRAW_REGION_INFLATE px each direction
-            int offset = REDRAW_REGION_INFLATE * -1;
-            int inflate = REDRAW_REGION_INFLATE * 2;
+            /*int offset = REDRAW_REGION_INFLATE * -1;
+            int inflate = (int)(REDRAW_REGION_INFLATE * 2 * drawCanvas1.CanvasZoomFactor);
             Rectangle region = updatedBounds;
             region.Inflate(inflate, inflate);
             region.Offset(offset, offset);
-            drawCanvas1.Invalidate(region);
+            drawCanvas1.Invalidate(region);*/
+            drawCanvas1.Invalidate();
         }
 
         private void toolStripMenuItemExit_Click(object sender, EventArgs e)
@@ -331,12 +345,10 @@ namespace SimplePaint
         private void ScrollInit()
         {
             int pictureH = Math.Max(panelContainer.ClientSize.Height, drawCanvas1.Height);
-            //int height = (int)(pictureH * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;//error here on zoom_out
             containerVScroll.Minimum = -1 * pictureH;
             containerVScroll.Maximum = pictureH;
             containerVScroll.Value = drawCanvas1.Location.Y;
             int pictureW = Math.Max(panelContainer.ClientSize.Width, drawCanvas1.Width);
-            //int width = (int)(pictureW * drawCanvas1.CanvasZoomFactor) + SCROLL_MARGIN_ADD;
             containerHScroll.Minimum = -1 * pictureW;
             containerHScroll.Maximum = pictureW;
             containerHScroll.Value = drawCanvas1.Location.X;
@@ -478,6 +490,14 @@ namespace SimplePaint
         private void drawCanvas1_SizeChanged(object sender, EventArgs e)
         {
             ScrollInit();
+        }
+
+        private void drawCanvas1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                currentDrawing.DiscardSelectedShape();
+            }
         }
     }
 }
