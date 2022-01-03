@@ -128,7 +128,7 @@ namespace SimplePaint
                 throw new NullReferenceException();
             }
             startPt = e.Location;
-            Cursor.Current = Cursors.SizeAll;
+            Cursor.Current = Cursors.NoMove2D;
             Panel panelContainer = canvas.Parent as Panel;
             Cursor.Clip = new Rectangle(panelContainer.PointToScreen(Point.Empty), panelContainer.Size);
         }
@@ -164,6 +164,8 @@ namespace SimplePaint
 
         private Point startPt;
 
+        private bool notMoved = true;
+
         public override void ProcessMouseDown(MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left)
@@ -174,6 +176,8 @@ namespace SimplePaint
             {
                 return;
             }
+            Cursor.Current = Cursors.SizeAll;
+            Cursor.Clip = new Rectangle(canvas.PointToScreen(Point.Empty), canvas.Size);
             startPt = e.Location;
         }
 
@@ -187,12 +191,21 @@ namespace SimplePaint
             {
                 return;
             }
+            if (notMoved)
+            {
+                notMoved = false;
+                //make shape backup to undo movement
+            }
             Point offset = PointMath.PtSubtract(e.Location, startPt);
             startPt = e.Location;
             drawing.MoveSelectedShape(offset);
         }
 
-        public override void ProcessMouseUp(MouseEventArgs e) { }
+        public override void ProcessMouseUp(MouseEventArgs e)
+        {
+            Cursor.Current = Cursors.Arrow;
+            Cursor.Clip = Rectangle.Empty;
+        }
     }
 
     internal class ToolShapeFill : DrawingTool

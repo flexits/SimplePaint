@@ -40,8 +40,22 @@ namespace SimplePaint
         public object Clone()
         {
             Shape newShape = this.MemberwiseClone() as Shape;
-            newShape.DrawingPen = DrawingPen.Clone() as Pen;
-            newShape.FillBrush = FillBrush.Clone() as Brush;
+            if (DrawingPen is null)
+            {
+                newShape.DrawingPen = null;
+            }
+            else
+            {
+                newShape.DrawingPen = DrawingPen.Clone() as Pen;
+            }
+            if (FillBrush is null)
+            {
+                newShape.FillBrush = null;
+            }
+            else
+            {
+                newShape.FillBrush = FillBrush.Clone() as Brush;
+            }
             return newShape;
         }
     }

@@ -20,7 +20,6 @@ namespace SimplePaint
         void Undo();
         void Redo();
         void UndoAll();
-        void Clear();
         IDrawable SelectShapeByPoint(Point ptToSearch, bool includeInside = false);
         void MoveSelectedShape(Point offset);
         void FillSelectedShape(Brush fill);
@@ -31,9 +30,7 @@ namespace SimplePaint
     {
         public event UpdateHandler Updated;
 
-        private readonly StackList<IDrawable> shapes;
-
-        private readonly StackList<IDrawable> discarded;
+        private readonly IRewindableShapesStorage shapes;
 
         private int currentZOrder;
 
@@ -47,8 +44,7 @@ namespace SimplePaint
 
         public Drawing()
         {
-            shapes = new StackList<IDrawable>();
-            discarded = new StackList<IDrawable>();
+            shapes = new RewindableShapesStorage();
             currentZOrder = 0;
             selectedShapeIndex = -1;
         }
@@ -60,8 +56,7 @@ namespace SimplePaint
                 return;
             }
             shape.ZOrder = currentZOrder++;
-            shapes.Push(shape);
-            discarded.Clear();
+            shapes.Add(shape);
             Updated?.Invoke(shape.GetBoundingRectangle());
         }
 
@@ -84,7 +79,7 @@ namespace SimplePaint
             {
                 drawSurface.DrawImage(lining, 0, 0);
             }
-            var sortedShapes = shapes.OrderBy(z => z.ZOrder);
+            var sortedShapes = shapes.GetSortedContents();
             foreach (IDrawable shape in sortedShapes)
             {
                 shape.Draw(drawSurface);
@@ -93,46 +88,21 @@ namespace SimplePaint
 
         public void Undo()
         {
-            if (shapes.Count == 0)
-            {
-                return;
-            }
-            IDrawable shape = shapes.Pop();
-            discarded.Push(shape);
-            Updated?.Invoke(shape.GetBoundingRectangle());
+            shapes.Rewind();
+            //Updated?.Invoke(shape.GetBoundingRectangle());
+            Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
         public void Redo()
         {
-            if (discarded.Count == 0)
-            {
-                return;
-            }
-            IDrawable shape = discarded.Pop();
-            shapes.Push(shape);
-            Updated?.Invoke(shape.GetBoundingRectangle());
+            shapes.Forward();
+            //Updated?.Invoke(shape.GetBoundingRectangle());
+            Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
         public void UndoAll()
         {
-            if (shapes.Count == 0)
-            {
-                return;
-            }
-            discarded.Clear();
-            for (int i = shapes.Count - 1; i >= 0; i--)
-            {
-                discarded.Push(shapes.ElementAt(i));
-            }
-            shapes.Clear();
-            Updated?.Invoke(new Rectangle(Point.Empty, Size));
-        }
-
-        public void Clear()
-        {
-            shapes.Clear();
-            discarded.Clear();
-            currentZOrder = 0;
+            shapes.RewindFull();
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
@@ -157,9 +127,10 @@ namespace SimplePaint
             {
                 return;
             }
-            IDrawable shape = shapes.ElementAt(selectedShapeIndex);
-            //TODO undo and redo operations
+            /*IDrawable shape = shapes.ElementAt(selectedShapeIndex).Clone() as IDrawable;
             shape.Move(offset);
+            //shapes.Update(selectedShapeIndex, shape); //неправильно*/
+            shapes.ElementAt(selectedShapeIndex).Move(offset);
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
@@ -169,9 +140,9 @@ namespace SimplePaint
             {
                 return;
             }
-            IDrawable shape = shapes.ElementAt(selectedShapeIndex);
-            //TODO undo and redo operations
+            IDrawable shape = shapes.ElementAt(selectedShapeIndex).Clone() as IDrawable;
             shape.FillBrush = fill;
+            shapes.Update(selectedShapeIndex, shape);
             Updated?.Invoke(shape.GetBoundingRectangle());
         }
 
@@ -182,7 +153,6 @@ namespace SimplePaint
                 return;
             }
             IDrawable shape = shapes.ElementAt(selectedShapeIndex);
-            discarded.Push(shape); // it will work on Redo(), not Undo()
             shapes.RemoveAt(selectedShapeIndex);
             selectedShapeIndex = -1;
             Updated?.Invoke(shape.GetBoundingRectangle());
