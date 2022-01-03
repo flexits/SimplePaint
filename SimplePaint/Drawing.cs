@@ -127,10 +127,9 @@ namespace SimplePaint
             {
                 return;
             }
-            /*IDrawable shape = shapes.ElementAt(selectedShapeIndex).Clone() as IDrawable;
+            IDrawable shape = shapes.ElementAt(selectedShapeIndex).Clone() as IDrawable;
             shape.Move(offset);
-            //shapes.Update(selectedShapeIndex, shape); //неправильно*/
-            shapes.ElementAt(selectedShapeIndex).Move(offset);
+            shapes.Update(selectedShapeIndex, shape);
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 

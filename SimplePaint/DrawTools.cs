@@ -162,9 +162,9 @@ namespace SimplePaint
     {
         public ToolShapeSelect(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
+        private Point prevPt;
         private Point startPt;
-
-        private bool notMoved = true;
+        private IDrawable selectedShape;
 
         public override void ProcessMouseDown(MouseEventArgs e)
         {
@@ -172,37 +172,44 @@ namespace SimplePaint
             {
                 return;
             }
-            if (drawing.SelectShapeByPoint(e.Location) is null)
+            selectedShape = drawing.SelectShapeByPoint(e.Location);
+            if (selectedShape is null)
             {
                 return;
             }
+            selectedShape = selectedShape.Clone() as IDrawable;
             Cursor.Current = Cursors.SizeAll;
             Cursor.Clip = new Rectangle(canvas.PointToScreen(Point.Empty), canvas.Size);
-            startPt = e.Location;
+            startPt = prevPt = e.Location;
         }
 
         public override void ProcessMouseMove(MouseEventArgs e)
         {
-            if (canvas is null)
-            {
-                throw new NullReferenceException();
-            }
             if (e.Button != MouseButtons.Left)
             {
                 return;
             }
-            if (notMoved)
+            if (selectedShape is null || canvas is null)
             {
-                notMoved = false;
-                //make shape backup to undo movement
+                return;
             }
-            Point offset = PointMath.PtSubtract(e.Location, startPt);
-            startPt = e.Location;
-            drawing.MoveSelectedShape(offset);
+            Point offset = PointMath.PtSubtract(e.Location, prevPt);
+            selectedShape.Move(offset);
+            prevPt = e.Location;
+
+            canvas.Refresh();
+            Graphics gr = canvas.CreateGraphics();
+            gr.ScaleTransform(canvas.CanvasZoomFactor, canvas.CanvasZoomFactor);
+            selectedShape.Draw(gr);
         }
 
         public override void ProcessMouseUp(MouseEventArgs e)
         {
+            if (e.Location != startPt)
+            {
+                Point offset = PointMath.PtSubtract(e.Location, startPt);
+                drawing.MoveSelectedShape(offset);
+            }
             Cursor.Current = Cursors.Arrow;
             Cursor.Clip = Rectangle.Empty;
         }

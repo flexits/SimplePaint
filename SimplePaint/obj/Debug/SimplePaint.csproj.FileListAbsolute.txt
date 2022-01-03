@@ -10,4 +10,3 @@ C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePain
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.DialogNew.resources
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.DrawCanvas.resources
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.csproj.AssemblyReference.cache
-C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Debug\SimplePaint.Form1.resources

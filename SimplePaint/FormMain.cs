@@ -37,7 +37,7 @@ namespace SimplePaint
         /* errors: */
         /*
         TODO when moving zoomed out canvas by mouse, it behaves unexpetedly - problem in DrawCanvas.UnscalePoint()
-        TODO center canvas unexpected behaviour - it centeres ont the second click sometimes - problem in CenterCanvasInContainer()
+        TODO center canvas unexpected behaviour - it actually centers on the second click sometimes - problem in CenterCanvasInContainer()
         TODO scrolling is weird sometimes
         */
 
@@ -462,7 +462,7 @@ namespace SimplePaint
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            new Form1().Show();
+            //TODO about
         }
 
         private void drawCanvas1_OnMouseDownScaled(object sender, MouseEventArgs e)
@@ -494,7 +494,7 @@ namespace SimplePaint
 
         private void drawCanvas1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
+            if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.Shift)
             {
                 currentDrawing.DiscardSelectedShape();
             }
