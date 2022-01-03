@@ -21,7 +21,8 @@ namespace SimplePaint
         void Redo();
         void UndoAll();
         void Clear();
-        IDrawable GetShapeByPoint(Point ptToSearch);
+        IDrawable SelectShapeByPoint(Point ptToSearch);
+        void MoveSelectedShape(Point offset);
     }
 
     class Drawing : IDrawing
@@ -32,7 +33,11 @@ namespace SimplePaint
 
         private Stack<IDrawable> discarded;
 
+        private int currentZOrder;
+
         private Bitmap lining;
+
+        private int selectedShapeIndex;
 
         public bool DrawingChanged => shapes.Count > 0 || lining != null;
 
@@ -42,6 +47,8 @@ namespace SimplePaint
         {
             shapes = new Stack<IDrawable>();
             discarded = new Stack<IDrawable>();
+            currentZOrder = 0;
+            selectedShapeIndex = -1;
         }
 
         public void AddShape(IDrawable shape)
@@ -50,6 +57,7 @@ namespace SimplePaint
             {
                 return;
             }
+            shape.ZOrder = currentZOrder++;
             shapes.Push(shape);
             discarded.Clear();
             Updated?.Invoke(shape.GetBoundingRectangle());
@@ -74,9 +82,10 @@ namespace SimplePaint
             {
                 drawSurface.DrawImage(lining, 0, 0);
             }
-            for (int i = shapes.Count - 1; i >= 0; i--)
+            var sortedShapes = shapes.OrderBy(z => z.ZOrder);
+            foreach (IDrawable shape in sortedShapes)
             {
-                shapes.ElementAt(i).Draw(drawSurface);
+                shape.Draw(drawSurface);
             }
         }
 
@@ -108,15 +117,13 @@ namespace SimplePaint
             {
                 return;
             }
-            Stack<IDrawable> temp = new Stack<IDrawable>();
-            while (shapes.Count > 0)
+            discarded.Clear();
+            for (int i = shapes.Count - 1; i >= 0; i--)
             {
-                temp.Push(shapes.Pop());
+                discarded.Push(shapes.ElementAt(i));
             }
-            while (temp.Count > 0)
-            {
-                discarded.Push(temp.Pop());
-            }
+            //меняется порядок при последовательных нажатиях кнопки
+            shapes.Clear();
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
@@ -124,19 +131,35 @@ namespace SimplePaint
         {
             shapes.Clear();
             discarded.Clear();
+            currentZOrder = 0;
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
-        public IDrawable GetShapeByPoint(Point ptToSearch)
+        public IDrawable SelectShapeByPoint(Point ptToSearch)
         {
-            foreach (IDrawable shape in shapes)
+            for (int i = shapes.Count - 1; i >= 0; i--)
             {
+                IDrawable shape = shapes.ElementAt(i);
                 if (shape.HitTest(ptToSearch))
                 {
+                    selectedShapeIndex = i;
                     return shape;
                 }
             }
+            selectedShapeIndex = -1;
             return null;
+        }
+
+        public void MoveSelectedShape(Point offset)
+        {
+            if (selectedShapeIndex < 0)
+            {
+                return;
+            }
+            IDrawable shape = shapes.ElementAt(selectedShapeIndex);
+            discarded.Push(shape);//неправильно, нужно только один раз 
+            shape.Move(offset);
+            Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
     }
 }

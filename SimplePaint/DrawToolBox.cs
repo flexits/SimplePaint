@@ -255,7 +255,6 @@ namespace SimplePaint
         public ToolShapeSelect(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
         private Point startPt;
-        private IDrawable selectedShape;
 
         public override void ProcessMouseDown(MouseEventArgs e)
         {
@@ -263,12 +262,10 @@ namespace SimplePaint
             {
                 return;
             }
-            selectedShape = drawing.GetShapeByPoint(e.Location);
-            if (selectedShape is null)
+            if (drawing.SelectShapeByPoint(e.Location) is null)
             {
                 return;
             }
-            MessageBox.Show("found!");
             startPt = e.Location;
         }
 
@@ -282,10 +279,9 @@ namespace SimplePaint
             {
                 return;
             }
-            //move shape
-            //drawing.Move manages undo/redo and then calls
-            //selectedShape.Move(inf offsetX, int offsetY)
-            throw new NotImplementedException();
+            Point offset = PointMath.PtSubtract(e.Location, startPt);
+            startPt = e.Location;
+            drawing.MoveSelectedShape(offset);
         }
 
         public override void ProcessMouseUp(MouseEventArgs e) { }
@@ -295,16 +291,13 @@ namespace SimplePaint
     {
         public ToolShapeFill(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
-        private IDrawable selectedShape;
-
         public override void ProcessMouseDown(MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left)
             {
                 return;
             }
-            selectedShape = drawing.GetShapeByPoint(e.Location);
-            if (selectedShape is null)
+            if (drawing.SelectShapeByPoint(e.Location) is null)
             {
                 return;
             }

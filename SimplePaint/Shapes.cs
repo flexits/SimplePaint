@@ -9,28 +9,32 @@ namespace SimplePaint
 {
     public interface IDrawable : ICloneable
     {
+        int ZOrder { get; set; }
         void AddPoint(Point pathPoint, bool snapToStraight);
         void Draw(Graphics drawSurface);
         Rectangle GetBoundingRectangle();
         bool HitTest(Point point);
+        void Move(Point offset);
     }
 
     internal abstract class Shape : IDrawable
     {
         public Pen DrawingPen { get; set; }
-
         public Brush FillBrush { get; set; }
+        public int ZOrder { get; set; }
 
         private protected Shape(Pen pen, Brush brush)
         {
             DrawingPen = pen;
             FillBrush = brush;
+            ZOrder = 0;
         }
 
         public abstract void AddPoint(Point pathPoint, bool snapToStraight);
         public abstract void Draw(Graphics drawSurface);
         public abstract Rectangle GetBoundingRectangle();
         public abstract bool HitTest(Point point);
+        public abstract void Move(Point offset);
 
         public object Clone()
         {
@@ -115,6 +119,12 @@ namespace SimplePaint
             gpath.AddLine(startPt, endPt);
             return gpath.IsOutlineVisible(ptToTest, DrawingPen);
         }
+
+        public override void Move(Point offset)
+        {
+            startPt.Offset(offset);
+            endPt.Offset(offset);
+        }
     }
 
     internal class Freepath : Shape
@@ -155,6 +165,14 @@ namespace SimplePaint
             GraphicsPath gpath = new GraphicsPath();
             gpath.AddLines(pathPoints.ToArray());
             return gpath.IsOutlineVisible(ptToTest, DrawingPen);
+        }
+
+        public override void Move(Point offset)
+        {
+            foreach (Point p in pathPoints)
+            {
+                p.Offset(offset);
+            }
         }
     }
 
@@ -240,6 +258,14 @@ namespace SimplePaint
                 return gpath.IsVisible(ptToTest);
             }
         }
+
+        public override void Move(Point offset)
+        {
+            startPt = PointMath.PtAdd(startPt, offset);
+            endPt = PointMath.PtAdd(endPt, offset);
+            /*startPt.Offset(offset);
+            endPt.Offset(offset);*/
+        }
     }
 
     internal class Ellipse : Rectngl
@@ -272,6 +298,19 @@ namespace SimplePaint
             {
                 return gpath.IsVisible(ptToTest);
             }
+        }
+    }
+
+    public static class PointMath
+    {
+        public static Point PtSubtract(Point minuend, Point subtrahend)
+        {
+            return new Point(minuend.X - subtrahend.X, minuend.Y - subtrahend.Y);
+        }
+
+        public static Point PtAdd(Point augend, Point addend)
+        {
+            return new Point(augend.X + addend.X, augend.Y + addend.Y);
         }
     }
 }
