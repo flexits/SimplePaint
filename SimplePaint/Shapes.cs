@@ -309,17 +309,4 @@ namespace SimplePaint
             return result;
         }
     }
-
-    public static class PointMath
-    {
-        public static Point PtSubtract(Point minuend, Point subtrahend)
-        {
-            return new Point(minuend.X - subtrahend.X, minuend.Y - subtrahend.Y);
-        }
-
-        public static Point PtAdd(Point augend, Point addend)
-        {
-            return new Point(augend.X + addend.X, augend.Y + addend.Y);
-        }
-    }
 }

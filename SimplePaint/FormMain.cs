@@ -36,9 +36,7 @@ namespace SimplePaint
 
         /* errors: */
         /*
-        TODO when moving zoomed out canvas by mouse, it behaves unexpetedly - problem in DrawCanvas.UnscalePoint()
-        TODO center canvas unexpected behaviour - it actually centers on the second click sometimes - problem in CenterCanvasInContainer()
-        TODO scrolling is weird sometimes
+        TODO center canvas unexpected behaviour - it actually centers on the second click sometimes
         */
 
         private IDrawing currentDrawing;
@@ -108,19 +106,10 @@ namespace SimplePaint
             pictureBoxBackColor.BackColor = DEFAULT_BACK_COLOR;
             trackBarWidth.Value = DEFAULT_PEN_WIDTH;
             comboBoxStyle.SelectedIndex = DEFAULT_LINE_STYLE.Item2;
-            drawCanvas1.CanvasSmoothing = DEFAULT_SMOOTHING_ON.Item1;
+            drawCanvas1.Smoothing = DEFAULT_SMOOTHING_ON.Item1;
             checkBoxSmoothing.Checked = DEFAULT_SMOOTHING_ON.Item2;
 
             drawCanvas1.Invalidate();
-        }
-
-        private void CenterCanvasInContainer()
-        {
-            //TODO срабатывает со второго раза на масштабированном изображении
-            int locY = (panelContainer.ClientSize.Height - drawCanvas1.Height - containerHScroll.Height) / 2;
-            int locX = (panelContainer.ClientSize.Width - drawCanvas1.Width - containerVScroll.Width) / 2;
-            containerVScroll.Value = locY;
-            containerHScroll.Value = locX;
         }
 
         private void CurrentDrawing_Updated(Rectangle updatedBounds)
@@ -171,7 +160,6 @@ namespace SimplePaint
         private void buttonZoomReset_Click(object sender, EventArgs e)
         {
             drawCanvas1.ZoomReset();
-            ScrollInit();
             CenterCanvasInContainer();
         }
 
@@ -327,35 +315,59 @@ namespace SimplePaint
 
         private void checkBoxSmoothing_CheckedChanged(object sender, EventArgs e)
         {
-            SmoothingMode prevMode = drawCanvas1.CanvasSmoothing;
+            SmoothingMode prevMode = drawCanvas1.Smoothing;
             if (checkBoxSmoothing.Checked)
             {
-                drawCanvas1.CanvasSmoothing = SmoothingMode.AntiAlias;
+                drawCanvas1.Smoothing = SmoothingMode.AntiAlias;
             }
             else
             {
-                drawCanvas1.CanvasSmoothing = SmoothingMode.None;
+                drawCanvas1.Smoothing = SmoothingMode.None;
             }
-            if (drawCanvas1.CanvasSmoothing != prevMode)
+            if (drawCanvas1.Smoothing != prevMode)
             {
                 drawCanvas1.Invalidate();
             }
         }
 
+        private void drawCanvas1_SizeChanged(object sender, EventArgs e)
+        {
+            ScrollInit();
+        }
+
+        private void panelContainer_SizeChanged(object sender, EventArgs e)
+        {
+            ScrollInit();
+        }
+
         private void ScrollInit()
         {
-            int pictureH = Math.Max(panelContainer.ClientSize.Height, drawCanvas1.Height);
-            containerVScroll.Minimum = -1 * pictureH;
-            containerVScroll.Maximum = pictureH;
-            containerVScroll.Value = drawCanvas1.Location.Y;
-            int pictureW = Math.Max(panelContainer.ClientSize.Width, drawCanvas1.Width);
-            containerHScroll.Minimum = -1 * pictureW;
-            containerHScroll.Maximum = pictureW;
-            containerHScroll.Value = drawCanvas1.Location.X;
+            containerVScroll.Minimum = -1 * drawCanvas1.Height;
+            containerVScroll.Maximum = panelContainer.ClientSize.Height;
+
+            containerHScroll.Minimum = -1 * drawCanvas1.Width;
+            containerHScroll.Maximum = panelContainer.ClientSize.Width;
+
+            CenterCanvasInContainer();
+        }
+
+        private void CenterCanvasInContainer()
+        {
+            //TODO срабатывает со второго раза если drawCanvas1.Size > panelContainer.Size
+
+            int locY = (panelContainer.ClientSize.Height - drawCanvas1.Height - containerHScroll.Height) / 2;
+            int locX = (panelContainer.ClientSize.Width - drawCanvas1.Width - containerVScroll.Width) / 2;
+            containerVScroll.Value = locY;
+            containerHScroll.Value = locX;
+            drawCanvas1.Location = new Point(locX, locY);
         }
 
         private void containerVScroll_ValueChanged(object sender, EventArgs e)
         {
+            if (drawCanvas1.Location.Y== containerVScroll.Value)
+            {
+                return;
+            }
             Point canvasLocation = drawCanvas1.Location;
             canvasLocation.Y = containerVScroll.Value;
             drawCanvas1.Location = canvasLocation;
@@ -363,6 +375,10 @@ namespace SimplePaint
 
         private void containerHScroll_ValueChanged(object sender, EventArgs e)
         {
+            if (drawCanvas1.Location.X == containerHScroll.Value)
+            {
+                return;
+            }
             Point canvasLocation = drawCanvas1.Location;
             canvasLocation.X = containerHScroll.Value;
             drawCanvas1.Location = canvasLocation;
@@ -380,10 +396,9 @@ namespace SimplePaint
                 currentDrawing = new Drawing();
                 currentDrawing.Updated += CurrentDrawing_Updated;
                 currentDrawing.Size = dialogNew.SelectedDimensions;
-                drawCanvas1.SetSize(currentDrawing.Size);
                 drawCanvas1.ZoomReset();
+                drawCanvas1.SetSize(currentDrawing.Size);
                 CenterCanvasInContainer();
-                ScrollInit();
                 DrawToolBox.SetDrawing(currentDrawing);
             }
             ControlsActivation(resultOK || changesDetected);
@@ -402,10 +417,9 @@ namespace SimplePaint
                     currentDrawing = new Drawing();
                     currentDrawing.Updated += CurrentDrawing_Updated;
                     currentDrawing.AddBitmap(btmp, true);
-                    drawCanvas1.SetSize(currentDrawing.Size);
                     drawCanvas1.ZoomReset();
+                    drawCanvas1.SetSize(currentDrawing.Size);
                     CenterCanvasInContainer();
-                    ScrollInit();
                     DrawToolBox.SetDrawing(currentDrawing);
                     resultOK = true;
                 }
@@ -484,12 +498,7 @@ namespace SimplePaint
         private void drawCanvas1_ShapesDrawRequest(object sender, PaintEventArgs e)
         {
             currentDrawing?.DrawAll(e.Graphics);
-            statusLabelScale.Text = "Масштаб " + Math.Round(drawCanvas1.CanvasZoomFactor * 100) + "%";
-        }
-
-        private void drawCanvas1_SizeChanged(object sender, EventArgs e)
-        {
-            ScrollInit();
+            statusLabelScale.Text = "Масштаб " + Math.Round(drawCanvas1.ZoomFactor * 100) + "%";
         }
 
         private void drawCanvas1_KeyDown(object sender, KeyEventArgs e)

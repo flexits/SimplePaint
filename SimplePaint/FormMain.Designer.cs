@@ -32,7 +32,18 @@ namespace SimplePaint
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.новыйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.открытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.отменитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.вернутьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.отменитьВсёToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.приблизитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.уменьшитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сброситьМасштабToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTools = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
@@ -82,17 +93,6 @@ namespace SimplePaint
             this.panelContainer = new System.Windows.Forms.Panel();
             this.containerHScroll = new System.Windows.Forms.HScrollBar();
             this.containerVScroll = new System.Windows.Forms.VScrollBar();
-            this.новыйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.открытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.отменитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.вернутьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.отменитьВсёToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.приблизитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.уменьшитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сброситьМасштабToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.drawCanvas1 = new SimplePaint.DrawCanvas();
             this.menuStrip1.SuspendLayout();
             this.toolStripTools.SuspendLayout();
@@ -132,6 +132,30 @@ namespace SimplePaint
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
             // 
+            // новыйToolStripMenuItem
+            // 
+            this.новыйToolStripMenuItem.Name = "новыйToolStripMenuItem";
+            this.новыйToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.новыйToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.новыйToolStripMenuItem.Text = "Новый";
+            this.новыйToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonNew_Click);
+            // 
+            // открытьToolStripMenuItem
+            // 
+            this.открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
+            this.открытьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.открытьToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.открытьToolStripMenuItem.Text = "Открыть";
+            this.открытьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            this.сохранитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.сохранитьToolStripMenuItem.Text = "Сохранить";
+            this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonSave_Click);
+            // 
             // toolStripMenuItemExit
             // 
             this.toolStripMenuItemExit.Name = "toolStripMenuItemExit";
@@ -139,6 +163,75 @@ namespace SimplePaint
             this.toolStripMenuItemExit.Size = new System.Drawing.Size(173, 22);
             this.toolStripMenuItemExit.Text = "Выход";
             this.toolStripMenuItemExit.Click += new System.EventHandler(this.toolStripMenuItemExit_Click);
+            // 
+            // правкаToolStripMenuItem
+            // 
+            this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.отменитьToolStripMenuItem,
+            this.вернутьToolStripMenuItem,
+            this.отменитьВсёToolStripMenuItem});
+            this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
+            this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.правкаToolStripMenuItem.Text = "Правка";
+            // 
+            // отменитьToolStripMenuItem
+            // 
+            this.отменитьToolStripMenuItem.Name = "отменитьToolStripMenuItem";
+            this.отменитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.отменитьToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.отменитьToolStripMenuItem.Text = "Отменить";
+            this.отменитьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonUndo_Click);
+            // 
+            // вернутьToolStripMenuItem
+            // 
+            this.вернутьToolStripMenuItem.Name = "вернутьToolStripMenuItem";
+            this.вернутьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Z)));
+            this.вернутьToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.вернутьToolStripMenuItem.Text = "Вернуть";
+            this.вернутьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
+            // 
+            // отменитьВсёToolStripMenuItem
+            // 
+            this.отменитьВсёToolStripMenuItem.Name = "отменитьВсёToolStripMenuItem";
+            this.отменитьВсёToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
+            this.отменитьВсёToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.отменитьВсёToolStripMenuItem.Text = "Отменить всё";
+            this.отменитьВсёToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonClear_Click);
+            // 
+            // видToolStripMenuItem
+            // 
+            this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.приблизитьToolStripMenuItem,
+            this.уменьшитьToolStripMenuItem,
+            this.сброситьМасштабToolStripMenuItem});
+            this.видToolStripMenuItem.Name = "видToolStripMenuItem";
+            this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.видToolStripMenuItem.Text = "Вид";
+            // 
+            // приблизитьToolStripMenuItem
+            // 
+            this.приблизитьToolStripMenuItem.Name = "приблизитьToolStripMenuItem";
+            this.приблизитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
+            this.приблизитьToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.приблизитьToolStripMenuItem.Text = "Увеличить";
+            this.приблизитьToolStripMenuItem.Click += new System.EventHandler(this.buttonZoomIn_Click);
+            // 
+            // уменьшитьToolStripMenuItem
+            // 
+            this.уменьшитьToolStripMenuItem.Name = "уменьшитьToolStripMenuItem";
+            this.уменьшитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
+            this.уменьшитьToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.уменьшитьToolStripMenuItem.Text = "Уменьшить";
+            this.уменьшитьToolStripMenuItem.Click += new System.EventHandler(this.buttonZoomOut_Click);
+            // 
+            // сброситьМасштабToolStripMenuItem
+            // 
+            this.сброситьМасштабToolStripMenuItem.Name = "сброситьМасштабToolStripMenuItem";
+            this.сброситьМасштабToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
+            this.сброситьМасштабToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.сброситьМасштабToolStripMenuItem.Text = "Сбросить масштаб";
+            this.сброситьМасштабToolStripMenuItem.Click += new System.EventHandler(this.buttonZoomReset_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -623,6 +716,7 @@ namespace SimplePaint
             this.panelContainer.Name = "panelContainer";
             this.panelContainer.Size = new System.Drawing.Size(682, 521);
             this.panelContainer.TabIndex = 2;
+            this.panelContainer.SizeChanged += new System.EventHandler(this.panelContainer_SizeChanged);
             // 
             // containerHScroll
             // 
@@ -642,104 +736,11 @@ namespace SimplePaint
             this.containerVScroll.TabIndex = 1;
             this.containerVScroll.ValueChanged += new System.EventHandler(this.containerVScroll_ValueChanged);
             // 
-            // новыйToolStripMenuItem
-            // 
-            this.новыйToolStripMenuItem.Name = "новыйToolStripMenuItem";
-            this.новыйToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.новыйToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.новыйToolStripMenuItem.Text = "Новый";
-            this.новыйToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonNew_Click);
-            // 
-            // открытьToolStripMenuItem
-            // 
-            this.открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            this.открытьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.открытьToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.открытьToolStripMenuItem.Text = "Открыть";
-            this.открытьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
-            // 
-            // сохранитьToolStripMenuItem
-            // 
-            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            this.сохранитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.сохранитьToolStripMenuItem.Text = "Сохранить";
-            this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonSave_Click);
-            // 
-            // правкаToolStripMenuItem
-            // 
-            this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.отменитьToolStripMenuItem,
-            this.вернутьToolStripMenuItem,
-            this.отменитьВсёToolStripMenuItem});
-            this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
-            this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.правкаToolStripMenuItem.Text = "Правка";
-            // 
-            // видToolStripMenuItem
-            // 
-            this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.приблизитьToolStripMenuItem,
-            this.уменьшитьToolStripMenuItem,
-            this.сброситьМасштабToolStripMenuItem});
-            this.видToolStripMenuItem.Name = "видToolStripMenuItem";
-            this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.видToolStripMenuItem.Text = "Вид";
-            // 
-            // отменитьToolStripMenuItem
-            // 
-            this.отменитьToolStripMenuItem.Name = "отменитьToolStripMenuItem";
-            this.отменитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.отменитьToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.отменитьToolStripMenuItem.Text = "Отменить";
-            this.отменитьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonUndo_Click);
-            // 
-            // вернутьToolStripMenuItem
-            // 
-            this.вернутьToolStripMenuItem.Name = "вернутьToolStripMenuItem";
-            this.вернутьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.Z)));
-            this.вернутьToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.вернутьToolStripMenuItem.Text = "Вернуть";
-            this.вернутьToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonRedo_Click);
-            // 
-            // отменитьВсёToolStripMenuItem
-            // 
-            this.отменитьВсёToolStripMenuItem.Name = "отменитьВсёToolStripMenuItem";
-            this.отменитьВсёToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Delete)));
-            this.отменитьВсёToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.отменитьВсёToolStripMenuItem.Text = "Отменить всё";
-            this.отменитьВсёToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonClear_Click);
-            // 
-            // приблизитьToolStripMenuItem
-            // 
-            this.приблизитьToolStripMenuItem.Name = "приблизитьToolStripMenuItem";
-            this.приблизитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
-            this.приблизитьToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.приблизитьToolStripMenuItem.Text = "Увеличить";
-            this.приблизитьToolStripMenuItem.Click += new System.EventHandler(this.buttonZoomIn_Click);
-            // 
-            // уменьшитьToolStripMenuItem
-            // 
-            this.уменьшитьToolStripMenuItem.Name = "уменьшитьToolStripMenuItem";
-            this.уменьшитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
-            this.уменьшитьToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.уменьшитьToolStripMenuItem.Text = "Уменьшить";
-            this.уменьшитьToolStripMenuItem.Click += new System.EventHandler(this.buttonZoomOut_Click);
-            // 
-            // сброситьМасштабToolStripMenuItem
-            // 
-            this.сброситьМасштабToolStripMenuItem.Name = "сброситьМасштабToolStripMenuItem";
-            this.сброситьМасштабToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
-            this.сброситьМасштабToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
-            this.сброситьМасштабToolStripMenuItem.Text = "Сбросить масштаб";
-            this.сброситьМасштабToolStripMenuItem.Click += new System.EventHandler(this.buttonZoomReset_Click);
-            // 
             // drawCanvas1
             // 
             this.drawCanvas1.BackColor = System.Drawing.Color.White;
-            this.drawCanvas1.CanvasSmoothing = System.Drawing.Drawing2D.SmoothingMode.None;
-            this.drawCanvas1.CanvasZoomFactor = 1F;
+            this.drawCanvas1.Smoothing = System.Drawing.Drawing2D.SmoothingMode.None;
+            this.drawCanvas1.ZoomFactor = 1F;
             this.drawCanvas1.Location = new System.Drawing.Point(0, 0);
             this.drawCanvas1.Name = "drawCanvas1";
             this.drawCanvas1.Size = new System.Drawing.Size(150, 150);

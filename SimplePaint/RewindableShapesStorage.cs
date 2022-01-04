@@ -92,7 +92,7 @@ namespace SimplePaint
             shapes.RemoveAt(index);
         }
 
-        private void FallbackToTimeline(int timelineIndex)
+        private void FallbackTimeline(int timelineIndex)
         {
             int currentIndex = timeline[timelineIndex].Item2;
             IDrawable currentShape = timeline[timelineIndex].Item1;
@@ -129,7 +129,7 @@ namespace SimplePaint
                 return;
             }
 
-            FallbackToTimeline(currtime - 1);
+            FallbackTimeline(currtime - 1);
 
             currtime--;
         }
@@ -141,7 +141,7 @@ namespace SimplePaint
                 return;
             }
 
-            FallbackToTimeline(currtime);
+            FallbackTimeline(currtime);
 
             currtime++;
         }

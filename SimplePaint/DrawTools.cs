@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace SimplePaint
@@ -70,10 +71,8 @@ namespace SimplePaint
                 return;
             }
             canvas.Refresh();
-            Graphics gr = canvas.CreateGraphics();
-            gr.ScaleTransform(canvas.CanvasZoomFactor, canvas.CanvasZoomFactor);
             ShapesFactory.AddPoint(e.Location, Control.ModifierKeys == Keys.Shift);
-            ShapesFactory.Finish().Draw(gr);
+            ShapesFactory.Finish().Draw(canvas.GetGraphics());
         }
 
         public override void ProcessMouseUp(MouseEventArgs e)
@@ -116,6 +115,7 @@ namespace SimplePaint
         public ToolCanvasMove(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
         private Point startPt;
+        private Rectangle outline;
 
         public override void ProcessMouseDown(MouseEventArgs e)
         {
@@ -127,10 +127,10 @@ namespace SimplePaint
             {
                 throw new NullReferenceException();
             }
-            startPt = e.Location;
+            startPt = PointMath.ScalePoint(e.Location, canvas.ZoomFactor);
             Cursor.Current = Cursors.NoMove2D;
-            Panel panelContainer = canvas.Parent as Panel;
-            Cursor.Clip = new Rectangle(panelContainer.PointToScreen(Point.Empty), panelContainer.Size);
+            Cursor.Clip = new Rectangle(canvas.Parent.PointToScreen(Point.Empty), canvas.Parent.Size);
+            outline = new Rectangle(canvas.Location, canvas.Size);
         }
 
         public override void ProcessMouseMove(MouseEventArgs e)
@@ -143,18 +143,23 @@ namespace SimplePaint
             {
                 return;
             }
-            int diffX = startPt.X - e.X;
-            int diffY = startPt.Y - e.Y;
-            Point canvasLocationNew = canvas.Location;
-            canvasLocationNew.X -= diffX;
-            canvasLocationNew.Y -= diffY;
-            canvas.Location = canvasLocationNew;
+            Point cursorLocation = PointMath.ScalePoint(e.Location, canvas.ZoomFactor);
+            int diffX = startPt.X - cursorLocation.X;
+            int diffY = startPt.Y - cursorLocation.Y;
+            Point newLocation = canvas.Location;
+            newLocation.X -= diffX;
+            newLocation.Y -= diffY;
+            outline.Location = newLocation;
+            canvas.Parent.Refresh();
+            canvas.Parent.CreateGraphics().DrawRectangle(new Pen(Color.Red, 1) { DashStyle = DashStyle.DashDotDot }, outline);
         }
 
         public override void ProcessMouseUp(MouseEventArgs e)
         {
             Cursor.Current = Cursors.Arrow;
             Cursor.Clip = Rectangle.Empty;
+            canvas.Parent.Refresh();
+            canvas.Location = outline.Location;
         }
     }
 
@@ -193,21 +198,19 @@ namespace SimplePaint
             {
                 return;
             }
-            Point offset = PointMath.PtSubtract(e.Location, prevPt);
+            Point offset = PointMath.Subtract(e.Location, prevPt);
             selectedShape.Move(offset);
             prevPt = e.Location;
 
             canvas.Refresh();
-            Graphics gr = canvas.CreateGraphics();
-            gr.ScaleTransform(canvas.CanvasZoomFactor, canvas.CanvasZoomFactor);
-            selectedShape.Draw(gr);
+            selectedShape.Draw(canvas.GetGraphics());
         }
 
         public override void ProcessMouseUp(MouseEventArgs e)
         {
             if (e.Location != startPt)
             {
-                Point offset = PointMath.PtSubtract(e.Location, startPt);
+                Point offset = PointMath.Subtract(e.Location, startPt);
                 drawing.MoveSelectedShape(offset);
             }
             Cursor.Current = Cursors.Arrow;

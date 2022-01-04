@@ -16,11 +16,11 @@ namespace SimplePaint
         private const float DEFAULT_ZOOM_FACTOR = 1.0F;
         private const float ZOOM_STEP = 0.1F;
 
-        public float CanvasZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
+        public float ZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
 
-        public SmoothingMode CanvasSmoothing { get; set; } = SmoothingMode.None;
+        public SmoothingMode Smoothing { get; set; } = SmoothingMode.None;
 
-        public Size CanvasSizeOriginal { get; private set; }
+        public Size SizeOriginal { get; private set; }
 
         public event PaintEventHandler ShapesDrawRequest;
 
@@ -28,35 +28,42 @@ namespace SimplePaint
         {
             InitializeComponent();
             DoubleBuffered = true;
-            CanvasSizeOriginal = Size; //needed for VS Constructor
+            SizeOriginal = Size; //needed for VS Constructor
         }
 
         public void SetSize(Size size)
         {
-            CanvasSizeOriginal = size;
+            SizeOriginal = size;
             this.Size = size;
         }
 
         public void ZoomIn()
         {
-            CanvasZoomFactor += ZOOM_STEP;
+            ZoomFactor += ZOOM_STEP;
             Invalidate();
         }
 
         public void ZoomOut()
         {
-            if (CanvasZoomFactor <= ZOOM_STEP)
+            if (ZoomFactor <= ZOOM_STEP)
             {
                 return;
             }
-            CanvasZoomFactor -= ZOOM_STEP;
+            ZoomFactor -= ZOOM_STEP;
             Invalidate();
         }
 
         public void ZoomReset()
         {
-            CanvasZoomFactor = 1.0F;
+            ZoomFactor = 1.0F;
             Invalidate();
+        }
+
+        public Graphics GetGraphics()
+        {
+            Graphics gr = CreateGraphics();
+            gr.ScaleTransform(ZoomFactor, ZoomFactor);
+            return gr;
         }
 
         public Bitmap GetBitmap()
@@ -67,13 +74,20 @@ namespace SimplePaint
             return btmp;
         }
 
+        /*public void CenterParent()
+        {
+            int locY = (Parent.Height - Height) / 2;
+            int locX = (Parent.Width - Width) / 2;
+            Location = new Point(locX, locY);
+        }*/
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            e.Graphics.SmoothingMode = CanvasSmoothing;
-            e.Graphics.ScaleTransform(CanvasZoomFactor, CanvasZoomFactor);
+            e.Graphics.SmoothingMode = Smoothing;
+            e.Graphics.ScaleTransform(ZoomFactor, ZoomFactor);
             ShapesDrawRequest?.Invoke(this, e);
-            Size = new Size((int)(CanvasSizeOriginal.Width * CanvasZoomFactor), (int)(CanvasSizeOriginal.Height * CanvasZoomFactor));
+            Size = new Size((int)(SizeOriginal.Width * ZoomFactor), (int)(SizeOriginal.Height * ZoomFactor));
         }
 
         public event MouseEventHandler OnMouseDownScaled;
@@ -81,7 +95,7 @@ namespace SimplePaint
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            Point unscaledPt = UnscalePoint(e.Location, CanvasZoomFactor);
+            Point unscaledPt = PointMath.UnscalePoint(e.Location, ZoomFactor);
             OnMouseDownScaled?.Invoke(this, new MouseEventArgs(e.Button, e.Clicks, unscaledPt.X, unscaledPt.Y, e.Delta));
         }
 
@@ -90,7 +104,7 @@ namespace SimplePaint
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            Point unscaledPt = UnscalePoint(e.Location, CanvasZoomFactor);
+            Point unscaledPt = PointMath.UnscalePoint(e.Location, ZoomFactor);
             OnMouseUpScaled?.Invoke(this, new MouseEventArgs(e.Button, e.Clicks, unscaledPt.X, unscaledPt.Y, e.Delta));
         }
 
@@ -99,20 +113,8 @@ namespace SimplePaint
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            Point unscaledPt = UnscalePoint(e.Location, CanvasZoomFactor);
+            Point unscaledPt = PointMath.UnscalePoint(e.Location, ZoomFactor);
             OnMouseMoveScaled?.Invoke(this, new MouseEventArgs(e.Button, e.Clicks, unscaledPt.X, unscaledPt.Y, e.Delta));
-        }
-
-        private Point UnscalePoint(Point scaledPoint, float zoomFactor)
-        {
-            //TODO unexpected behaviour here
-            //if zoomFactor set to <= 0.5 approx.
-            //the canvas flickers and tends to run far across the screen bounds
-            //because unscaledPoint value becomes 
-            Point unscaledPoint = Point.Empty;
-            unscaledPoint.X = (int)Math.Round(scaledPoint.X / zoomFactor);
-            unscaledPoint.Y = (int)Math.Round(scaledPoint.Y / zoomFactor);
-            return unscaledPoint;
         }
     }
 }
