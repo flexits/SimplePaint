@@ -22,7 +22,7 @@ namespace SimplePaint
         private readonly (DashStyle, int) DEFAULT_LINE_STYLE = (DashStyle.Solid, 0);
         private readonly (SmoothingMode, bool) DEFAULT_SMOOTHING_ON = (SmoothingMode.AntiAlias, true);
 
-        /* features */
+        /* features pending */
         /*
         TODO highlight the selected shape
         TODO display grid and snap cursor position while drawing
@@ -114,7 +114,8 @@ namespace SimplePaint
 
         private void CurrentDrawing_Updated(Rectangle updatedBounds)
         {
-            //TODO update only the region that changed
+            //TODO update only the changed region
+
             //private const int REDRAW_REGION_INFLATE = 5;
             //private const int SCROLL_MARGIN_ADD = 20;
             //increase update rectangle by REDRAW_REGION_INFLATE px each direction

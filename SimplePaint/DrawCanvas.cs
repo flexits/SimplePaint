@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace SimplePaint
 {
+    /*
+     * The control represents a drawing area
+     */
     public partial class DrawCanvas : UserControl
     {
         private const float DEFAULT_ZOOM_FACTOR = 1.0F;
@@ -20,7 +23,7 @@ namespace SimplePaint
 
         public SmoothingMode Smoothing { get; set; } = SmoothingMode.None;
 
-        public Size SizeOriginal { get; private set; }
+        public Size SizeOriginal { get; private set; } //original size without zoom 
 
         public event PaintEventHandler ShapesDrawRequest;
 
