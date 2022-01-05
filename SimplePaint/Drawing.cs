@@ -143,7 +143,7 @@ namespace SimplePaint
                 return;
             }
             IDrawable shape = shapes.ElementAt(selectedShapeIndex).Clone() as IDrawable;
-            shape.FillBrush = fill;
+            shape.SetFill(fill);
             shapes.Replace(selectedShapeIndex, shape);
             Updated?.Invoke(shape.GetBoundingRectangle());
         }

@@ -53,7 +53,7 @@ namespace SimplePaint
         Fill
     }
 
-    internal partial class GenericTool<T> : DrawingTool where T : IDrawable { } //creates IDrawable object of type provided
+    internal partial class GenericTool<T> : DrawingTool where T : IDrawable { } //creates IDrawable object of given type T
     internal partial class ToolEraser : GenericTool<Freepath> { }               //eraser tool (it's actually a Freehand shape with Background colored pen)
     internal partial class ToolCanvasMove : DrawingTool { }                     //mouse drags drawing area with left button pressed
     internal partial class ToolShapeSelect : DrawingTool { }                    //select a shape and move selected on mouse move with left button pressed

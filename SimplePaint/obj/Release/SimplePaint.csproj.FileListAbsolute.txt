@@ -1,0 +1,13 @@
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Release\SimplePaint.exe.config
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Release\SimplePaint.exe
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Release\SimplePaint.pdb
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.csproj.AssemblyReference.cache
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.DialogAbout.resources
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.DialogNew.resources
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.DrawCanvas.resources
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.FormMain.resources
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.Properties.Resources.resources
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.csproj.GenerateResource.cache
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.csproj.CoreCompileInputs.cache
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.exe
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.pdb

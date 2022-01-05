@@ -183,6 +183,16 @@ namespace SimplePaint.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap pichon_48px {
+            get {
+                object obj = ResourceManager.GetObject("pichon_48px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap rectangle_40px {
             get {
                 object obj = ResourceManager.GetObject("rectangle_40px", resourceCulture);

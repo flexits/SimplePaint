@@ -477,7 +477,7 @@ namespace SimplePaint
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            //TODO about
+            _ = new DialogAbout().ShowDialog(this);
         }
 
         private void drawCanvas1_OnMouseDownScaled(object sender, MouseEventArgs e)

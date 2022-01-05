@@ -53,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DashStyles.cs" />
+    <Compile Include="DialogAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DialogAbout.Designer.cs">
+      <DependentUpon>DialogAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="DialogNew.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,6 +87,9 @@
     <Compile Include="Shapes.cs" />
     <Compile Include="ShapesFactory.cs" />
     <Compile Include="RewindableShapesStorage.cs" />
+    <EmbeddedResource Include="DialogAbout.resx">
+      <DependentUpon>DialogAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DialogNew.resx">
       <DependentUpon>DialogNew.cs</DependentUpon>
     </EmbeddedResource>
@@ -163,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="image.ico" />
+    <None Include="Resources\pichon_48px.png" />
     <None Include="Resources\drag_40px.png" />
     <None Include="Resources\fill_color_40px.png" />
   </ItemGroup>

@@ -7,28 +7,54 @@ using System.Threading.Tasks;
 
 namespace SimplePaint
 {
+    /*
+     * Each graphics primitive existing on the drawing surface is presented
+     * by the Shape class, that implements the IDrawable interface. In its turn,
+     * the IDrawable implements system's ICloneable interface, producing a deep
+     * copy of the object.
+     * 
+     * Base constructor of the Shape class gets non-nullable Pen and nullable Brush
+     * arguments. Later the corresponding properties may be modified by SetPen() 
+     * and SetFill() methods correspondingly.
+     * 
+     * Actual classes of real graphics primitives are derived from abstract class Shape.
+     * The constructor of such a class contains at least one additional mandatory
+     * agrument - that is the starting point where the geometric figure "grows" from.
+     * 
+     * Geometrical shapes may be forced to some presets (line to 90 and 45 degrees 
+     * X- and Y- axis relatively, rectangle to square, ellipe to circle) by setting the
+     * AddPoint(Point pathPoint, bool snapToStraight) snapToStraight argument true. If so,
+     * the provided pathPoint will be modified correspondingly.
+     * 
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
+     */
+
     public interface IDrawable : ICloneable
     {
-        Brush FillBrush { get; set; }
-        int ZOrder { get; set; }
-        void AddPoint(Point pathPoint, bool snapToStraight);
-        void Draw(Graphics drawSurface);
-        Rectangle GetBoundingRectangle();
-        bool HitTest(Point point, bool includeInside);
-        void Move(Point offset);
+        int ZOrder { get; set; }                                //sets object's position on Z axis
+        void SetFill(Brush fillBrush);                          //sets brush to fill the shape (no fill if null)
+        void SetPen(Pen outlinePen);                            //sets pen to draw the shape (exception if null)
+        void AddPoint(Point pathPoint, bool snapToStraight);    //adds a point to the current object structure
+        void Draw(Graphics drawSurface);                        //draws current object onto the provided surface
+        Rectangle GetBoundingRectangle();                       //returns a minimum rectanle containing the object
+        bool HitTest(Point point, bool includeInside);          //true if the provided point is included in the object's outline (or also inside of the object if includeInside)
+        void Move(Point offset);                                //moves the starting point of the object by offset (thus moving the full figure)
     }
 
     internal abstract class Shape : IDrawable
     {
-        public Pen DrawingPen { get; set; }
-        public Brush FillBrush { get; set; }
-        public int ZOrder { get; set; }
+        private protected Pen DrawingPen { get; set; }
+        private protected Brush FillBrush { get; set; }
+        public int ZOrder { get; set; } = 0;
 
         private protected Shape(Pen pen, Brush brush)
         {
+            if (pen is null)
+            {
+                throw new ArgumentNullException();
+            }
             DrawingPen = pen;
             FillBrush = brush;
-            ZOrder = 0;
         }
 
         public abstract void AddPoint(Point pathPoint, bool snapToStraight);
@@ -37,7 +63,21 @@ namespace SimplePaint
         public abstract bool HitTest(Point point, bool includeInside);
         public abstract void Move(Point offset);
 
-        public object Clone()
+        public void SetFill(Brush fillBrush)
+        {
+            FillBrush = fillBrush;
+        }
+
+        public void SetPen(Pen outlinePen)
+        {
+            if (outlinePen is null)
+            {
+                return;
+            }
+            DrawingPen = outlinePen;
+        }
+
+        public object Clone()                                   //a deep copy of the object
         {
             Shape newShape = this.MemberwiseClone() as Shape;
             if (DrawingPen is null)
@@ -62,7 +102,13 @@ namespace SimplePaint
 
     internal class Line : Shape
     {
-        //snap-on angle = 15 
+        //the line is considered as a hypotenuse, and its
+        //projections onto X- and Y- axis as cathetuses.
+        //Thus the cathetuses ratio is tangent of adjacent angle.
+        //Let the snap-on angle be +/-15 degrees, then the line
+        //will be snap on 15,30,60,75 degress deflection
+        //(regardless the sign).
+
         private const float Tg15 = 0.27F;
         private const float Tg75 = 3.73F;
         private const float Tg30 = 0.58F;
@@ -87,23 +133,24 @@ namespace SimplePaint
             if (!snapToStraight || endPt.X == startPt.X || endPt.Y == startPt.Y)
             {
                 return;
+                //if X or Y coords of two points are equal, the line is parallel to the axis
             }
             int width = endPt.X - startPt.X;
             int height = endPt.Y - startPt.Y;
             float tga = Math.Abs((float)width / height);
             if (tga < Tg15)
             {
-                //vertical
+                //vertical snap
                 endPt.X = startPt.X;
             }
             else if (tga > Tg75)
             {
-                //horizontal
+                //horizontal snap
                 endPt.Y = startPt.Y;
             }
             else if (tga > Tg30 || tga < Tg60)
             {
-                //45%
+                //45% snap
                 int hyp = (int)Math.Sqrt(Math.Pow(width, 2) + Math.Pow(height, 2));
                 endPt.X = startPt.X + hyp * Math.Sign(width);
                 endPt.Y = startPt.Y + hyp * Math.Sign(height);
@@ -227,13 +274,6 @@ namespace SimplePaint
             }
             endPt.X = startPt.X + width;
             endPt.Y = startPt.Y + height;
-            /*It works but adding snapToStraight is complicated
-            int width = addPt.X - givenStartPt.X;
-            int height = addPt.Y - givenStartPt.Y;
-            startPt.X = givenStartPt.X + Math.Min(0, width);
-            startPt.Y = givenStartPt.Y + Math.Min(0, height);
-            endPt.X = startPt.X + Math.Abs(width);
-            endPt.Y = startPt.Y + Math.Abs(height);*/
         }
 
         protected Rectangle GenerateRect()
