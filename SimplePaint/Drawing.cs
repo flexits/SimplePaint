@@ -7,28 +7,41 @@ using System.Drawing;
 
 namespace SimplePaint
 {
-    public delegate void UpdateHandler(Rectangle updatedBounds);
-    interface IDrawing
-    {
-        bool DrawingChanged { get; }
-        Size Size { get; set; }
+    /*
+     * Incapsulates drawing contents (graphics primitives) as a collection of IDrawable objects
+     * and provides methods to operate on them.
+     * 
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
+     */
 
-        event UpdateHandler Updated;
-        void AddShape(IDrawable shape);
-        void AddBitmap(Bitmap bitmap, bool resizeDrawing);
-        void DrawAll(Graphics drawSurface);
-        void Undo();
-        void Redo();
-        void UndoAll();
-        IDrawable SelectShapeByPoint(Point ptToSearch, bool includeInside = false);
-        void MoveSelectedShape(Point offset);
-        void FillSelectedShape(Brush fill);
-        void DiscardSelectedShape();
+    public delegate void UpdateHandler(Rectangle updatedBounds);
+
+    internal interface IDrawing
+    {
+        event UpdateHandler Updated;    //triggered upon any visualizable contents modification
+        bool DrawingChanged { get; }    //true if the drawing object was modified after its creation
+        Size Size { get; set; }         //size of the drawing area in px
+        void AddShape(IDrawable shape); //add a graphics primitive object to the drawing
+        void AddBitmap(Bitmap bitmap, bool resizeDrawing);  //add a bitmap as background, if resizeDrawing - set the drawing size equal to the bitmap's
+        void DrawAll(Graphics drawSurface); //draw all containing objects preserving Z order on the provided Graphics 
+        void Undo();                    //undo last modification
+        void Redo();                    //redo undone actions 
+        void UndoAll();                 //undo all actions - revert to claen original state
+        IDrawable SelectShapeByPoint(Point ptToSearch, bool includeInside = false); //mark an object as selected and return it, if the provided point
+                                                                                    //belongs to the object's outline (or is included inside the object);
+                                                                                    //otherwise deselect the previously selected one and return null
+        void MoveSelectedShape(Point offset); //move the object marked as selected by the provided offset
+        void FillSelectedShape(Brush fill);   //fill the object marked as selected with the provided brush
+        void DiscardSelectedShape();          //remove the object marked as selected (this action may be undone)
     }
 
-    class Drawing : IDrawing
+    internal class Drawing : IDrawing
     {
         public event UpdateHandler Updated;
+
+        public bool DrawingChanged => shapes.Count > 0 || lining != null;
+
+        public Size Size { get; set; }
 
         private readonly IRewindableShapesStorage shapes;
 
@@ -37,10 +50,6 @@ namespace SimplePaint
         private Bitmap lining;
 
         private int selectedShapeIndex;
-
-        public bool DrawingChanged => shapes.Count > 0 || lining != null;
-
-        public Size Size { get; set; }
 
         public Drawing()
         {
@@ -89,14 +98,12 @@ namespace SimplePaint
         public void Undo()
         {
             shapes.Rewind();
-            //Updated?.Invoke(shape.GetBoundingRectangle());
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
         public void Redo()
         {
             shapes.Forward();
-            //Updated?.Invoke(shape.GetBoundingRectangle());
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
@@ -128,8 +135,9 @@ namespace SimplePaint
                 return;
             }
             IDrawable shape = shapes.ElementAt(selectedShapeIndex).Clone() as IDrawable;
+            //TODO color outline ot the moving shape
             shape.Move(offset);
-            shapes.Update(selectedShapeIndex, shape);
+            shapes.Replace(selectedShapeIndex, shape);
             Updated?.Invoke(new Rectangle(Point.Empty, Size));
         }
 
@@ -141,7 +149,7 @@ namespace SimplePaint
             }
             IDrawable shape = shapes.ElementAt(selectedShapeIndex).Clone() as IDrawable;
             shape.FillBrush = fill;
-            shapes.Update(selectedShapeIndex, shape);
+            shapes.Replace(selectedShapeIndex, shape);
             Updated?.Invoke(shape.GetBoundingRectangle());
         }
 

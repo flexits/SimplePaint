@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace SimplePaint
 {
+    /*
+     * Stores DashStyle and corresponding name collations. Used to fill a combobox content 
+     * and to transform the combobox.selectedvalue into the matching DashStyle.
+     * 
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
+     */
     public static class DashStyles
     {
         private static readonly List<(string, DashStyle)> dshstyles = new List<(string, DashStyle)>();

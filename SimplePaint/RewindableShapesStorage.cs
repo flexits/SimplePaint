@@ -6,21 +6,47 @@ using System.Threading.Tasks;
 
 namespace SimplePaint
 {
+    /*
+     * Storage of IDrawable objects. Provides methods to add, modify and remove
+     * containing objects, storing the history of these actions to make undo/redo operations possible.
+     * Redo history is cleared after adding a new object to avoid undecidable condition.
+     * 
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
+     */
+
     internal interface IRewindableShapesStorage
     {
-        int Count { get; }
-        void Add(IDrawable shape);
-        IEnumerable<IDrawable> GetSortedContents();
-        IDrawable ElementAt(int index);
-        void Update(int index, IDrawable newshape);
-        void RemoveAt(int index);
-        void Rewind();
-        void Forward();
-        void RewindFull();
+        int Count { get; }                          //number of objects in the collection
+        void Add(IDrawable shape);                  //add an object to the collection
+        IEnumerable<IDrawable> GetSortedContents(); //get all conatining objects in Z order
+        IDrawable ElementAt(int index);             //get an object by its index in collection
+        void Replace(int index, IDrawable newshape); //replace an object in the collection by the provided one
+        void RemoveAt(int index);                   //remove an object by its index
+        void Rewind();                              //one step back - undo an action
+        void Forward();                             //one step forward - redo an action
+        void RewindFull();                          //revert to the start - undo all
     }
 
     internal class RewindableShapesStorage : IRewindableShapesStorage
     {
+        /*
+         * Current set of IDrawable objects is represented by List<IDrawable> shapes collection.
+         * 
+         * Set of actions is represented by a timeline List<(IDrawable, int, DrawingOperations)> timeline.
+         * Each entry in the timeline collection represents a snapshot of an action. 
+         * Each snapshot contains the previous IDrawable object (i.e. object that was contained in the shapes collection 
+         * before an action took place), its index in the shapes collection and an action attribute.
+         * 
+         * Also there's a currtime variable, that points to a specific shapshop in timeline, holding it index.
+         * 
+         * When a new action is done, a snapshot is being added to the timeline by currtime index.
+         * When an action is reverted, currtime decreases, and the two objects with identical indices are exchanged - 
+         * one from timeline and other from the snapshot. Whed an action it redone, the same process takes place, but currtime increases.
+         * 
+         * So the timeline may be seen as a tape with snapshots, movable forwards and backwards. Exchanging objects with current snapshot
+         * makes possible to store the history of actions.
+         */
+
         private enum DrawingOperations
         {
             Create,
@@ -68,7 +94,7 @@ namespace SimplePaint
             return shapes.ElementAt(index);
         }
 
-        public void Update(int index, IDrawable newshape)
+        public void Replace(int index, IDrawable newshape)
         {
             if (index < 0 || index >= shapes.Count || newshape is null)
             {
@@ -92,7 +118,7 @@ namespace SimplePaint
             shapes.RemoveAt(index);
         }
 
-        private void FallbackTimeline(int timelineIndex)
+        private void ExchangeWithSnapshot(int timelineIndex)
         {
             int currentIndex = timeline[timelineIndex].Item2;
             IDrawable currentShape = timeline[timelineIndex].Item1;
@@ -129,7 +155,7 @@ namespace SimplePaint
                 return;
             }
 
-            FallbackTimeline(currtime - 1);
+            ExchangeWithSnapshot(currtime - 1);
 
             currtime--;
         }
@@ -141,7 +167,7 @@ namespace SimplePaint
                 return;
             }
 
-            FallbackTimeline(currtime);
+            ExchangeWithSnapshot(currtime);
 
             currtime++;
         }

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimplePaint
 {
     /*
-     * The control represents a drawing area
+     * The control represents a scalable drawing area
+     * 
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
      */
     public partial class DrawCanvas : UserControl
     {
@@ -20,12 +15,20 @@ namespace SimplePaint
         private const float ZOOM_STEP = 0.1F;
 
         public float ZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
+        
+        //original size without zoom 
+        public Size SizeOriginal { get; private set; } 
 
+        //smoothing mode of this.Graphics
         public SmoothingMode Smoothing { get; set; } = SmoothingMode.None;
 
-        public Size SizeOriginal { get; private set; } //original size without zoom 
-
+        //invoked on this.Paint; may be used to draw objects in e.Graphics
         public event PaintEventHandler ShapesDrawRequest;
+        
+        //overrided mouse events provide e.Location re-calculated without scaling
+        public event MouseEventHandler OnMouseDownScaled;
+        public event MouseEventHandler OnMouseUpScaled;
+        public event MouseEventHandler OnMouseMoveScaled;
 
         public DrawCanvas()
         {
@@ -63,6 +66,7 @@ namespace SimplePaint
         }
 
         public Graphics GetGraphics()
+            //return scaled this.Graphics
         {
             Graphics gr = CreateGraphics();
             gr.ScaleTransform(ZoomFactor, ZoomFactor);
@@ -70,19 +74,13 @@ namespace SimplePaint
         }
 
         public Bitmap GetBitmap()
+            //draw control's contents into bitmap
         {
             ZoomReset();
             Bitmap btmp = new Bitmap(Width, Height, CreateGraphics());
             DrawToBitmap(btmp, new Rectangle(0, 0, Width, Height));
             return btmp;
         }
-
-        /*public void CenterParent()
-        {
-            int locY = (Parent.Height - Height) / 2;
-            int locX = (Parent.Width - Width) / 2;
-            Location = new Point(locX, locY);
-        }*/
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -93,8 +91,6 @@ namespace SimplePaint
             Size = new Size((int)(SizeOriginal.Width * ZoomFactor), (int)(SizeOriginal.Height * ZoomFactor));
         }
 
-        public event MouseEventHandler OnMouseDownScaled;
-
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -102,16 +98,12 @@ namespace SimplePaint
             OnMouseDownScaled?.Invoke(this, new MouseEventArgs(e.Button, e.Clicks, unscaledPt.X, unscaledPt.Y, e.Delta));
         }
 
-        public event MouseEventHandler OnMouseUpScaled;
-
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
             Point unscaledPt = PointMath.UnscalePoint(e.Location, ZoomFactor);
             OnMouseUpScaled?.Invoke(this, new MouseEventArgs(e.Button, e.Clicks, unscaledPt.X, unscaledPt.Y, e.Delta));
         }
-
-        public event MouseEventHandler OnMouseMoveScaled;
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
