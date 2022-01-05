@@ -5,18 +5,17 @@ using System.Windows.Forms;
 
 namespace SimplePaint
 {
-    internal enum DrawingTools
-    {
-        None,
-        Selector,
-        Move,
-        Pencil,
-        Freehand,
-        Rectangle,
-        Ellipse,
-        Eraser,
-        Fill
-    }
+    /*
+     * The IDrawingTool class incapsulates mouse events processing methods in order to
+     * create or modify drawing contents etc. and visualizes this process by altering 
+     * the mouse cursor or painting a graphics outline of the object.
+     * 
+     * Constructor of the IDrawingTool class is provided with links to current
+     * drawing area (DrawCanvas), current drawing object (IDrawing) and Palette object, 
+     * incapsulating user-selected pens and brushes.
+     *
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
+     */
 
     internal interface IDrawingTool
     {
@@ -41,7 +40,26 @@ namespace SimplePaint
         public abstract void ProcessMouseUp(MouseEventArgs e);
     }
 
-    internal class GenericTool<T> : DrawingTool where T : Shape
+    internal enum DrawingTools      //available drawing tools
+    {
+        None,
+        Selector,
+        Move,
+        Pencil,
+        Freehand,
+        Rectangle,
+        Ellipse,
+        Eraser,
+        Fill
+    }
+
+    internal partial class GenericTool<T> : DrawingTool where T : IDrawable { } //creates IDrawable object of type provided
+    internal partial class ToolEraser : GenericTool<Freepath> { }               //eraser tool (it's actually a Freehand shape with Background colored pen)
+    internal partial class ToolCanvasMove : DrawingTool { }                     //mouse drags drawing area with left button pressed
+    internal partial class ToolShapeSelect : DrawingTool { }                    //select a shape and move selected on mouse move with left button pressed
+    internal partial class ToolShapeFill : DrawingTool { }                      //select a shape and fill it with color
+
+    internal partial class GenericTool<T> : DrawingTool where T : IDrawable     
     {
         public GenericTool(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
@@ -91,7 +109,7 @@ namespace SimplePaint
         }
     }
 
-    internal class ToolEraser : GenericTool<Freepath>
+    internal partial class ToolEraser : GenericTool<Freepath>
     {
         public ToolEraser(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
         public override void ProcessMouseDown(MouseEventArgs e)
@@ -110,7 +128,7 @@ namespace SimplePaint
         }
     }
 
-    internal class ToolCanvasMove : DrawingTool
+    internal partial class ToolCanvasMove : DrawingTool
     {
         public ToolCanvasMove(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
@@ -163,7 +181,7 @@ namespace SimplePaint
         }
     }
 
-    internal class ToolShapeSelect : DrawingTool
+    internal partial class ToolShapeSelect : DrawingTool
     {
         public ToolShapeSelect(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 
@@ -218,7 +236,7 @@ namespace SimplePaint
         }
     }
 
-    internal class ToolShapeFill : DrawingTool
+    internal partial class ToolShapeFill : DrawingTool
     {
         public ToolShapeFill(Palette palette, DrawCanvas canvas, IDrawing drawing) : base(palette, canvas, drawing) { }
 

@@ -11,22 +11,15 @@ namespace SimplePaint
      */
     public partial class DrawCanvas : UserControl
     {
-        private const float DEFAULT_ZOOM_FACTOR = 1.0F;
-        private const float ZOOM_STEP = 0.1F;
+        private const float DEFAULT_ZOOM_FACTOR = 1.0F;                     //default scale is 100%
+        private const float ZOOM_STEP = 0.1F;                               //scale modification step is 10%
 
-        public float ZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;
-        
-        //original size without zoom 
-        public Size SizeOriginal { get; private set; } 
+        public float ZoomFactor { get; set; } = DEFAULT_ZOOM_FACTOR;        //this area scale
+        public Size SizeOriginal { get; private set; }                      //original size without zoom 
+        public SmoothingMode Smoothing { get; set; } = SmoothingMode.None;  //smoothing mode of this.Graphics
 
-        //smoothing mode of this.Graphics
-        public SmoothingMode Smoothing { get; set; } = SmoothingMode.None;
-
-        //invoked on this.Paint; may be used to draw objects in e.Graphics
-        public event PaintEventHandler ShapesDrawRequest;
-        
-        //overrided mouse events provide e.Location re-calculated without scaling
-        public event MouseEventHandler OnMouseDownScaled;
+        public event PaintEventHandler ShapesDrawRequest;                   //invoked on this.Paint; may be used to draw objects in e.Graphics
+        public event MouseEventHandler OnMouseDownScaled;                   //overrided mouse events provide e.Location re-calculated without scaling
         public event MouseEventHandler OnMouseUpScaled;
         public event MouseEventHandler OnMouseMoveScaled;
 
@@ -65,16 +58,14 @@ namespace SimplePaint
             Invalidate();
         }
 
-        public Graphics GetGraphics()
-            //return scaled this.Graphics
+        public Graphics GetGraphics()                   //return scaled this.Graphics
         {
             Graphics gr = CreateGraphics();
             gr.ScaleTransform(ZoomFactor, ZoomFactor);
             return gr;
         }
 
-        public Bitmap GetBitmap()
-            //draw control's contents into bitmap
+        public Bitmap GetBitmap()                       //draw control's contents into bitmap
         {
             ZoomReset();
             Bitmap btmp = new Bitmap(Width, Height, CreateGraphics());

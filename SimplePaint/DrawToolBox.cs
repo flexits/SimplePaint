@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Windows.Forms;
 
 namespace SimplePaint
 {
-    internal class Palette
-    {
-        public Palette()
-        {
-            ForegroundPen = new Pen(Color.Black, 1);
-            BackgroundPen = new Pen(Color.White, 1);
-            FillBrush = null;
-        }
-        public Pen ForegroundPen { get; set; }
-        public Pen BackgroundPen { get; set; }
-        public Brush FillBrush { get; set; }
-    }
+    /*
+     * This static class incapsulates all available drawing tools (one instance for each), 
+     * holds the selection of currently assigned tool, and stores the user selected colors 
+     * and styles in Palette object. 
+     * 
+     * This class processes mouse events as an intermediate entity, i.e. passes them to 
+     * the currently selected tool for the actual processing.
+     * 
+     * For drawing tools to fuction properly, they must get a reference to the actual 
+     * drawing area (DrawCanvas) and drawing object (IDrawing) by SetDrawing() and SetCanvas()
+     * methods correspondingly.
+     *
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
+     */
 
     internal static class DrawToolBox
     {

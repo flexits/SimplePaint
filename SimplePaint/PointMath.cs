@@ -3,6 +3,12 @@ using System.Drawing;
 
 namespace SimplePaint
 {
+    /*
+     * This static class defines operations on Point objects
+     *
+     * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
+     */
+
     public static class PointMath
     {
         public static Point Add(Point augend, Point addend)
