@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Threading.Tasks;
 
-namespace SimplePaint
+namespace ShapesLibrary
 {
     /*
      * Each graphics primitive existing on the drawing surface is presented
@@ -41,7 +40,7 @@ namespace SimplePaint
         void Move(Point offset);                                //moves the starting point of the object by offset (thus moving the full figure)
     }
 
-    internal abstract class Shape : IDrawable
+    public abstract class Shape : IDrawable
     {
         private protected Pen DrawingPen { get; set; }
         private protected Brush FillBrush { get; set; }
@@ -100,7 +99,7 @@ namespace SimplePaint
         }
     }
 
-    internal class Line : Shape
+    public class Line : Shape
     {
         //the line is considered as a hypotenuse, and its
         //projections onto X- and Y- axis as cathetuses.
@@ -189,7 +188,7 @@ namespace SimplePaint
         }
     }
 
-    internal class Freepath : Shape
+    public class Freepath : Shape
     { 
         private protected List<Point> pathPoints;
         
@@ -238,7 +237,7 @@ namespace SimplePaint
         }
     }
 
-    internal class Rectngl : Shape
+    public class Rectngl : Shape
     {
         private protected Point givenStartPt;
 
@@ -319,7 +318,7 @@ namespace SimplePaint
         }
     }
 
-    internal class Ellipse : Rectngl
+    public class Ellipse : Rectngl
     {
         public Ellipse(Pen pen, Brush brush, Point startPoint) : base(pen, brush, startPoint) { }
 

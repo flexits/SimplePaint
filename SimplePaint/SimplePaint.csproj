@@ -84,9 +84,7 @@
     <Compile Include="PointMath.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shapes.cs" />
     <Compile Include="ShapesFactory.cs" />
-    <Compile Include="RewindableShapesStorage.cs" />
     <EmbeddedResource Include="DialogAbout.resx">
       <DependentUpon>DialogAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -175,6 +173,12 @@
     <None Include="Resources\pichon_48px.png" />
     <None Include="Resources\drag_40px.png" />
     <None Include="Resources\fill_color_40px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShapesLibrary\ShapesLibrary.csproj">
+      <Project>{7f2f4607-8fa9-4970-8eb0-5c943e3ff497}</Project>
+      <Name>ShapesLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

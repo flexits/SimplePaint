@@ -11,3 +11,6 @@ C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePa
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.csproj.CoreCompileInputs.cache
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.exe
 C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.pdb
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Release\ShapesLibrary.dll
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\bin\Release\ShapesLibrary.pdb
+C:\Users\4d414\source\repos\flexits\SimplePaint\SimplePaint\obj\Release\SimplePaint.csproj.CopyComplete

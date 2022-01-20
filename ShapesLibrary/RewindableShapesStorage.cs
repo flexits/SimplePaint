@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SimplePaint
+namespace ShapesLibrary
 {
     /*
      * Storage of IDrawable objects. Provides methods to add, modify and remove
@@ -11,7 +11,7 @@ namespace SimplePaint
      * © Alexander V. Korostelin, SibSUTIS, Novosibirsk 2021
      */
 
-    internal interface IRewindableShapesStorage
+    public interface IRewindableShapesStorage
     {
         int Count { get; }                          //number of objects in the collection
         void Add(IDrawable shape);                  //add an object to the collection
@@ -24,7 +24,7 @@ namespace SimplePaint
         void RewindFull();                          //revert to the start - undo all
     }
 
-    internal class RewindableShapesStorage : IRewindableShapesStorage
+    public class RewindableShapesStorage : IRewindableShapesStorage
     {
         /*
          * Current set of IDrawable objects is represented by List<IDrawable> shapes collection.
