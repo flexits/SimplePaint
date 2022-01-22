@@ -15,7 +15,7 @@ namespace ShapesLibrary
     {
         int Count { get; }                          //number of objects in the collection
         void Add(IDrawable shape);                  //add an object to the collection
-        IEnumerable<IDrawable> GetSortedContents(); //get all conatining objects in Z order
+        IEnumerable<IDrawable> GetSortedContents(); //get all contained objects in Z order
         IDrawable ElementAt(int index);             //get an object by its index in collection
         void Replace(int index, IDrawable newshape); //replace an object in the collection by the provided one
         void RemoveAt(int index);                   //remove an object by its index
