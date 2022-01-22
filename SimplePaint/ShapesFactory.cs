@@ -14,7 +14,7 @@ namespace SimplePaint
      * one will be used (black 1px). If provided brush is null, the shape will have no fill.
      * 
      * Then, any quantity of additional points can be added by AddPoint() method -
-     * actualli it's a wrapper for IDrawable.AddPoint().
+     * actually it's a wrapper for IDrawable.AddPoint().
      * Finally, the created object can be passed out by calling Finish().
      * 
      * Calling any of these methods without preceding Init<T>() generates NullReferenceException.
