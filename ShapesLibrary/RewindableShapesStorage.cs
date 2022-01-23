@@ -72,8 +72,7 @@ namespace ShapesLibrary
                 return;
             }
             shapes.Add(shape);
-            timeline.Insert(currtime, (null, shapes.Count - 1, DrawingOperations.Create));
-            currtime++;
+            timeline.Insert(currtime++, (null, shapes.Count - 1, DrawingOperations.Create));
             timeline.RemoveRange(currtime, timeline.Count - currtime);
         }
 
@@ -88,7 +87,7 @@ namespace ShapesLibrary
             {
                 return null;
             }
-            return shapes.ElementAt(index);
+            return shapes[index];
         }
 
         public void Replace(int index, IDrawable newshape)
@@ -97,21 +96,17 @@ namespace ShapesLibrary
             {
                 return;
             }
-            IDrawable shape = shapes[index];
+            timeline.Insert(currtime++, (shapes[index], index, DrawingOperations.Update));
             shapes[index] = newshape;
-            timeline.Insert(currtime, (shape, index, DrawingOperations.Update));
-            currtime++;
         }
 
         public void RemoveAt(int index)
         {
-            IDrawable shape = shapes.ElementAt(index);
-            if (shape is null)
+            if (index < 0 || index >= shapes.Count)
             {
                 return;
             }
-            timeline.Insert(currtime, (shape, index, DrawingOperations.Delete));
-            currtime++;
+            timeline.Insert(currtime++, (shapes[index], index, DrawingOperations.Delete));
             shapes.RemoveAt(index);
         }
 
