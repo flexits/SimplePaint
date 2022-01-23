@@ -3,3 +3,4 @@ C:\Users\4d414\source\repos\flexits\SimplePaint\ShapesLibrary\bin\Debug\ShapesLi
 C:\Users\4d414\source\repos\flexits\SimplePaint\ShapesLibrary\obj\Debug\ShapesLibrary.csproj.CoreCompileInputs.cache
 C:\Users\4d414\source\repos\flexits\SimplePaint\ShapesLibrary\obj\Debug\ShapesLibrary.dll
 C:\Users\4d414\source\repos\flexits\SimplePaint\ShapesLibrary\obj\Debug\ShapesLibrary.pdb
+C:\Users\4d414\source\repos\flexits\SimplePaint\ShapesLibrary\obj\Debug\ShapesLibrary.csproj.AssemblyReference.cache

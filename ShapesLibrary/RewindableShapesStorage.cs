@@ -151,10 +151,7 @@ namespace ShapesLibrary
             {
                 return;
             }
-
-            ExchangeWithSnapshot(currtime - 1);
-
-            currtime--;
+            ExchangeWithSnapshot(--currtime);
         }
 
         public void Forward()
@@ -163,10 +160,7 @@ namespace ShapesLibrary
             {
                 return;
             }
-
-            ExchangeWithSnapshot(currtime);
-
-            currtime++;
+            ExchangeWithSnapshot(currtime++);
         }
 
         public void RewindFull()
